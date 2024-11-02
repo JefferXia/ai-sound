@@ -3,7 +3,7 @@
 const WaveLoader = () => {
     
   return (
-    <div id='loading' className='w-full h-full flex justify-center items-center space-x-2'>
+    <div id='loading' className='w-full h-full flex justify-center items-center gap-[6px]'>
       <p></p>
       <p></p>
       <p></p>

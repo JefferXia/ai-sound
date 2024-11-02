@@ -184,7 +184,7 @@ const AudioList = () => {
       </div>
       {loading && (
         <div className={cn('w-full',
-          pageNum > 0 ? 'h-[60px]' : 'h-full')}
+          pageNum > 0 ? 'h-[40px]' : 'h-[300px]')}
         >
           <WaveLoader />
         </div>

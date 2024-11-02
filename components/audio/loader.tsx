@@ -126,7 +126,7 @@ const AudioLoader = ({
   }, [])
 
   return (
-    <div className={cn('flex flex-col justify-between bg-card p-3 h-36 rounded-lg',
+    <div className={cn('flex flex-col justify-between bg-muted p-3 h-36 rounded-lg',
       !audioData?.audioUrl ? 'animate-pulse' : '')}
     >
       <div className='pt-2 line-clamp-1'>
@@ -140,12 +140,12 @@ const AudioLoader = ({
       </div>
 
       {isLoading && (
-      <div className='pb-5 flex justify-center'>
+      <div className='pb-7 flex justify-center'>
         {spinner}
         <span className='text-xs'>文案生成中</span>
       </div>)}
       {(!isLoading && !audioData.audioUrl) && (
-      <div className='pb-5 flex justify-center'>
+      <div className='pb-7 flex justify-center'>
         {spinner}
         <span className='text-xs'>音频生成中</span>
       </div>)}
