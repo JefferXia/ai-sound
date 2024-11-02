@@ -55,7 +55,7 @@ export function Navbar({ user }: { user: User | undefined }) {
           </span>
         </Link>
         <Link href="/sound">
-          <BetterTooltip content="创建新的声音">
+          <BetterTooltip content="创建新的播客">
             <Plus />
           </BetterTooltip>
         </Link>
@@ -65,7 +65,7 @@ export function Navbar({ user }: { user: User | undefined }) {
           <NavigationMenuItem>
             <Link href="/sound-list" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                声音广场
+                发现聆听
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>

@@ -8,9 +8,9 @@ import { cookies } from 'next/headers'
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'Next.js Chatbot Template',
-  description: 'Next.js chatbot template using the AI SDK.',
+  metadataBase: new URL('https://sound.topmind.video'),
+  title: '音咖',
+  description: '用AI创作有趣的播客',
 };
 
 export const viewport = {
