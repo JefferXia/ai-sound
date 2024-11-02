@@ -3,7 +3,7 @@
 import { ExternalLink, Trash2 } from "lucide-react"
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { toast } from 'sonner'
 import { cn } from "@/lib/utils"
 import { useGlobalContext } from "@/app/globalContext"
@@ -22,13 +22,16 @@ import {
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import { DEMO_USER_ID } from '@/lib/utils'
 import WaveLoader from "./wave-loader"
+import AudioPlayingLoader from "./audio-loader"
 
 const AudioList = () => {
   const [listData, setListData] = useState<AudioWorkCard[]>([])
   const [pageNum, setPageNum] = useState<number>(0)
   const [loading, setLoading] = useState(true)
   const [noMoreData, setNoMoreData] = useState(false)
+  const [playingId, setPlayingId] = useState(-1)
   const { copyToClipboard } = useCopyToClipboard({ timeout: 1000 })
+  const audioRefs = useRef<any>([]); // 创建一个 ref 数组
   const {
     createId,
     queryData,
@@ -133,7 +136,7 @@ const AudioList = () => {
         />
       )}
 
-      {listData.length > 0 && listData.map(item => (
+      {listData.length > 0 && listData.map((item, index) => (
         <div key={item.id} className="flex flex-col justify-between bg-muted p-3 h-36 rounded-xl">
           <div className='flex justify-between'>
             <div
@@ -171,12 +174,25 @@ const AudioList = () => {
               </AlertDialog>
             </div>
           </div>
+          <div className={cn("justify-center",
+            playingId === index ? 'flex' : 'hidden'
+          )}>
+            <AudioPlayingLoader />
+          </div>
           <div className="flex items-center">
             <audio
+              ref={(el:any) => audioRefs.current[index] = el}
               className="w-full border-none appearance-none outline-none"
               controls
               controlsList="nodownload noplaybackrate nofullscreen"
               src={item?.audioUrl}
+              onPlay={() => {
+                playingId >= 0 && audioRefs.current[playingId].pause()
+                setPlayingId(index)
+              }}
+              onPause={() => {
+                playingId === index && setPlayingId(-1)
+              }}
             ></audio>
           </div>
         </div>
