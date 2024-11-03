@@ -248,7 +248,7 @@ export function AudioCreate() {
 
         <div className='mt-8 mx-4'>
           <Button
-            className="w-full text-base font-bold bg-[#FF6700] cursor-pointer"
+            className="w-full text-base font-bold bg-[linear-gradient(225deg,_rgb(255,_58,_212)_0%,_rgb(151,_107,_255)_33%,_rgb(67,_102,_255)_66%,_rgb(89,_187,_252)_100%)] cursor-pointer"
             onClick={handleGenerateBtn}
             disabled={
               loading || !title ||

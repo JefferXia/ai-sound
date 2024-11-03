@@ -51,16 +51,16 @@ export function Navbar({ user }: { user: User | undefined }) {
       <div className='flex items-center space-x-3'>
         <Link href="/">
           <span className="text-lg font-semibold font-mono tracking-tighter">
-            八点半
+            AI·Talk
           </span>
         </Link>
-        <Link href="/sound">
+        {/* <Link href="/sound">
           <BetterTooltip content="创建新的播客">
             <Plus />
           </BetterTooltip>
-        </Link>
+        </Link> */}
       </div>
-      <NavigationMenu>
+      {/* <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link href="/sound-list" legacyBehavior passHref>
@@ -70,7 +70,7 @@ export function Navbar({ user }: { user: User | undefined }) {
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
-      </NavigationMenu>
+      </NavigationMenu> */}
       {user ? (
         <UserNav user={user} />
       ) : (
