@@ -142,11 +142,11 @@ const AudioList = () => {
             <div
               className='pt-2 line-clamp-1'
             >
-              <Link href={`/content/${item.id}`}>
+              <Link href="/">
                 {item.title}
               </Link>
             </div>
-            <div className='flex pt-2 space-x-3'>
+            {/* <div className='flex pt-2 space-x-3'>
               <ExternalLink
                 size={16}
                 className='cursor-pointer'
@@ -172,7 +172,7 @@ const AudioList = () => {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </div>
+            </div> */}
           </div>
           <div className={cn("justify-center",
             playingId === index ? 'flex' : 'hidden'

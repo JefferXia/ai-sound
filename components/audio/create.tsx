@@ -66,7 +66,7 @@ export function AudioCreate() {
   const handleAutoFill = () => {
     setTitle('谈谈原生家庭疗愈')
     setActiveTab('TEXT')
-    setTextInput(`你是一名心理咨询专家，聊一聊如何做原生家庭的心理疗愈`)
+    setTextInput(`如何做原生家庭的心理疗愈`)
   }
 
   useEffect(() => {

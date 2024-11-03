@@ -51,7 +51,7 @@ export function Navbar({ user }: { user: User | undefined }) {
       <div className='flex items-center space-x-3'>
         <Link href="/">
           <span className="text-lg font-semibold font-mono tracking-tighter">
-            音咖
+            八点半
           </span>
         </Link>
         <Link href="/sound">

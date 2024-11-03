@@ -131,7 +131,7 @@ const AudioLoader = ({
     >
       <div className='pt-2 line-clamp-1'>
       {audioData?.audioWorkId ? (
-        <Link href={`/content/${audioData.audioWorkId}`}>
+        <Link href="/">
           {title}
         </Link>
       ) : (
