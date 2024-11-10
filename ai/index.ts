@@ -1,4 +1,5 @@
 import { createOpenAI, openai } from '@ai-sdk/openai'
+import { createGroq } from '@ai-sdk/groq';
 import { experimental_wrapLanguageModel as wrapLanguageModel } from 'ai';
 
 import { customMiddleware } from './custom-middleware';
@@ -21,3 +22,7 @@ export const customModel = () => {
     middleware: customMiddleware,
   });
 };
+
+export const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY
+});

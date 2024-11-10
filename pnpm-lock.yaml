@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@ai-sdk/groq':
+        specifier: ^0.0.1
+        version: 0.0.1(zod@3.23.8)
       '@ai-sdk/openai':
         specifier: ^0.0.60
         version: 0.0.60(zod@3.23.8)
@@ -260,6 +263,12 @@ packages:
 
   '@ably/msgpack-js@0.4.0':
     resolution: {integrity: sha512-IPt/BoiQwCWubqoNik1aw/6M/DleMdrxJOUpSja6xmMRbT2p1TA8oqKWgfZabqzrq8emRNeSl/+4XABPNnW5pQ==}
+
+  '@ai-sdk/groq@0.0.1':
+    resolution: {integrity: sha512-M8XHUovs2UqOx6xlhABXXCGlzbgeErSyIwvH1LQeDl3Z2CbSSgvttc0k6irm4J7ViuULE5XcIDQurXijIePWqQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
 
   '@ai-sdk/openai@0.0.60':
     resolution: {integrity: sha512-NEdDdv3o76jT6UeWHxP6I/lMYcjFQhQGQi/U2gVqW1PEU4Pjaud7tAVSy27IPbiRakg6GOzWrltI2JhZgAI1wg==}
@@ -4819,6 +4828,12 @@ snapshots:
   '@ably/msgpack-js@0.4.0':
     dependencies:
       bops: 1.0.1
+
+  '@ai-sdk/groq@0.0.1(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.24
+      '@ai-sdk/provider-utils': 1.0.20(zod@3.23.8)
+      zod: 3.23.8
 
   '@ai-sdk/openai@0.0.60(zod@3.23.8)':
     dependencies:

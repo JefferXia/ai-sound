@@ -60,7 +60,7 @@ export function Navbar({ user }: { user: User | undefined }) {
           </BetterTooltip>
         </Link> */}
       </div>
-      {/* <NavigationMenu>
+      <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link href="/sound-list" legacyBehavior passHref>
@@ -70,7 +70,7 @@ export function Navbar({ user }: { user: User | undefined }) {
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
-      </NavigationMenu> */}
+      </NavigationMenu>
       {user ? (
         <UserNav user={user} />
       ) : (
