@@ -51,7 +51,7 @@ export function Navbar({ user }: { user: User | undefined }) {
       <div className='flex items-center space-x-3'>
         <Link href="/">
           <span className="text-lg font-semibold font-mono tracking-tighter">
-            AI·Talk
+            Topmind
           </span>
         </Link>
         {/* <Link href="/sound">
