@@ -42,3 +42,50 @@ model AudioWork {
   @@index([user_id, is_deleted, created_at(sort: Desc)])
   @@index([is_deleted, created_at(sort: Desc)])
 }
+
+enum ContentType {
+  TEXT
+  AUDIO
+  IMAGE
+  VIDEO
+}
+enum FileFormat {
+  // Text formats
+  PLAIN_TEXT
+  MD
+  PDF
+  DOC
+  // Audio formats
+  MP3
+  WAV
+  M4A
+  AAC
+  // Image formats
+  PNG
+  JPG
+  JPEG
+  SVG
+  WEBP
+  // Video formats
+  MP4
+  MOV
+  AVI
+  WEBM
+}
+enum TaskStatus {
+  SUCCESS
+  ERROR
+}
+model CreateTask {
+  id           String      @id @default(uuid())
+  user_id      String
+  content_type ContentType
+  file_format  FileFormat // for simple text while is not a file format, fill with PLAIN_TEXT
+  content      String // url if it's a file or text if it's a text
+  status       TaskStatus
+  error_msg    String?
+  task_info    Json @default("{}") // Additional task metadata like model info, processing parameters, etc.
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  @@index([user_id, created_at(sort: Desc)])
+}

@@ -9,7 +9,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sound.topmind.video'),
-  title: '音咖',
+  title: 'Topmind',
   description: '用AI创作有趣的播客',
 };
 
@@ -64,7 +64,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Toaster position="top-center" />
-          <GlobalContextProvider>
+          <GlobalContextProvider user={session?.user}>
             <Navbar user={session?.user} />
             {children}
           </GlobalContextProvider>

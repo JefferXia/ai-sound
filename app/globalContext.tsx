@@ -1,20 +1,22 @@
 'use client'
+
 import {
   useState,
   createContext,
   useContext,
-  useMemo,
-  useEffect,
   ReactNode
 } from 'react'
+import { type User } from 'next-auth'
 
 const GlobalContext = createContext<any>({})
 
 export const useGlobalContext = () => useContext<any>(GlobalContext)
 
 export const GlobalContextProvider = function ({
+  user,
   children
 }: {
+  user: User | undefined
   children: ReactNode
 }) {
   const [createId, setCreateId] = useState('')
@@ -24,6 +26,7 @@ export const GlobalContextProvider = function ({
   return (
     <GlobalContext.Provider
       value={{
+        userInfo: user,
         createId,
         setCreateId,
         queryData,

@@ -19,15 +19,15 @@ export function UserNav({ user }: { user: User }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="data-[state=open]:bg-sidebar-accent bg-muted data-[state=open]:text-sidebar-accent-foreground h-10">
+        <Button className="bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent h-10">
           <Image
             src={`https://avatar.vercel.sh/${user.email}`}
-            alt={user.email ?? 'User Avatar'}
+            alt={user.email ?? '用户'}
             width={24}
             height={24}
             className="rounded-full"
           />
-          <span className='max-w-26 text-primary line-clamp-1'>{user?.email}</span>
+          <span className='max-w-26 text-primary line-clamp-1'>{user?.name}</span>
           <ChevronDown className="ml-auto" />
         </Button>
       </DropdownMenuTrigger>

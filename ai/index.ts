@@ -5,7 +5,7 @@ import { experimental_wrapLanguageModel as wrapLanguageModel } from 'ai';
 import { customMiddleware } from './custom-middleware';
 
 export const customOpenAI = createOpenAI({
-  baseURL: process.env.OPENAI_API_BASE,
+  // baseURL: process.env.OPENAI_API_BASE,
   apiKey: process.env.OPENAI_API_KEY
 })
 
@@ -24,5 +24,6 @@ export const customModel = () => {
 };
 
 export const groq = createGroq({
+  // baseURL: process.env.OPENAI_API_BASE,
   apiKey: process.env.GROQ_API_KEY
 });

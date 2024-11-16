@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
   // }
 
   const promptTemplate = `## Goals
-  你是一个播客对话内容生成器，你需要将我给你的内容转换为自然的对话，创作一段500字左右的谈话文案。
+  你是一个播客对话内容生成器，你需要将我给你的内容转换为自然的对话，创作一段谈话文案。
   
   ## Workflow
   1. 对于话题进行搜索，找到相关的信息。信息只用于辅助后续创作，不要直接输出。
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
   2. 对话不是简单的一问一答，应该在每个发言中都抛出更多的观点和内容知识。
   3. 要敢于讽刺，但是不要直接用脏话。
   4. 正式对话开始前需要有引入主题的对话，需要欢迎大家收听本期播客。
-  5. 文案长度在500字左右。`
+  5. 文案长度不要超过500字。`
 
   // const { fullStream } = await streamText({
   //   model: customModel(),
