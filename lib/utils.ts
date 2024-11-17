@@ -232,3 +232,15 @@ export const Regex = {
 
 // export const DEMO_USER_ID = 'utest'
 export const DEMO_USER_ID = 'a3192a56-34a8-4c6c-9a5a-6aa6bb9bf132'
+
+// 拿到一个字符串，并获取首字母大写
+export function getFirstLetterAndUpperCase(str: string) {
+  if (str && typeof str === 'string') {
+    return str.charAt(0).toUpperCase()
+  }
+  return ''
+}
+
+export function utcToBeijing(time: Date|string) {
+  return new Date(time).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
+}

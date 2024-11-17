@@ -1,6 +1,7 @@
 'use client';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { type User } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
@@ -35,6 +36,9 @@ export function UserNav({ user }: { user: User }) {
         side="top"
         className="w-[--radix-popper-anchor-width]"
       >
+        <DropdownMenuItem>
+          <Link href="/profile">个人主页</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >

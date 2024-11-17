@@ -1,6 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prisma'
+import { utcToBeijing } from './utils'
 
 interface Record {
   type: string
@@ -139,19 +140,19 @@ export async function accountDetails(userId: string) {
   // 合并 GiftRecord、TransactionRecord 和 RechargeRecord
   const combinedRecords = [
     ...accountWithDetails.gifts.map(record => ({
-      type: `type_${record.type}`,                 // 赠送记录的类型
+      type: record.type,                 // 赠送记录的类型
       amount: `+${record.amount}`,        // 积分变动（正数）
       createdAt: record.created_at,        // 记录的时间
     })),
     ...accountWithDetails.transactions.map(record => ({
-      type: `type_${record.type}`,    // 消费记录的类型
+      type: record.type,                  // 消费记录的类型
       amount: `-${record.price}`,              // 积分变动（负数）
       createdAt: record.created_at,        // 记录的时间
     })),
     ...accountWithDetails.recharges
       .filter(record => record.status === 'COMPLETED') // 只包含已完成的充值
       .map(record => ({
-        type: `source_${record.source}`, // 充值记录的类型
+        type: record.source,              // 充值记录的类型
         amount: `+${record.amount}`,       // 积分变动（正数）
         createdAt: record.created_at,       // 记录的时间
       })),
@@ -166,8 +167,17 @@ export async function accountDetails(userId: string) {
   const formattedRecords = sortedRecords.map(record => ({
     type: record.type,
     amount: record.amount,
-    createdAt: new Date(record.createdAt).toLocaleString(),
+    createdAt: utcToBeijing(record.createdAt),
   }));
 
-  return formattedRecords
+  return {
+    info: {
+      balance: accountWithDetails.balance,
+      giftTokens: accountWithDetails.gift_tokens,
+      rechargeTokens: accountWithDetails.recharge_tokens,
+      earnedTokens: accountWithDetails.earned_tokens,
+      createdAt: utcToBeijing(accountWithDetails.created_at)
+    },
+    records: formattedRecords
+  }
 }
