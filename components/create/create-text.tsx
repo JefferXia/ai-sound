@@ -17,16 +17,19 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/ui/toggle-group"
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
-import { PromptConfig } from '@/lib/ai/prompt-template'
+import { BestPromptName, BestPromptText } from '@/lib/ai/prompt-template'
 
 export function CreateText() {
   const [template, setTemplate] = useState('')
-  const [systemPrompt, setSystemPrompt] = useState(PromptConfig['default'])
+  const [systemPrompt, setSystemPrompt] = useState('')
   const [scriptPrompt, setScriptPrompt] = useState('')
   const [scriptLen, setScriptLen] = useState(0)
   const [model, setModel] = useState('gpt-4o')
-  const [keyValue, setKeyValue] = useState('')
   const [generation, setGeneration] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const scriptRef = useRef<any>(null)
@@ -61,125 +64,147 @@ export function CreateText() {
 
   useEffect(() => {
     if(template) {
-      setSystemPrompt(template)
+      setSystemPrompt(BestPromptText[template])
+    } else {
+      setSystemPrompt('')
     }
   }, [template])
 
   return (
-  <div className="p-5 pt-10">
-  {/* <h1 className="text-2xl font-medium text-center">文案助手</h1> */}
-  <div className="flex flex-row w-full">
-    <div className="flex flex-col w-1/2 mr-12">
-      <Label className="block mb-2 font-medium text-base">文案素材</Label>
-      <div className="relative mb-5">
-        <Textarea
-          rows={8}
-          maxLength={1000}
-          placeholder='输入你的文案主题或者大纲'
-          value={scriptPrompt}
-          className="w-full border p-2 rounded-lg placeholder:text-sm placeholder:leading-[22px] text-sm leading-[22px] resize-none"
-          onChange={e => {
-            setScriptPrompt(e.target.value)
-            setScriptLen(e.target.value.length)
-          }}
-        />
-        <div className="absolute right-3 bottom-3 text-sm text-black/80 dark:text-white/80">
-          {scriptLen} / 1000
+    <div className="p-6 pt-24">
+      {/* <h1 className="text-2xl font-medium text-center">文案助手</h1> */}
+      <div className="flex flex-row w-full">
+        <div className="flex flex-col w-1/2 mr-12">
+          <Label className="block mb-2 font-medium text-base">选择模板助手</Label>
+          <div className="mb-5">
+            <ToggleGroup 
+              className='justify-start gap-2 flex-wrap'
+              variant="outline" 
+              type="single"
+              value={template}
+              onValueChange={setTemplate}
+            >
+            {Object.entries(BestPromptName).map(([key, value]: [string, string]) => (
+              <ToggleGroupItem 
+                key={key} 
+                value={key} 
+                aria-label={value} 
+                className='data-[state=on]:bg-primary data-[state=on]:text-primary-foreground'
+              >
+                {value}
+              </ToggleGroupItem>
+            ))}
+            </ToggleGroup>
+          </div>
+          <Label className="block mb-2 font-medium text-base">文案主题</Label>
+          <div className="relative mb-5">
+            <Textarea
+              rows={8}
+              maxLength={1000}
+              placeholder='输入你的文案主题或者大纲'
+              value={scriptPrompt}
+              className="w-full border p-2 bg-muted rounded-lg placeholder:text-sm placeholder:leading-[22px] text-sm leading-[22px] resize-none"
+              onChange={e => {
+                setScriptPrompt(e.target.value)
+                setScriptLen(e.target.value.length)
+              }}
+            />
+            <div className="absolute right-3 bottom-3 text-sm text-black/80 dark:text-white/80">
+              {scriptLen} / 1000
+            </div>
+          </div>
+          <div className="flex space-x-8">
+            <div>
+              <Label className="block mb-2 font-medium text-base">
+                模型选择
+              </Label>
+              <Select onValueChange={setModel} value={model}>
+                <SelectTrigger className="w-[180px] rounded-lg">
+                  <SelectValue placeholder="选择大模型" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="gpt-4o">ChatGPT-4o</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex-1">
+              {/* <Label className="block mb-2 font-medium text-base">
+              API KEY
+              </Label>
+              <Input
+                className="w-full"
+                type="text"
+                placeholder="暂时免费使用"
+                value={keyValue}
+                onChange={e => {
+                  setKeyValue(e.target.value)
+                }}
+              /> */}
+            </div>
+          </div>
+          <div className="mt-10">
+            <Button
+              className="w-full text-base font-bold cursor-pointer"
+              onClick={handleGenerateBtn}
+              disabled={loading || !systemPrompt || !scriptPrompt}
+            >
+              {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+              生成
+            </Button>
+          </div>
         </div>
-      </div>
-      <div className="flex space-x-8">
-        <div>
-          <Label className="block mb-2 font-medium text-base">
-            模型选择
-          </Label>
-          <Select onValueChange={setModel} value={model}>
-            <SelectTrigger className="w-[180px] rounded-lg">
-              <SelectValue placeholder="选择大模型" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="gpt-4o">ChatGPT-4o</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex-1">
-          {/* <Label className="block mb-2 font-medium text-base">
-          API KEY
-          </Label>
-          <Input
-            className="w-full"
-            type="text"
-            placeholder="暂时免费使用"
-            value={keyValue}
-            onChange={e => {
-              setKeyValue(e.target.value)
-            }}
-          /> */}
-        </div>
-      </div>
-      <div className="mt-10">
-        <Button
-          className="w-full text-base font-bold cursor-pointer"
-          onClick={handleGenerateBtn}
-          disabled={loading || !systemPrompt || !scriptPrompt}
-        >
-          {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-          生成
-        </Button>
-      </div>
-    </div>
 
-    <div className="flex-1">
-      <div className="flex justify-between mb-2">
-        <span className="font-medium text-base">生成结果</span>
-        <div
-          className="flex items-center text-sm cursor-pointer"
-          onClick={handleCopyScript}
-        >
-          {isCopied ? (
-            <>
-              <ClipboardCheck size={16} className="mr-1" />
-              已复制
-            </>
-          ) : (
-            <>
-              <Clipboard size={16} className="mr-1" />
-              复制
-            </>
+        <div className="flex-1">
+          <div className="flex justify-between mb-2">
+            <span className="font-medium text-base">生成结果</span>
+            <div
+              className="flex items-center text-sm cursor-pointer"
+              onClick={handleCopyScript}
+            >
+              {isCopied ? (
+                <>
+                  <ClipboardCheck size={16} className="mr-1" />
+                  已复制
+                </>
+              ) : (
+                <>
+                  <Clipboard size={16} className="mr-1" />
+                  复制
+                </>
+              )}
+            </div>
+          </div>
+          <div className='overflow-y-scroll' style={{ maxHeight: 'calc(100vh - 160px)' }}>
+          {generation && (
+            <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
+              <Markdown>{generation as string}</Markdown>
+            </div>
+          )}
+          </div>
+          {loading && (
+            <div className="flex justify-center my-5">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="24px" height="30px" viewBox="0 0 24 30" xmlSpace="preserve">
+                <rect x="0" y="10" width="4" height="10" fill="#24A0ED" opacity="0.2">
+                  <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="1.2s" repeatCount="indefinite" />
+                  <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="1.2s" repeatCount="indefinite" />
+                  <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="1.2s" repeatCount="indefinite" />
+                </rect>
+                <rect x="8" y="10" width="4" height="10" fill="#24A0ED"  opacity="0.2">
+                  <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="1.2s" repeatCount="indefinite" />
+                  <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="1.2s" repeatCount="indefinite" />
+                  <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="1.2s" repeatCount="indefinite" />
+                </rect>
+                <rect x="16" y="10" width="4" height="10" fill="#24A0ED"  opacity="0.2">
+                  <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.6s" dur="1.2s" repeatCount="indefinite" />
+                  <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.6s" dur="1.2s" repeatCount="indefinite" />
+                  <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.6s" dur="1.2s" repeatCount="indefinite" />
+                </rect>
+              </svg>
+            </div>
           )}
         </div>
       </div>
-      <div className='overflow-y-scroll' style={{ maxHeight: 'calc(100vh - 160px)' }}>
-      {generation && (
-        <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-          <Markdown>{generation as string}</Markdown>
-        </div>
-      )}
-      </div>
-      {loading && (
-        <div className="flex justify-center my-5">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            width="24px" height="30px" viewBox="0 0 24 30" xmlSpace="preserve">
-            <rect x="0" y="10" width="4" height="10" fill="#24A0ED" opacity="0.2">
-              <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="1.2s" repeatCount="indefinite" />
-            </rect>
-            <rect x="8" y="10" width="4" height="10" fill="#24A0ED"  opacity="0.2">
-              <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="1.2s" repeatCount="indefinite" />
-            </rect>
-            <rect x="16" y="10" width="4" height="10" fill="#24A0ED"  opacity="0.2">
-              <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.6s" dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.6s" dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.6s" dur="1.2s" repeatCount="indefinite" />
-            </rect>
-          </svg>
-        </div>
-      )}
     </div>
-  </div>
-</div>
-
-)
+  )
 }

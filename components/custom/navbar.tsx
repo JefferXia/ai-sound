@@ -48,7 +48,7 @@ ListItem.displayName = "ListItem"
 export function Navbar({ user }: { user: User | undefined }) {
 
   return (
-    <div className="sticky top-0 z-10 w-full h-16 px-7 flex items-center justify-between backdrop-blur-md border-b">
+    <div className="fixed left-0 top-0 z-10 w-full h-16 px-7 flex items-center justify-between backdrop-blur-md border-b">
       <div className='flex items-center space-x-5'>
         <Link href="/">
           <span className="text-lg font-semibold font-mono tracking-tighter">
