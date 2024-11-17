@@ -2,10 +2,17 @@ export default async function Page() {
 
   return (
     <div 
-      className='min-h-screen flex flex-col justify-center items-center'
+      id="space"
+      className='min-h-svh'
     >
-      <h2 className='mb-2 text-2xl font-medium'>AI·Talk</h2>
-      <span>每天早八点半来一杯音咖，开启全新认知的一天！</span>
+      <div id='stars'></div>
+      <div id='stars2'></div>
+      <div id='stars3'></div>
+      <div className="w-full h-svh flex justify-center items-center text-white">
+        <div id="typing">
+        AI创作无界 尽在天马行空
+        </div>
+      </div>
     </div>
   );
 }

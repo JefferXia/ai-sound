@@ -8,9 +8,9 @@ import { cookies } from 'next/headers'
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sound.topmind.video'),
+  metadataBase: new URL('https://ai.topmind.video'),
   title: 'Topmind',
-  description: '用AI创作有趣的播客',
+  description: '用AI创作有趣的视频',
 };
 
 export const viewport = {
