@@ -22,6 +22,7 @@ model User {
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   AudioWork  AudioWork[]
+  accounts   Account[]       // 用户与账户的关系
 }
 
 model AudioWork {
@@ -88,4 +89,64 @@ model CreateTask {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
   @@index([user_id, created_at(sort: Desc)])
+}
+
+model Account {
+  id              String    @id @default(uuid())           // 账户ID
+  user_id         String                                   // 外键，关联用户
+  balance         Int       @default(0)                    // 总余额，包括所有代币
+  gift_tokens     Int       @default(0)                 // 赠送代币余额
+  recharge_tokens Int       @default(0)                 // 充值代币余额
+  earned_tokens   Int       @default(0)                  // 赚取的代币余额
+  created_at      DateTime  @default(now())                // 创建时间
+  updated_at      DateTime  @updatedAt                     // 更新时间
+  grade           String    @default("REGULAR")            // 会员等级（REGULAR、VIP、SVIP）
+  user            User      @relation(fields: [user_id], references: [id]) // 与用户的关系
+  gifts           GiftRecord[]
+  recharges       RechargeRecord[]
+  transactions    TransactionRecord[]
+}
+
+model GiftRecord {
+  id              Int       @id @default(autoincrement())   // 赠送记录ID，自增主键
+  account_id      String                                       // 外键，关联账户
+  amount          Int       @default(0)                        // 赠送的代币数量
+  created_at      DateTime  @default(now())                 // 创建时间
+  type            String
+  account         Account   @relation(fields: [account_id], references: [id]) // 与账户的关系
+}
+
+model RechargeRecord {
+  id              Int      @id @default(autoincrement())
+  account_id      String
+  amount          Int      @default(0) 
+  created_at      DateTime @default(now())
+  order_number    String   @unique                        // 订单号，唯一
+  source          String                                  // 充值来源（如：支付宝、微信、银行卡等）
+  status          String   @default("PENDING")            // 充值状态（如：PENDING, COMPLETED, FAILED）
+  account         Account  @relation(fields: [account_id], references: [id]) // 与账户的关系
+}
+
+model TransactionRecord {
+  id             Int      @id @default(autoincrement())
+  account_id     String
+  price          Int      @default(0) 
+  created_at     DateTime @default(now())
+  type           String
+  account        Account   @relation(fields: [account_id], references: [id]) // 与账户的关系
+}
+
+model Video {
+  id          String   @id @default(cuid())   // 视频ID，使用cuid生成唯一标识符
+  url         String   @db.Text               // 视频URL，非空
+  audio_url   String?  @db.Text               // 音频URL，可选
+  video_id    String?  @db.Text               // 视频外站ID，可选
+  title       String?  @db.Text               // 标题，可选
+  metadata    Json?    @db.Json                // 元数据，JSON格式，可选
+  subtitles   Json?    @db.Json                // 字幕，JSON格式，可选
+  scene       Json?    @db.Json                // 场景，JSON格式，可选
+  summary     String?  @db.Text               // 摘要，可选
+  user_id     String                         // 用户ID，可选
+  created_at  DateTime  @default(now())                // 创建时间
+  updated_at  DateTime  @updatedAt                     // 更新时间
 }

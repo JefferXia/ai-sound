@@ -27,6 +27,18 @@ export async function createUser(email: string, password: string) {
         email,
         name,
         password: hash,
+        accounts: {
+          create: {
+            balance: 50, // 创建账户时设置总余额等信息
+            gift_tokens: 50,
+            gifts: {
+              create: {
+                amount: 50,
+                type: 'WELCOME_GIFT'
+              }
+            }
+          }
+        }
       },
     });
   } catch (error) {

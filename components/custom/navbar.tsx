@@ -55,67 +55,56 @@ export function Navbar({ user }: { user: User | undefined }) {
             Topmind
           </span>
         </Link>
-        {/* <Link href="/create/text">
-          <BetterTooltip content="创建新的">
-            <Plus />
-          </BetterTooltip>
-        </Link> */}
       </div>
 
       <NavigationMenu>
         <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>开始创作</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  {/* <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
-                  >
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Topmind
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components that you can copy and
-                      paste into your apps. Accessible. Customizable. Open
-                      Source.
-                    </p>
-                  </a> */}
-                  <a
-                    className="flex h-full w-full select-none flex-col rounded-md bg-gradient-to-b no-underline outline-none focus:shadow-md overflow-hidden"
-                    href="/"
-                  >
-                    <Image
-                      width={190}
-                      height={220}
-                      src="/images/create.webp" 
-                      alt="创作"
-                      objectFit="cover"
-                    />
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/create/text" title="创作文案">
-                用AI帮你快速创作脚本文案
-              </ListItem>
-              <ListItem href="/create/audio" title="创作音频">
-                创作你想要的配音
-              </ListItem>
-              <ListItem href="/create/video" title="创作视频">
-                剪辑视频
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/sound-list" legacyBehavior passHref>
+            <NavigationMenuTrigger>开始创作</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                <li className="row-span-3">
+                  <NavigationMenuLink asChild>
+                    <a
+                      className="flex h-full w-full select-none flex-col rounded-md bg-gradient-to-b no-underline outline-none focus:shadow-md overflow-hidden"
+                      href="/"
+                    >
+                      <Image
+                        width={190}
+                        height={220}
+                        src="/images/create.webp" 
+                        alt="创作"
+                        objectFit="cover"
+                      />
+                    </a>
+                  </NavigationMenuLink>
+                </li>
+                <ListItem href="/create/text" title="创作文案">
+                  用AI帮你快速创作脚本文案
+                </ListItem>
+                <ListItem href="/create/audio" title="创作音频">
+                  创作你想要的配音
+                </ListItem>
+                <ListItem href="/create/video" title="创作视频">
+                  剪辑视频
+                </ListItem>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/hot" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 创作灵感
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+          {/* <NavigationMenuItem>
+            <Link href="/director" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                AI 大导演
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem> */}
         </NavigationMenuList>
       </NavigationMenu>
 
