@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       {
         hostname: 'avatar.vercel.sh',
       },
+      {
+        hostname: '*.cos.ap-nanjing.myqcloud.com'
+      },
     ],
   },
   reactStrictMode: false,

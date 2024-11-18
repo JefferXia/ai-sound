@@ -1,11 +1,9 @@
-import { cookies } from 'next/headers';
-import { CreateText } from '@/components/create/create-text'
+import { CreateAudio } from '@/components/create/create-audio'
+import { MinimaxVoiceMap } from '@/lib/config'
 
 export default async function Page() {
 
-  const cookieStore = await cookies();
-
   return (
-    <CreateText />
+    <CreateAudio audioConfig={MinimaxVoiceMap} />
   );
 }
