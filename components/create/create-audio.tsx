@@ -2,8 +2,9 @@
 
 import { Download, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { useGlobalContext } from "@/app/globalContext"
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -22,8 +23,9 @@ export function CreateAudio({
   const [audioUrl, setAudioUrl] = useState<string>('')
   const [audioDownloadUrl, setAudioDownloadUrl] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const scriptRef = useRef<any>(null)
-  const router = useRouter()
+  const {
+    userInfo
+  } = useGlobalContext()
 
   const handleGenerateBtn = async () => {
     setAudioUrl('')
@@ -35,6 +37,7 @@ export function CreateAudio({
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        userId: userInfo.id,
         text: script,
         voiceId: voice
       })
@@ -122,7 +125,7 @@ export function CreateAudio({
             <Button
               className="w-full text-base font-bold cursor-pointer"
               onClick={handleGenerateBtn}
-              disabled={loading || !script}
+              disabled={loading || !script || !voice}
             >
               {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
               生成

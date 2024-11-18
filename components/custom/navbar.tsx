@@ -80,13 +80,13 @@ export function Navbar({ user }: { user: User | undefined }) {
                   </NavigationMenuLink>
                 </li>
                 <ListItem href="/create/text" title="创作文案">
-                  用AI帮你快速创作脚本文案
+                  超强AI智能体帮你快速创作脚本文案
                 </ListItem>
                 <ListItem href="/create/audio" title="创作音频">
-                  创作你想要的配音
+                  超逼真多情感的生成式语音大模型
                 </ListItem>
                 <ListItem href="/create/video" title="创作视频">
-                  剪辑视频
+                  一键生成创意视频
                 </ListItem>
               </ul>
             </NavigationMenuContent>
