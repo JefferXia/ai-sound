@@ -1,5 +1,5 @@
 export const BestPromptName: { [key: string]: string } = {
-  titleMaster: '10w+标题大师',
+  titleMaster: '10w+标题',
   hotScript: '爆款网络文案',
   slogan: '营销slogan',
   WeChatEditor: '微信公众号小编',

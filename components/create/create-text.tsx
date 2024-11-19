@@ -1,6 +1,6 @@
 'use client'
 import { readStreamableValue } from 'ai/rsc'
-import { Clipboard, ClipboardCheck, Info, Loader2 } from 'lucide-react'
+import { Clipboard, ClipboardCheck, Gem, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { generate } from '@/app/create/actions'
@@ -22,6 +22,7 @@ import {
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 import Loading from './loading'
+import { toast } from 'sonner'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import { BestPromptName, BestPromptText } from '@/lib/ai/prompt-template'
 
@@ -46,14 +47,20 @@ export function CreateText() {
       setGeneration('')
     }
     setLoading(true)
-    const { output } = await generate({
+    const res = await generate({
       userId: userInfo.id,
       systemPrompt,
       textMaterial: scriptPrompt,
-      model
+      model,
+      template
     })
 
-    for await (const delta of readStreamableValue(output)) {
+    if(!res.output) {
+      setLoading(false)
+      toast.error(res?.error || '出错了~ 请重试')
+      return
+    }
+    for await (const delta of readStreamableValue(res.output)) {
       setGeneration(currentGeneration => `${currentGeneration}${delta}`)
     }
     setLoading(false)
@@ -76,7 +83,7 @@ export function CreateText() {
       {/* <h1 className="text-2xl font-medium text-center">文案助手</h1> */}
       <div className="flex flex-row w-full">
         <div className="flex flex-col w-1/2 mr-12">
-          <Label className="block mb-2 font-medium text-base">选择模板助手</Label>
+          <Label className="block mb-2 font-medium text-base">选择智能助手</Label>
           <div className="mb-5">
             <ToggleGroup 
               className='justify-start gap-2 flex-wrap'
@@ -151,6 +158,9 @@ export function CreateText() {
             >
               {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
               生成
+              <span className='flex items-center'>
+              （<Gem className='mr-1' size={16} />5）
+              </span>
             </Button>
           </div>
         </div>
