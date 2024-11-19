@@ -1,6 +1,6 @@
 'use client'
 
-import { Download, Loader2 } from 'lucide-react'
+import { Download, Loader2, Gem } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
@@ -129,6 +129,9 @@ export function CreateAudio({
             >
               {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
               生成
+              <span className='flex items-center'>
+              （<Gem className='mr-1' size={16} />8）
+              </span>
             </Button>
           </div>
         

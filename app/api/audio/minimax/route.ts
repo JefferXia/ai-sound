@@ -2,7 +2,8 @@ import axios from "axios"
 import { NextRequest, NextResponse } from 'next/server'
 import { cosUploadBuffer } from "@/lib/cosUpload"
 import prisma from '@/lib/prisma'
-import { ContentType, FileFormat, TaskStatus } from '@prisma/client';
+import { ContentType, FileFormat, TaskStatus } from '@prisma/client'
+import { createTransaction } from "@/lib/db"
 
 const GROUP_ID = process.env.MINIMAX_GROUP_ID
 const API_KEY = process.env.MINIMAX_API_KEY
@@ -41,8 +42,8 @@ export async function POST(req: NextRequest) {
       const minimaxResponse = response.data
       // console.log(minimaxResponse)
       const timestamp = Date.now()
-      const fileName = `topmind/audios/minimax_audio_${timestamp}.mp3`
-      const audioUrl = await cosUploadBuffer(minimaxResponse.data.audio, fileName)
+      const fileName = `tm/audios/minimax_audio_${timestamp}.mp3`
+      const audioUrl = await cosUploadBuffer(Buffer.from(minimaxResponse.data.audio, 'hex'), fileName)
 
       const resp = {
         audioUrl: 'https://'+audioUrl || '',
@@ -64,15 +65,20 @@ export async function POST(req: NextRequest) {
             }
           }
         });
+        const transactionData = await createTransaction(userId, ContentType.AUDIO)
+
+        return Response.json(transactionData ? {
+          ...resp,
+          accountInfo: transactionData[1]
+        } : resp)
       } catch (error) {
         console.error('Error saving content work to database:', error);
+        return NextResponse.json({ error }, { status: 500 })
       }
-
-      return Response.json(resp)
     } else {
       throw new Error(`Minimax.t2a_v2: error: ${response.status}`)
     }
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to generate audio' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to generate audio'+JSON.stringify(error) }, { status: 500 })
   }
 }

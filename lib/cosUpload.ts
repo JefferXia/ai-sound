@@ -23,7 +23,7 @@ export default async function cosUpload(file: string, fileName: string) {
   }
 }
 
-export async function cosUploadBuffer(audioHex: string, fileName: string) {
+export async function cosUploadBuffer(buffer: Buffer, fileName: string) {
   const cos = new COS({
     SecretId: process.env.COS_SECRETID,
     SecretKey: process.env.COS_SECRETKEY,
@@ -33,7 +33,7 @@ export async function cosUploadBuffer(audioHex: string, fileName: string) {
     Bucket: "video-1255988328", // 替换为你的存储桶名称
     Region: "ap-nanjing", // 替换为你的存储桶所在区域
     Key: fileName, // 上传到 COS 的文件名
-    Body: Buffer.from(audioHex, 'hex')
+    Body: buffer
   };
 
   try {

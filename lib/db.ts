@@ -63,19 +63,26 @@ export async function createRecharge(accountId: string, amount: number) {
 }
 
 // 添加交易记录
-export async function createTransaction(accountId: string, type: string) {
+export async function createTransaction(userId: string, type: string) {
   const getValueByType: ValueType = {
-    'VIDEO_ANALYSIS': 10
+    'VIDEO_ANALYSIS': 20,
+    'TEXT': 5,
+    'AUDIO': 8,
+    'VIDEO': 60
   }
-  const accountData = await prisma.account.findUnique({
-    where: { id: accountId },
+  const accountData = await prisma.account.findFirst({
+    where: { 
+      user_id: userId,
+    },
     select: {
+      id: true,
       balance: true,
       gift_tokens: true,
       recharge_tokens: true,
     }
   });
-  if(!accountData || accountData.balance < getValueByType[type]) {
+  // if(!accountData || accountData.balance < getValueByType[type]) {
+  if(!accountData) {
     return false
   }
   // 优先扣除 giftTokens
@@ -103,20 +110,20 @@ export async function createTransaction(accountId: string, type: string) {
   const transaction = await prisma.$transaction([
     prisma.transactionRecord.create({
       data: {
-        account_id: accountId,
+        account_id: accountData.id,
         price: getValueByType[type],
         type,
       },
     }),
     prisma.account.update({
-      where: { id: accountId },
+      where: { id: accountData.id },
       data: updateData,
     }),
   ]);
 
   return transaction
 
-  console.log('Transaction record created:', transaction);
+  // console.log('Transaction record created:', transaction);
 }
 
 export async function accountDetails(userId: string) {
