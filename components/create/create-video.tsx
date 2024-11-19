@@ -1,22 +1,19 @@
 'use client'
 
-import { Download, Loader2, Link, Gem } from 'lucide-react'
+import { Download, Loader2, Gem } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useGlobalContext } from "@/app/globalContext"
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import Loading from './loading'
 import { toast } from 'sonner'
-import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 
 export function CreateVideo() {
   const [script, setScript] = useState('')
   const [videoUrl, setVideoUrl] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const { isCopied, copyToClipboard } = useCopyToClipboard({})
   const {
     userInfo
   } = useGlobalContext()
@@ -55,10 +52,6 @@ export function CreateVideo() {
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
-  }
-
-  const handleCopyText = (text: string) => {
-    copyToClipboard(text)
   }
 
   return (
@@ -114,26 +107,6 @@ export function CreateVideo() {
         )}
         {loading && <Loading />}
       </div>
-
-      {/* <div className='grid grid-cols-5 gap-4'>
-        <div className='p-4 rounded-2xl bg-muted/50'>
-          <div className='text-sm font-bold'>
-            10w+标题大师
-          </div>
-          <div className='relative my-3 text-base line-clamp-3 group cursor-pointer'>
-          摄像机从高处俯瞰的位置开始缓慢下降，呈现出一个古老战场的全景。从高处的视角，可以看到一片广阔泥泞的大地，见证着下方激烈的冲突。摄像机镜头捕捉到陷入生死搏斗的战士们痛苦的吼叫、刀剑相击，用令人窒息的紧张感笼罩着感官。
-            <div 
-              className='flex justify-center items-center absolute inset-0 bg-[rgba(0,0,0,0.5)] rounded invisible group-hover:visible'
-              onClick={() => handleCopyText('')}
-            >
-              复制文本
-            </div>
-          </div>
-          <div className='text-sm text-muted-foreground/50 text-right'>
-            创建于 2024/11/12
-          </div>
-        </div>
-      </div> */}
     </div>
   )
 }
