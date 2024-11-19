@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { MinimaxVoice } from '@/lib/config'
 import Loading from './loading'
+import { toast } from 'sonner'
 
 export function CreateAudio({
   audioConfig,
@@ -42,12 +43,13 @@ export function CreateAudio({
         voiceId: voice
       })
     })
+    const res = await response.json()
     if (!response.ok) {
       setLoading(false)
-      throw new Error(`HTTP error! status: ${response.status}`)
+      toast.error(res?.error || '出错了~ 请重试')
+      // throw new Error(`HTTP error! status: ${response.status}`)
     }
-    const { audioUrl } = await response.json()
-    setAudioUrl(audioUrl)
+    setAudioUrl(res?.audioUrl)
     setAudioDownloadUrl(audioUrl)
     setLoading(false)
   }

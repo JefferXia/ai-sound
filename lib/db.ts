@@ -63,16 +63,16 @@ export async function createRecharge(accountId: string, amount: number) {
 }
 
 // 添加交易记录
-export async function createTransaction(userId: string, type: string) {
+export async function createTransaction(accountId: string, type: string) {
   const getValueByType: ValueType = {
     'VIDEO_ANALYSIS': 20,
     'TEXT': 5,
     'AUDIO': 8,
     'VIDEO': 60
   }
-  const accountData = await prisma.account.findFirst({
+  const accountData = await prisma.account.findUnique({
     where: { 
-      user_id: userId,
+      id: accountId,
     },
     select: {
       id: true,

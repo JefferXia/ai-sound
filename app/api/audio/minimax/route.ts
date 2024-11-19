@@ -12,6 +12,30 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const { userId, text, voiceId } = body
 
+  if (!userId || !text || !voiceId) {
+    return NextResponse.json(
+      { error: "Missing required parameters" },
+      { status: 400 }
+    );
+  }
+
+  const accountData = await prisma.account.findFirst({
+    where: { 
+      user_id: userId,
+    },
+    select: {
+      id: true,
+      balance: true,
+    }
+  });
+
+  if (!accountData || accountData.balance < 8) {
+    return NextResponse.json(
+      { error: "余额不足" },
+      { status: 403 }
+    );
+  }
+
   const payload = {
     model: "speech-01-turbo",
     text,
@@ -65,15 +89,15 @@ export async function POST(req: NextRequest) {
             }
           }
         });
-        const transactionData = await createTransaction(userId, ContentType.AUDIO)
+        const transactionData = await createTransaction(accountData.id, ContentType.AUDIO)
 
         return Response.json(transactionData ? {
           ...resp,
-          accountInfo: transactionData[1]
+          balance: transactionData[1]?.balance
         } : resp)
       } catch (error) {
         console.error('Error saving content work to database:', error);
-        return NextResponse.json({ error }, { status: 500 })
+        return NextResponse.json({ error: 'Error saving task to database' }, { status: 500 })
       }
     } else {
       throw new Error(`Minimax.t2a_v2: error: ${response.status}`)
