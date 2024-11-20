@@ -36,6 +36,7 @@ export function CreateText() {
   const [model, setModel] = useState('gpt-4o')
   const [generation, setGeneration] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const [analysising, setAnalysising] = useState(false)
   const { isCopied, copyToClipboard } = useCopyToClipboard({})
   const router = useRouter()
   const {
@@ -80,6 +81,7 @@ export function CreateText() {
   }, [template])
 
   const handleAnalysisLink = async () => {
+    setAnalysising(true)
     const response: any = await fetch('/api/analysis/douyin', {
       method: 'post',
       headers: {
@@ -92,11 +94,13 @@ export function CreateText() {
     })
     const res = await response.json()
     if (!response.ok) {
-      setLoading(false)
+      setAnalysising(false)
       toast.error(res?.error || '出错了~ 请重试')
+      return
     }
     setTemplate('secondCreation')
     setScriptPrompt(`视频标题为：${res?.title}，以下是视频文案：${res?.content}`)
+    setAnalysising(false)
   }
 
   return (
@@ -118,7 +122,7 @@ export function CreateText() {
                 key={key} 
                 value={key} 
                 aria-label={value} 
-                className='data-[state=on]:bg-main-color data-[state=on]:text-white'
+                className='data-[state=on]:bg-blue-600 data-[state=on]:text-white'
               >
                 {value}
               </ToggleGroupItem>
@@ -126,20 +130,22 @@ export function CreateText() {
             </ToggleGroup>
           </div>
           <Label className="block mb-2 font-medium text-base">爆款链接（可选项）</Label>
-          <div className='w-full mb-5 flex items-center gap-1 p-1 pl-5 border-2 rounded-lg border'>
+          <div className='w-full mb-5 flex items-center gap-1 p-1 pl-5 border-2 rounded-lg'>
             <Link />
             <Input 
               className='border-none outline-0 bg-transparent ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 focus-visible:ring-0' 
-              placeholder='输入爆款短视频链接，目前仅支持抖音'
+              placeholder='请输入爆款短视频链接，目前仅支持抖音'
               onChange={e => {
                 setLink(e.target.value)
               }}
             />
             <Button 
-              className='rounded-lg' 
+              className='bg-blue-600 hover:bg-blue-500 text-white rounded-lg' 
               onClick={handleAnalysisLink}
+              disabled={analysising}
             >
-              分析链接
+              {analysising && <Loader2 className="mr-2 size-4 animate-spin" />}
+              {analysising ? '分析中' : '分析链接'}
             </Button>
           </div>
           <Label className="block mb-2 font-medium text-base">文案主题</Label>

@@ -85,7 +85,7 @@ const pullRecTask = async (TaskId: any) => {
 };
 
 // 腾讯语音识别
-export const useTecentAsr = async (filePath: string) => {
+export const tecentAsr = async (filePath: string) => {
   // const base64Audio = fileToBase64(filePath);
   const params = {
     EngineModelType: "16k_zh_large",

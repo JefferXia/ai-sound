@@ -1,7 +1,7 @@
 export const maxDuration = 60; // 设置为60秒
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { useTecentAsr } from '@/lib/asr';
+import { tecentAsr } from '@/lib/asr';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
       );
     }
     const ocrContent = metadata.seo_info?.ocr_content;
-    const audioInfo = await useTecentAsr(audioUrl);
+    const audioInfo = await tecentAsr(audioUrl);
     const videoScript = audioInfo ? audioInfo.result : ocrContent;
     const subtitles = (audioInfo && audioInfo.resultDetail) ? { asrData: audioInfo.resultDetail } : {};
 
