@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     take: limit,
     skip: offset
   })
-  console.log(textTasks)
+  // console.log(textTasks)
 
   // 格式化输出
   const formattedData = textTasks.map(task => ({

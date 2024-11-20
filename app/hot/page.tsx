@@ -11,15 +11,14 @@ export interface VideoItem {
   url: string;
   title: string;
   extractor: string;
-  metadata: string;
-  metadataObj: any;
-  createdAt: number;
+  metadata: any;
 }
 
 const Page = () => {
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
+  const pageCount = 10
 
   const formatNumber = (num:number) => {
     if (num >= 10000) {
@@ -29,29 +28,32 @@ const Page = () => {
     }
   }
 
+  const fetchVideos = async (page: number) => {
+    setLoading(true)
+
+    const response = await fetch(`/api/hot-list`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        limit: pageCount,
+        offset: page * pageCount
+      })
+    });
+
+    if (!response.ok) {
+      setLoading(false)
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    const { data } = await response.json()
+
+    setVideos(data)
+    setLoading(false)
+  };
+
   useEffect(() => {
-    const fetchVideos = async () => {
-      setLoading(true);
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/videos`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await res.json();
-
-      const newData = data.videos.map((item:any) => ({
-        metadataObj: JSON.parse(item.metadata),
-        ...item
-      }));
-
-      setVideos(newData);
-      setLoading(false);
-    };
-
-    fetchVideos();
+    fetchVideos(0);
   }, []);
 
   const downloadVideo = (url:string) => {
@@ -76,10 +78,10 @@ const Page = () => {
         </div>
       )}
       {videos.length > 0 && (
-        <div className="grid grid-cols-2 xl:grid-cols-5 lg:grid-cols-4 gap-4">
+        <div className="p-6 pt-24 grid grid-cols-2 xl:grid-cols-5 md:grid-cols-4 gap-4">
           {videos.map((video, i) => (
             <div
-              className="flex flex-col justify-between p-3 pb-2 bg-muted rounded-lg"
+              className="flex flex-col justify-between p-3 bg-muted rounded-lg"
               key={i}
             >
               <div 
@@ -90,7 +92,7 @@ const Page = () => {
                 <video
                   className='w-full'
                   ref={(el:any) => (videoRefs.current[i] = el)}
-                  src={`//${video.url}`}
+                  src={`${video.url}`}
                   onMouseLeave={() => {
                     videoRefs.current[i] && videoRefs.current[i].pause()
                   }}
@@ -103,11 +105,11 @@ const Page = () => {
               <div className=''>
                 <div className='flex justify-around py-4'>
                   <div className='text-center'>
-                    <p className='text-lg font-medium'>{formatNumber(video.metadataObj?.like_count)}</p>
+                    <p className='text-lg font-medium'>{formatNumber(video.metadata?.stat?.digg_count)}</p>
                     <p className="text-sm text-gray-500">点赞</p>
                   </div>
                   <div className='text-center'>
-                    <p className='text-lg font-medium'>{formatNumber(video.metadataObj?.comment_count)}</p>
+                    <p className='text-lg font-medium'>{formatNumber(video.metadata?.stat?.comment_count)}</p>
                     <p className="text-sm text-gray-500">评论</p>
                   </div>
                 </div>
