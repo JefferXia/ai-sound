@@ -1,6 +1,6 @@
 'use client'
 import { readStreamableValue } from 'ai/rsc'
-import { Clipboard, ClipboardCheck, Gem, Loader2 } from 'lucide-react'
+import { Clipboard, ClipboardCheck, Gem, Loader2, Link } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { generate } from '@/app/create/actions'
@@ -23,18 +23,19 @@ import {
 } from "@/components/ui/toggle-group"
 import Loading from './loading'
 import { toast } from 'sonner'
+import { BetterTooltip } from '@/components/ui/tooltip'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import { BestPromptName, BestPromptText } from '@/lib/ai/prompt-template'
 
 export function CreateText() {
   const [template, setTemplate] = useState('')
+  const [link, setLink] = useState('')
   const [systemPrompt, setSystemPrompt] = useState('')
   const [scriptPrompt, setScriptPrompt] = useState('')
   const [scriptLen, setScriptLen] = useState(0)
   const [model, setModel] = useState('gpt-4o')
   const [generation, setGeneration] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const scriptRef = useRef<any>(null)
   const { isCopied, copyToClipboard } = useCopyToClipboard({})
   const router = useRouter()
   const {
@@ -78,6 +79,26 @@ export function CreateText() {
     }
   }, [template])
 
+  const handleAnalysisLink = async () => {
+    const response: any = await fetch('/api/analysis/douyin', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId: userInfo.id,
+        url: link
+      })
+    })
+    const res = await response.json()
+    if (!response.ok) {
+      setLoading(false)
+      toast.error(res?.error || '出错了~ 请重试')
+    }
+    setTemplate('secondCreation')
+    setScriptPrompt(`视频标题为：${res?.title}，以下是视频文案：${res?.content}`)
+  }
+
   return (
     <div className="p-6 pt-24">
       {/* <h1 className="text-2xl font-medium text-center">文案助手</h1> */}
@@ -103,6 +124,23 @@ export function CreateText() {
               </ToggleGroupItem>
             ))}
             </ToggleGroup>
+          </div>
+          <Label className="block mb-2 font-medium text-base">爆款链接（可选项）</Label>
+          <div className='w-full mb-5 flex items-center gap-1 p-1 pl-5 border-2 rounded-lg border'>
+            <Link />
+            <Input 
+              className='border-none outline-0 bg-transparent ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 focus-visible:ring-0' 
+              placeholder='输入爆款短视频链接，目前仅支持抖音'
+              onChange={e => {
+                setLink(e.target.value)
+              }}
+            />
+            <Button 
+              className='rounded-lg' 
+              onClick={handleAnalysisLink}
+            >
+              分析链接
+            </Button>
           </div>
           <Label className="block mb-2 font-medium text-base">文案主题</Label>
           <div className="relative mb-5">
@@ -151,17 +189,19 @@ export function CreateText() {
             </div>
           </div>
           <div className="mt-10">
-            <Button
-              className="w-full text-base font-bold cursor-pointer"
-              onClick={handleGenerateBtn}
-              disabled={loading || !systemPrompt || !scriptPrompt}
-            >
-              {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-              生成
-              <span className='flex items-center'>
-              （<Gem className='mr-1' size={16} />5）
-              </span>
-            </Button>
+            <BetterTooltip content="将消耗 5 积分">
+              <Button
+                className="w-full text-base font-bold cursor-pointer"
+                onClick={handleGenerateBtn}
+                disabled={loading || !systemPrompt || !scriptPrompt}
+              >
+                {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+                生成
+                <span className='flex items-center'>
+                （<Gem className='mr-1' size={16} />5）
+                </span>
+              </Button>
+            </BetterTooltip>
           </div>
         </div>
 

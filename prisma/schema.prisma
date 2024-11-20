@@ -75,7 +75,9 @@ enum FileFormat {
 }
 enum TaskStatus {
   SUCCESS
-  ERROR
+  FAILED
+  QUEUEING
+  PROCESSING
 }
 model CreateTask {
   id           String      @id @default(uuid())
@@ -84,7 +86,7 @@ model CreateTask {
   file_format  FileFormat // for simple text while is not a file format, fill with PLAIN_TEXT
   content      String // url if it's a file or text if it's a text
   status       TaskStatus
-  error_msg    String?
+  is_deleted   Boolean  @default(false)
   task_info    Json @default("{}") // Additional task metadata like model info, processing parameters, etc.
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
@@ -138,15 +140,18 @@ model TransactionRecord {
 
 model Video {
   id          String   @id @default(cuid())   // 视频ID，使用cuid生成唯一标识符
-  url         String   @db.Text               // 视频URL，非空
+  video_url   String   @db.Text               // 视频URL，非空
   audio_url   String?  @db.Text               // 音频URL，可选
-  video_id    String?  @db.Text               // 视频外站ID，可选
-  title       String?  @db.Text               // 标题，可选
+  video_id    String   @db.Text               // 视频外站ID
+  title       String   @db.Text               // 标题
+  content     String?  @db.Text               // 视频文案，可选
   metadata    Json?    @db.Json                // 元数据，JSON格式，可选
   subtitles   Json?    @db.Json                // 字幕，JSON格式，可选
   scene       Json?    @db.Json                // 场景，JSON格式，可选
   summary     String?  @db.Text               // 摘要，可选
   user_id     String                         // 用户ID，可选
+  status      String
+  source      String
   created_at  DateTime  @default(now())                // 创建时间
   updated_at  DateTime  @updatedAt                     // 更新时间
 }

@@ -6,6 +6,7 @@ import {
   Message,
   ToolInvocation,
 } from 'ai';
+import axios from 'axios';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -244,3 +245,15 @@ export function getFirstLetterAndUpperCase(str: string) {
 export function utcToBeijing(time: Date|string) {
   return new Date(time).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
 }
+
+export async function videoUrlToBuffer(videoUrl: string) {
+  try {
+    const response = await axios.get(videoUrl, {
+      responseType: 'arraybuffer', // 确保响应是二进制数据
+    });
+    const buffer = Buffer.from(response.data, 'binary');
+    return buffer;
+  } catch (error: any) {
+    console.error('Error downloading video:', error.message);
+  }
+};
