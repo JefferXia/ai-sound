@@ -72,9 +72,9 @@ export function Navbar({ user }: { user: User | undefined }) {
                       <Image
                         width={190}
                         height={220}
-                        src="/images/create.webp" 
+                        src="/images/google-base.svg"
                         alt="创作"
-                        objectFit="cover"
+                        objectFit="contain"
                       />
                     </a>
                   </NavigationMenuLink>
