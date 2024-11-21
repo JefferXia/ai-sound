@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Crown, CalendarDays, Info } from 'lucide-react';
 import { useGlobalContext } from '@/app/globalContext'
+import { useRouter } from 'next/navigation'
 import { getFirstLetterAndUpperCase } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/hover-card"
 
 interface AccountInfo {
+  grade: string
   balance: number
   giftTokens: number
   rechargeTokens: number
@@ -24,6 +26,7 @@ export function AccountInfo({
   accountInfo: AccountInfo
 }) {
   const { userInfo } = useGlobalContext()
+  const router = useRouter()
 
   useEffect(() => {}, []);
 
@@ -37,7 +40,7 @@ export function AccountInfo({
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">{userInfo?.email}</h4>
             <p className="text-sm text-muted-foreground">
-            未开通会员
+              {accountInfo?.grade === 'REGULAR' ? '未开通会员' : `${accountInfo?.grade}会员`}
             </p>
             <div className="flex items-center pt-1">
               <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
@@ -49,9 +52,12 @@ export function AccountInfo({
         </div>
         <Button 
           className="text-[#79402e] bg-[#F8da51] hover:bg-[#ffefd1] flex items-center justify-center"
+          onClick={() => {
+            router.push('/member/upgrade')
+          }}
         >
-          <Crown className="mr-2 h-4 w-4" />
-          开通会员
+          <Crown className="mr-1 h-4 w-4" />
+          升级会员
         </Button>
       </div>
       <div className='flex items-center mt-5 pt-5 border-t border-tbborder text-sm'>

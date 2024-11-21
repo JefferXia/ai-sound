@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { MinimaxVoice } from '@/lib/config'
 import Loading from './loading'
 import { toast } from 'sonner'
+import { BetterTooltip } from '@/components/ui/tooltip'
 
 export function CreateAudio({
   audioConfig,
@@ -43,15 +44,14 @@ export function CreateAudio({
         voiceId: voice
       })
     })
+    setLoading(false)
     const res = await response.json()
     if (!response.ok) {
-      setLoading(false)
       toast.error(res?.error || '出错了~ 请重试')
-      // throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
     setAudioUrl(res?.audioUrl)
     setAudioDownloadUrl(audioUrl)
-    setLoading(false)
   }
 
   const handleDownload = () => {
@@ -124,17 +124,19 @@ export function CreateAudio({
           </div>
 
           <div className="mt-10">
-            <Button
-              className="w-full text-base font-bold cursor-pointer"
-              onClick={handleGenerateBtn}
-              disabled={loading || !script || !voice}
-            >
-              {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-              生成
-              <span className='flex items-center'>
-              （<Gem className='mr-1' size={16} />8）
-              </span>
-            </Button>
+            <BetterTooltip content="将消耗 8 积分">
+              <Button
+                className="w-full text-base font-bold cursor-pointer"
+                onClick={handleGenerateBtn}
+                disabled={loading || !script || !voice}
+              >
+                {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+                生成
+                <span className='flex items-center'>
+                （<Gem className='mr-1' size={16} />8）
+                </span>
+              </Button>
+            </BetterTooltip>
           </div>
         
           <div className="flex justify-between mt-10">

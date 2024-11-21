@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import Loading from './loading'
 import { toast } from 'sonner'
+import { BetterTooltip } from '@/components/ui/tooltip'
 
 export function CreateVideo() {
   const [script, setScript] = useState('')
@@ -32,14 +33,13 @@ export function CreateVideo() {
         model: "video-01"
       })
     })
+    setLoading(false)
     const res = await response.json()
     if (!response.ok) {
-      setLoading(false)
       toast.error(res?.error || '出错了~ 请重试')
-      // throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`)
     }   
     setVideoUrl(res.downloadUrl)
-    setLoading(false)
   }
 
   const handleDownload = () => {
@@ -72,17 +72,19 @@ export function CreateVideo() {
         </div>
 
         <div className="mt-5">
-          <Button
-            className="w-full text-base font-bold cursor-pointer"
-            onClick={handleGenerateBtn}
-            disabled={loading || !script}
-          >
-            {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-            生成
-            <span className='flex items-center'>
-              （<Gem className='mr-1' size={16} />60）
-            </span>
-          </Button>
+          <BetterTooltip content="将消耗 60 积分">
+            <Button
+              className="w-full text-base font-bold cursor-pointer"
+              onClick={handleGenerateBtn}
+              disabled={loading || !script}
+            >
+              {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+              生成
+              <span className='flex items-center'>
+                （<Gem className='mr-1' size={16} />60）
+              </span>
+            </Button>
+          </BetterTooltip>
         </div>
 
         <div className="mt-10 flex justify-between">

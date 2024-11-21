@@ -14,10 +14,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useEffect } from 'react'
 
 export function UserNav({ user }: { user: User }) {
   const { setTheme, theme } = useTheme()
   const router = useRouter()
+
+  useEffect(() => {
+    if(theme === 'light') {
+      setTheme('dark')
+    }
+  }, [theme])
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,7 +47,7 @@ export function UserNav({ user }: { user: User }) {
       >
         <DropdownMenuItem
           onSelect={() => {
-            router.push("/upgrade")
+            router.push("/member/upgrade")
           }}
         >
           升级会员

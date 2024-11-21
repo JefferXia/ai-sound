@@ -179,6 +179,7 @@ export async function accountDetails(userId: string) {
 
   return {
     info: {
+      grade: accountWithDetails.grade,
       balance: accountWithDetails.balance,
       giftTokens: accountWithDetails.gift_tokens,
       rechargeTokens: accountWithDetails.recharge_tokens,
