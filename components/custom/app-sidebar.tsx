@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus } from 'lucide-react';
+import { Plus, ScrollText, AudioLines, Youtube, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { type User } from 'next-auth';
 
@@ -20,6 +20,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
@@ -27,6 +28,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
+  SidebarSeparator
 } from '@/components/ui/sidebar';
 import { BetterTooltip } from '@/components/ui/tooltip';
 
@@ -55,13 +57,56 @@ export function AppSidebar({ user }: { user: User | undefined }) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className='pt-8'>
         {/* <SidebarHistory user={user} /> */}
+        <SidebarGroup>
+          <SidebarGroupLabel>我的项目</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/profile/text">
+                  <ScrollText />
+                  <span>我创作的文案</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/profile/audio">
+                  <AudioLines />
+                  <span>我创作的音频</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/profile/video">
+                  <Youtube />
+                  <span>我创作的视频</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        {/* <SidebarSeparator /> */}
+        <SidebarGroup>
+          <SidebarGroupLabel>我的账户</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/profile/account">
+                  <CreditCard />
+                  <span>账户明细</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="gap-0">
         <SidebarGroup>
           <SidebarGroupContent>
-            <Card className="p-4 flex flex-col gap-4 relative rounded-md border-none shadow-none hover:shadow transition-shadow">
+            {/* <Card className="p-4 flex flex-col gap-4 relative rounded-md border-none shadow-none hover:shadow transition-shadow">
               <a
                 href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fai-chatbot&env=AUTH_SECRET,OPENAI_API_KEY&envDescription=Learn%20more%20about%20how%20to%20get%20the%20API%20Keys%20for%20the%20application&envLink=https%3A%2F%2Fgithub.com%2Fvercel%2Fai-chatbot%2Fblob%2Fmain%2F.env.example&demo-title=AI%20Chatbot&demo-description=An%20Open-Source%20AI%20Chatbot%20Template%20Built%20With%20Next.js%20and%20the%20AI%20SDK%20by%20Vercel.&demo-url=https%3A%2F%2Fchat.vercel.ai&stores=[{%22type%22:%22postgres%22},{%22type%22:%22blob%22}]"
                 className="absolute inset-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
@@ -83,16 +128,16 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   Deploy with Vercel
                 </Button>
               </CardFooter>
-            </Card>
+            </Card> */}
           </SidebarGroupContent>
         </SidebarGroup>
-        {user && (
+        {/* {user && (
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarUserNav user={user} />
             </SidebarGroupContent>
           </SidebarGroup>
-        )}
+        )} */}
       </SidebarFooter>
     </Sidebar>
   );

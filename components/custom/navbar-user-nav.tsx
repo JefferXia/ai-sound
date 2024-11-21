@@ -1,22 +1,23 @@
-'use client';
-import { ChevronDown } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { type User } from 'next-auth';
-import { signOut } from 'next-auth/react';
-import { useTheme } from 'next-themes';
-
-import { Button } from '@/components/ui/button';
+'use client'
+import { ChevronDown } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { type User } from 'next-auth'
+import { signOut } from 'next-auth/react'
+import { useTheme } from 'next-themes'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu'
 
 export function UserNav({ user }: { user: User }) {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, theme } = useTheme()
+  const router = useRouter()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,14 +37,33 @@ export function UserNav({ user }: { user: User }) {
         side="top"
         className="w-[--radix-popper-anchor-width]"
       >
-        <DropdownMenuItem>
-          <Link href="/profile">个人主页</Link>
+        <DropdownMenuItem
+          onSelect={() => {
+            router.push("/upgrade")
+          }}
+        >
+          升级会员
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onSelect={() => {
+            router.push("/profile/text")
+          }}
+        >
+          个人主页
         </DropdownMenuItem>
         <DropdownMenuItem
+          onSelect={() => {
+            router.push("/profile/account")
+          }}
+        >
+          账户明细
+        </DropdownMenuItem>
+        {/* <DropdownMenuItem
           onSelect={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           切换主题色
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <button
