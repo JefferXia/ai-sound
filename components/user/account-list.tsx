@@ -28,9 +28,9 @@ export function AccountList({ list }: ListProps) {
   const typeMap:any = {
     WELCOME_GIFT: '注册赠送积分',
     VIDEO_ANALYSIS: '消耗积分-拆解视频',
-    TEXT: '文案创作',
-    AUDIO: '音频创作',
-    VIDEO: '视频创作',
+    TEXT: '消耗积分-文案创作',
+    AUDIO: '消耗积分-音频创作',
+    VIDEO: '消耗积分-视频创作',
     WECHAT: '充值积分-微信',
     ALIPAY: '充值积分-支付宝'
   }
@@ -51,7 +51,7 @@ export function AccountList({ list }: ListProps) {
         <TableBody>
           {list?.map((item, index) => (
             <TableRow key={index}>
-              <TableCell className="font-medium">{typeMap[item.type]}</TableCell>
+              <TableCell className="font-medium">{typeMap[item.type] || '其他类型'}</TableCell>
               <TableCell>{item.amount}</TableCell>
               <TableCell>{item.createdAt}</TableCell>
             </TableRow>

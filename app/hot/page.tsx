@@ -78,7 +78,7 @@ const Page = () => {
         </div>
       )}
       {videos.length > 0 && (
-        <div className="p-6 pt-24 grid grid-cols-2 xl:grid-cols-5 md:grid-cols-4 gap-4">
+        <div className="p-6 pt-24 grid grid-cols-2 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 gap-4">
           {videos.map((video, i) => (
             <div
               className="flex flex-col justify-between p-3 bg-muted rounded-lg"

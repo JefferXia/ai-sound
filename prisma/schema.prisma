@@ -125,7 +125,7 @@ model RechargeRecord {
   created_at      DateTime @default(now())
   order_number    String   @unique                        // 订单号，唯一
   source          String                                  // 充值来源（如：支付宝、微信、银行卡等）
-  status          String   @default("PENDING")            // 充值状态（如：PENDING, COMPLETED, FAILED）
+  status          String   @default("PENDING")            // 充值状态（如：PENDING, SUCCESS, FAILED）
   account         Account  @relation(fields: [account_id], references: [id]) // 与账户的关系
 }
 

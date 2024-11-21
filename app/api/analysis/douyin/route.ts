@@ -1,35 +1,37 @@
 export const maxDuration = 60; // 设置为60秒
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { tecentAsr } from '@/lib/asr';
+import { NextRequest, NextResponse } from 'next/server'
+import prisma from '@/lib/prisma'
+import { tecentAsr } from '@/lib/asr'
+import { cosUploadBuffer } from "@/lib/cosUpload"
+import { videoUrlToBuffer } from '@/lib/utils'
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { userId, url } = body;
   if (!userId || !url) {
     return NextResponse.json(
-      { error: 'Missing required parameters' },
+      { error: '请输入视频链接' },
       { status: 400 }
     );
   }
 
-  // const accountData = await prisma.account.findFirst({
-  //   where: { 
-  //     user_id: userId,
-  //   },
-  //   select: {
-  //     id: true,
-  //     balance: true,
-  //     grade: true
-  //   }
-  // });
+  const accountData = await prisma.account.findFirst({
+    where: { 
+      user_id: userId,
+    },
+    select: {
+      id: true,
+      balance: true,
+      grade: true
+    }
+  });
 
-  // if (!accountData || accountData.balance < 10) {
-  //   return NextResponse.json(
-  //     { error: "余额不足" },
-  //     { status: 402 }
-  //   );
-  // }
+  if (!accountData || accountData.balance < 10) {
+    return NextResponse.json(
+      { error: "余额不足" },
+      { status: 402 }
+    );
+  }
 
   try {
     const res = await fetch(
@@ -78,6 +80,16 @@ export async function POST(req: NextRequest) {
         { status: 404 }
       );
     }
+
+    const videoBuffer = await videoUrlToBuffer(metadata.video?.play_addr?.url_list[2])
+    const fileName = `va/videos/${metadata.aweme_id}.mp4`
+    let videoUrl;
+    if(videoBuffer) {
+      const cosUploadUrl = await cosUploadBuffer(videoBuffer, fileName)
+      videoUrl = cosUploadUrl ? `https://${cosUploadUrl}` : metadata.video?.play_addr?.url_list[2]
+      console.log('上传视频成功')
+    }
+
     const ocrContent = metadata.seo_info?.ocr_content;
     const audioInfo = await tecentAsr(audioUrl);
     const videoScript = audioInfo ? audioInfo.result : ocrContent;
@@ -87,7 +99,7 @@ export async function POST(req: NextRequest) {
       data: {
         user_id: userId,
         video_id: metadata.aweme_id,
-        video_url: metadata.video?.play_addr?.url_list[0],
+        video_url: videoUrl,
         audio_url: audioUrl,
         title: metadata.item_title,
         content: videoScript,

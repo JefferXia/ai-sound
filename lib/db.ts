@@ -42,7 +42,7 @@ export async function createRecharge(accountId: string, amount: number) {
         amount,
         order_number: 'ORD123456', // 生成或传入唯一订单号
         source: 'WECHAT',         // 充值来源，如：支付宝、微信等
-        status: 'COMPLETED',      // 充值状态：成功
+        status: 'SUCCESS',      // 充值状态：成功
       },
     }),
     // 2. 更新账户余额和充值代币
@@ -157,7 +157,7 @@ export async function accountDetails(userId: string) {
       createdAt: record.created_at,        // 记录的时间
     })),
     ...accountWithDetails.recharges
-      .filter(record => record.status === 'COMPLETED') // 只包含已完成的充值
+      .filter(record => record.status === 'SUCCESS') // 只包含已完成的充值
       .map(record => ({
         type: record.source,              // 充值记录的类型
         amount: `+${record.amount}`,       // 积分变动（正数）
