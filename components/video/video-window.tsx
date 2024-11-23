@@ -12,7 +12,7 @@ import VideoInfoBox from '@/components/video/video-detail'
 import VideoMarkmapBox from '@/components/video/video-markmap'
 import VideoSceneBox from '@/components/video/video-scene'
 import Loading from '../create/loading'
-import { generate } from '@/app/create/actions'
+import { generateSummary } from '@/app/actions'
 import { useGlobalContext } from "@/app/globalContext"
 import { BestPromptText } from '@/lib/ai/prompt-template'
 
@@ -111,19 +111,19 @@ const VideoWindow = ({
     }
   };
 
-  const generateSummary = async () => {
+  const handleGenerateSummary = async () => {
     if(!videoInfo?.content) {
       toast.error('没有视频文案')
       return false
     }
     try {
       setGenerating(true)
-      const res = await generate({
+      const res = await generateSummary({
         userId: userInfo.id,
         systemPrompt: BestPromptText['summary'],
         textMaterial: videoInfo?.content,
         model: 'gpt-4o',
-        template: 'summary'
+        videoId: videoInfo?.id
       })
 
       if(!res.output) {
@@ -255,7 +255,7 @@ const VideoWindow = ({
                 <BetterTooltip content="将消耗 5 积分">
                   <Button 
                     className='bg-blue-600 hover:bg-blue-500 text-white rounded-lg' 
-                    onClick={generateSummary}
+                    onClick={handleGenerateSummary}
                     disabled={generating}
                   >
                     {generating && <Loader2 className="mr-2 size-4 animate-spin" />}
