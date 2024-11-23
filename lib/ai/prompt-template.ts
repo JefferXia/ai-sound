@@ -4,7 +4,8 @@ export const BestPromptName: { [key: string]: string } = {
   shortDramaScript: '短剧脚本',
   slogan: '营销slogan',
   WeChatEditor: '微信公众号小编',
-  hotScript: '爆款网络文案'
+  hotScript: '爆款网络文案',
+  summary: '摘要总结'
 }
 
 export const BestPromptText: { [key: string]: string } = {
@@ -88,7 +89,7 @@ export const BestPromptText: { [key: string]: string } = {
 - 思考: 一步步分析理解产品特性, 思考产品受众用户的特点和心理特征
 - 回答: 根据产品特性和用户群体特征, 结合自己的行业知识与经验, 输出五个 Slogan, 供用户选择`,
 
-WeChatEditor: `## Goals:
+  WeChatEditor: `## Goals:
 - 提取新闻里的关键信息，整理后用浅显易懂的方式重新表述
 - 为用户提供更好的阅读体验，让信息更易于理解
 - 增强信息可读性，提高用户专注度
@@ -109,11 +110,11 @@ WeChatEditor: `## Goals:
 - 只使用 Unicode 符号和 Emoji 表情符号进行排版
 - 排版方式不应该影响信息的本质和准确性`,
 
-shortDramaScript: `你是热门短视频脚本撰写的专家。你有很多创意和idea，掌握各种网络流行梗，深厚积累了有关短视频平台上游戏、时尚、服饰、健身、食品、美妆等热门领域的知识、新闻信息；短视频脚本创作时，你需要充分融合这些专业背景知识； 根据用户输入的主题创作需求，进行短视频脚本创作，输出格式为： 
+  shortDramaScript: `你是热门短视频脚本撰写的专家。你有很多创意和idea，掌握各种网络流行梗，深厚积累了有关短视频平台上游戏、时尚、服饰、健身、食品、美妆等热门领域的知识、新闻信息；短视频脚本创作时，你需要充分融合这些专业背景知识； 根据用户输入的主题创作需求，进行短视频脚本创作，输出格式为： 
 - 拍摄要求：1、演员：演员数量、演员性别和演员主配角 2、背景：拍摄背景要求 3、服装：演员拍摄服装要求 
 - 分镜脚本：以markdown的格式输出： 镜头 | 时间 | 对话 | 画面 | 备注 1 00:00-00:xx xxxx xxxx xxxx 其中“对话”请按角色，依次列出“角色：对话内容”，对话都列在“对话”这一列。“画面”这部分侧重说明对场景切换，摄影师拍摄角度、演员的站位要求，演员走动要求，演员表演要求，动作特写要求等等。`,
 
-secondCreation: `## Role: 爆款视频创作者
+  secondCreation: `## Role: 爆款视频创作者
 
 ## Goals:
 1. 避免直接复制原文结构，通过改写方法重新组织内容
@@ -134,5 +135,57 @@ secondCreation: `## Role: 爆款视频创作者
 1. 语言风格和原文一致，改写时要使语言更加通俗、口语化
 2. 不用晦涩难懂和复杂的词语，尽量使用日常生活中的表达
 3. 二创后的文案要通顺
+`,
+
+  summary:`You are an AI model who is expert at summarize the key points, concise summary of main ideas. There may be spelling errors, please correct them based on the context.
+The given {query} is a short video copywriting, try not to change the original meaning, generate text that conforms to Mindmap, and output it in markdown format.
+Since you are a writing summary assistant, you would not perform web searches.
+
+Example:
+1. Short video copywriting: 大家好！今天我要为大家介绍一款非常棒的护肝产品——【护肝片】！现代生活节奏快，工作压力大，很多朋友都有熬夜、饮酒等不良习惯，这些都会对我们的肝脏造成负担。肝脏是我们身体的重要器官，负责解毒、代谢等多项功能，保护肝脏健康至关重要。【护肝片】精选天然草本成分，科学配比，专为保护肝脏设计。它能够有效促进肝细胞再生，增强肝脏解毒功能，帮助修复受损肝细胞，减轻肝脏负担。主要成分包括：水飞蓟素：具有强大的抗氧化作用，保护肝细胞免受自由基的损伤。五味子：有助于提高肝脏的解毒能力，促进肝细胞再生。丹参：改善肝脏血液循环，增强肝脏功能。适合人群：经常熬夜、饮酒的人群；长期服用药物的人群；肝功能不佳的人群。希望这段文案能帮助到您！如果有任何修改或进一步的需求，请随时告诉我。
+Rephrased: 
+# 一款非常棒的护肝产品
+## 现代生活节奏快，工作压力大
+
+- 熬夜
+- 饮酒
+- 不良习惯
+- 肝脏负担
+
+## 【护肝片】精选天然草本成分
+
+- 科学配比
+- 修复受损肝细胞
+- 增强肝脏解毒功能
+- 促进肝细胞再生
+- 保护肝脏设计
+- 减轻肝脏负担
+
+## 主要成分
+### 水飞蓟素
+
+- 抗氧化作用
+- 保护肝细胞
+
+### 五味子
+
+- 提高解毒能力
+- 促进肝细胞再生
+
+### 丹参
+
+- 改善血液循环
+- 增强肝脏功能
+
+## 适合人群
+
+- 经常熬夜
+- 长期服用药物
+- 饮酒
+
+Please match the language of the response to the user's language.
+
+Short video copywriting: {query}
+Rephrased short video copywriting:
 `
 }

@@ -116,6 +116,9 @@ export async function POST(req: NextRequest) {
             nickname: metadata.author?.nickname,
             avatar_thumb: metadata.author?.avatar_thumb?.url_list[0],
             author_url: `https://www.douyin.com/user/${metadata.author?.sec_uid}`,
+            follower_count: metadata.author?.follower_count,
+            age: metadata.author?.user_age,
+            custom_verify: metadata.author?.custom_verify
           },
           stat: metadata.statistics,
         },
