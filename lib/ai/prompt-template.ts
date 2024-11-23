@@ -184,8 +184,5 @@ Rephrased:
 - 饮酒
 
 Please match the language of the response to the user's language.
-
-Short video copywriting: {query}
-Rephrased short video copywriting:
 `
 }

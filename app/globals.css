@@ -19,6 +19,9 @@
 li {
   list-style: none !important;
 }
+.dark .markmap-foreign {
+  color: #fff !important;
+}
 
 @layer utilities {
   .text-balance {
