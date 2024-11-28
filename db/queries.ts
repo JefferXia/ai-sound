@@ -27,16 +27,12 @@ export async function createUser(email: string, password: string) {
         email,
         name,
         password: hash,
-        accounts: {
+        balance: 50, // 创建账户时设置总余额
+        point: {
           create: {
-            balance: 50, // 创建账户时设置总余额等信息
-            gift_tokens: 50,
-            gifts: {
-              create: {
-                amount: 50,
-                type: 'WELCOME_GIFT'
-              }
-            }
+            amount: 50,
+            type: 'SYSTEM',
+            reason: '首次注册送新人礼50积分'
           }
         }
       },
