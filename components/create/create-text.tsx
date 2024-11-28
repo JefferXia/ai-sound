@@ -152,7 +152,7 @@ export function CreateText() {
           <div className="relative mb-5">
             <Textarea
               rows={8}
-              maxLength={1000}
+              maxLength={3000}
               placeholder='输入你的文案主题或者大纲'
               value={scriptPrompt}
               className="w-full border p-2 bg-muted rounded-lg placeholder:text-sm placeholder:leading-[22px] text-sm leading-[22px] resize-none"
@@ -162,7 +162,7 @@ export function CreateText() {
               }}
             />
             <div className="absolute right-3 bottom-3 text-sm text-black/80 dark:text-white/80">
-              {scriptLen} / 1000
+              {scriptLen} / 3000
             </div>
           </div>
           <div className="flex space-x-8">

@@ -16,9 +16,11 @@ export const authConfig = {
       let isOnChat = nextUrl.pathname.startsWith("/");
       let isOnRegister = nextUrl.pathname.startsWith("/register");
       let isOnLogin = nextUrl.pathname.startsWith("/login");
+      const callbackUrl = nextUrl.searchParams.get('callbackUrl');
+      const redirectUrl = callbackUrl ? new URL(callbackUrl).pathname : '/';
 
       if (isLoggedIn && (isOnLogin || isOnRegister)) {
-        return Response.redirect(new URL("/", nextUrl));
+        return Response.redirect(new URL(redirectUrl, nextUrl));
       }
 
       if (isOnRegister || isOnLogin) {
@@ -31,7 +33,7 @@ export const authConfig = {
       }
 
       if (isLoggedIn) {
-        return Response.redirect(new URL("/", nextUrl));
+        return Response.redirect(new URL(redirectUrl, nextUrl));
       }
 
       return true;
