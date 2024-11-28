@@ -1,35 +1,34 @@
-'use server'
+'use server';
 
-import prisma from '@/lib/prisma'
-import { utcToBeijing } from './utils'
+import prisma from '@/lib/prisma';
+import { utcToBeijing } from './utils';
 
 interface Record {
-  type: string
-  amount: string | number
-  createdAt: Date
+  type: string;
+  amount: string | number;
+  createdAt: Date;
 }
 type ValueType = {
   [key: string]: number; // 定义对象的键为字符串，值为数字
 };
 
 export async function createAccount(uid: string) {
-  
-    // 建立初始账户
-    const account = await prisma.account.create({
-      data: {
-        user_id: uid,
-        balance: 50,
-        gift_tokens: 50,
-        gifts: {
-          create: {
-            amount: 50,
-            type: 'WELCOME_GIFT'
-          }
-        }
-      }
-    })
+  // 建立初始账户
+  const account = await prisma.account.create({
+    data: {
+      user_id: uid,
+      balance: 50,
+      gift_tokens: 50,
+      gifts: {
+        create: {
+          amount: 50,
+          type: 'WELCOME_GIFT',
+        },
+      },
+    },
+  });
 
-    return account
+  return account;
 }
 
 // 添加充值记录
@@ -41,8 +40,8 @@ export async function createRecharge(accountId: string, amount: number) {
         account_id: accountId,
         amount,
         order_number: 'ORD123456', // 生成或传入唯一订单号
-        source: 'WECHAT',         // 充值来源，如：支付宝、微信等
-        status: 'SUCCESS',      // 充值状态：成功
+        source: 'WECHAT', // 充值来源，如：支付宝、微信等
+        status: 'SUCCESS', // 充值状态：成功
       },
     }),
     // 2. 更新账户余额和充值代币
@@ -65,13 +64,13 @@ export async function createRecharge(accountId: string, amount: number) {
 // 添加交易记录
 export async function createTransaction(accountId: string, type: string) {
   const getValueByType: ValueType = {
-    'VIDEO_ANALYSIS': 20,
-    'TEXT': 5,
-    'AUDIO': 8,
-    'VIDEO': 60
-  }
+    VIDEO_ANALYSIS: 20,
+    TEXT: 5,
+    AUDIO: 8,
+    VIDEO: 60,
+  };
   const accountData = await prisma.account.findUnique({
-    where: { 
+    where: {
       id: accountId,
     },
     select: {
@@ -79,11 +78,11 @@ export async function createTransaction(accountId: string, type: string) {
       balance: true,
       gift_tokens: true,
       recharge_tokens: true,
-    }
+    },
   });
   // if(!accountData || accountData.balance < getValueByType[type]) {
-  if(!accountData) {
-    return false
+  if (!accountData) {
+    return false;
   }
   // 优先扣除 giftTokens
   let updateData;
@@ -95,7 +94,7 @@ export async function createTransaction(accountId: string, type: string) {
       gift_tokens: {
         decrement: getValueByType[type],
       },
-    }
+    };
   } else {
     updateData = {
       balance: {
@@ -104,7 +103,7 @@ export async function createTransaction(accountId: string, type: string) {
       recharge_tokens: {
         decrement: getValueByType[type],
       },
-    }
+    };
   }
 
   const transaction = await prisma.$transaction([
@@ -121,7 +120,7 @@ export async function createTransaction(accountId: string, type: string) {
     }),
   ]);
 
-  return transaction
+  return transaction;
 
   // console.log('Transaction record created:', transaction);
 }
@@ -133,9 +132,9 @@ export async function accountDetails(userId: string) {
       user_id: userId,
     },
     include: {
-      gifts: true,            // 包含 GiftRecord 赠送记录
-      recharges: true,        // 包含 RechargeRecord 充值记录
-      transactions: true,     // 包含 TransactionRecord 消费记录
+      gifts: true, // 包含 GiftRecord 赠送记录
+      recharges: true, // 包含 RechargeRecord 充值记录
+      transactions: true, // 包含 TransactionRecord 消费记录
     },
   });
 
@@ -146,22 +145,22 @@ export async function accountDetails(userId: string) {
 
   // 合并 GiftRecord、TransactionRecord 和 RechargeRecord
   const combinedRecords = [
-    ...accountWithDetails.gifts.map(record => ({
-      type: record.type,                 // 赠送记录的类型
-      amount: `+${record.amount}`,        // 积分变动（正数）
-      createdAt: record.created_at,        // 记录的时间
+    ...accountWithDetails.gifts.map((record) => ({
+      type: record.type, // 赠送记录的类型
+      amount: `+${record.amount}`, // 积分变动（正数）
+      createdAt: record.created_at, // 记录的时间
     })),
-    ...accountWithDetails.transactions.map(record => ({
-      type: record.type,                  // 消费记录的类型
-      amount: `-${record.price}`,              // 积分变动（负数）
-      createdAt: record.created_at,        // 记录的时间
+    ...accountWithDetails.transactions.map((record) => ({
+      type: record.type, // 消费记录的类型
+      amount: `-${record.price}`, // 积分变动（负数）
+      createdAt: record.created_at, // 记录的时间
     })),
     ...accountWithDetails.recharges
-      .filter(record => record.status === 'SUCCESS') // 只包含已完成的充值
-      .map(record => ({
-        type: record.source,              // 充值记录的类型
-        amount: `+${record.amount}`,       // 积分变动（正数）
-        createdAt: record.created_at,       // 记录的时间
+      .filter((record) => record.status === 'SUCCESS') // 只包含已完成的充值
+      .map((record) => ({
+        type: record.source, // 充值记录的类型
+        amount: `+${record.amount}`, // 积分变动（正数）
+        createdAt: record.created_at, // 记录的时间
       })),
   ];
 
@@ -171,7 +170,7 @@ export async function accountDetails(userId: string) {
   });
 
   // 格式化输出
-  const formattedRecords = sortedRecords.map(record => ({
+  const formattedRecords = sortedRecords.map((record) => ({
     type: record.type,
     amount: record.amount,
     createdAt: utcToBeijing(record.createdAt),
@@ -184,8 +183,70 @@ export async function accountDetails(userId: string) {
       giftTokens: accountWithDetails.gift_tokens,
       rechargeTokens: accountWithDetails.recharge_tokens,
       earnedTokens: accountWithDetails.earned_tokens,
-      createdAt: utcToBeijing(accountWithDetails.created_at)
+      createdAt: utcToBeijing(accountWithDetails.created_at),
     },
-    records: formattedRecords
+    records: formattedRecords,
+  };
+}
+
+export async function addPoint(
+  userId: string,
+  amount: number,
+  type: string,
+  reason: string
+) {
+  // 开启事务
+  const res = await prisma.$transaction([
+    prisma.user.update({
+      where: { id: userId },
+      data: {
+        balance: {
+          increment: amount,
+        },
+      },
+    }),
+    prisma.point.create({
+      data: {
+        user_id: userId,
+        amount,
+        type,
+        reason,
+      },
+    }),
+  ]);
+  return res;
+}
+
+export async function pointDetails(userId: string) {
+  const accountData: any = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      balance: true,
+      created_at: true,
+      point: {
+        orderBy: {
+          created_at: 'desc',
+        },
+      },
+    },
+  });
+  // 格式化输出
+  if (accountData && accountData.point) {
+    const formatData = accountData.point.map((record: any) => ({
+      type: record.type,
+      amount: record.amount < 0 ? `-${record.amount}` : `+${record.amount}`,
+      reason: record.reason,
+      createdAt: utcToBeijing(record.created_at),
+    }));
+    return {
+      accountInfo: {
+        balance: accountData.balance,
+        createdAt: utcToBeijing(accountData.created_at),
+      },
+      pointData: formatData,
+    };
   }
+  return false;
 }

@@ -4,7 +4,7 @@ import { createStreamableValue } from 'ai/rsc';
 import { groq } from '@/ai';
 import prisma from '@/lib/prisma';
 import { ContentType, FileFormat, TaskStatus } from '@prisma/client';
-import { createTransaction } from "@/lib/db"
+import { createTransaction, addPoint } from "@/lib/db"
 
 type GenerateParam = {
   userId: string
@@ -67,7 +67,8 @@ export async function generate(data: GenerateParam) {
               }
             }
           });
-          const transactionData = await createTransaction(accountData.id, ContentType.TEXT)
+          // const transactionData = await createTransaction(accountData.id, ContentType.TEXT)
+          await addPoint(userId, -5, 'CONSUME', '消耗积分-生成文案')
         } catch (error) {
           console.error('Error saving content work to database:', error);
         }

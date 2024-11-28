@@ -17,12 +17,24 @@ datasource db {
 model User {
   id         String      @id @default(uuid())
   email      String      @unique @db.VarChar(64) // 唯一的电子邮件字段
-  password   String?     @db.VarChar(64) // 可选的密码字段
+  password   String?     @db.VarChar(64)         // 可选的密码字段
   name       String      @db.VarChar(50)
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
-  AudioWork  AudioWork[]
-  accounts   Account[]       // 用户与账户的关系
+  balance    Int         @default(0)             // 余额
+  point      Point[]                             // 用户与积分账户的关系
+}
+
+model Point {
+  id              Int       @id @default(autoincrement())  // 积分账户ID，自增主键
+  user_id         String                                   // 外键，关联用户
+  amount          Int                                      // 积分变动值，正值为增加，负值为减少
+  type            String                                   // 类型: "充值" | "消费" | "系统发放"
+  reason          String?                                  // 积分变动原因
+  created_at      DateTime  @default(now())                // 创建时间
+  user            User      @relation(fields: [user_id], references: [id])
+
+  @@index([user_id, created_at(sort: Desc)])
 }
 
 model AudioWork {
@@ -36,7 +48,6 @@ model AudioWork {
   is_deleted    Boolean  @default(false)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
-  User          User     @relation(fields: [user_id], references: [id])
   user_id       String
   user_name     String
 
@@ -103,7 +114,7 @@ model Account {
   created_at      DateTime  @default(now())                // 创建时间
   updated_at      DateTime  @updatedAt                     // 更新时间
   grade           String    @default("REGULAR")            // 会员等级（REGULAR、VIP、SVIP）
-  user            User      @relation(fields: [user_id], references: [id]) // 与用户的关系
+  // user            User      @relation(fields: [user_id], references: [id]) // 与用户的关系
   gifts           GiftRecord[]
   recharges       RechargeRecord[]
   transactions    TransactionRecord[]
