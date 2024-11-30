@@ -1,9 +1,10 @@
-'use server';
-import { streamText } from 'ai';
-import { createStreamableValue } from 'ai/rsc';
-import { groq } from '@/ai';
-import prisma from '@/lib/prisma';
-import { ContentType, FileFormat, TaskStatus } from '@prisma/client';
+'use server'
+import { streamText } from 'ai'
+import { createStreamableValue } from 'ai/rsc'
+import { groq } from '@/ai'
+import { auth } from '@/app/(auth)/auth'
+import prisma from '@/lib/prisma'
+import { ContentType, FileFormat, TaskStatus } from '@prisma/client'
 import { createTransaction, addPoint } from "@/lib/db"
 
 type GenerateParam = {
@@ -15,23 +16,24 @@ type GenerateParam = {
 };
 
 export async function generate(data: GenerateParam) {
-  const { userId, systemPrompt, textMaterial, model, template } = data;
+  const { systemPrompt, textMaterial, model, template } = data
+  const session = await auth()
+  const userId = session?.user?.id
 
   if (!userId || !systemPrompt || !textMaterial || !model || !template) {
     return { error: "Missing required parameters" }
   }
 
-  const accountData = await prisma.account.findFirst({
+  const accountData = await prisma.user.findUnique({
     where: { 
-      user_id: userId,
+      id: userId,
     },
     select: {
-      id: true,
       balance: true,
     }
   });
 
-  if (!accountData || accountData.balance < 5) {
+  if (accountData && accountData.balance < 5) {
     return { error: "余额不足" }
   }
 

@@ -7,17 +7,27 @@ import { AccountList } from "@/components/user/account-list"
 import Loading from '@/components/create/loading'
 import { useGlobalContext } from '@/app/globalContext'
 
+export interface AccountData {
+  balance: number
+  createdAt: string
+}
+export interface PointItem {
+  type: string
+  amount: string | number
+  reason: string
+  createdAt: string
+}
 export default function AccountPage() {
   const [loading, setLoading] = useState(true)
-  const [accountInfo, setAccountInfo] = useState<any>()
-  const [accountRecords, setAccountRecords] = useState<any>()
+  const [accountInfo, setAccountInfo] = useState<AccountData>()
+  const [accountRecords, setAccountRecords] = useState<PointItem[]>()
   const { userInfo } = useGlobalContext()
 
   useEffect(() => {
     (async() => {
-      const { info, records } = await getAccountInfo(userInfo.id)
-      setAccountInfo(info)
-      setAccountRecords(records)
+      const { userData, pointData } = await getAccountInfo(userInfo.id)
+      userData && setAccountInfo(userData)
+      setAccountRecords(pointData)
       setLoading(false)
     })()
   }, []);

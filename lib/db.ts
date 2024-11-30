@@ -12,25 +12,6 @@ type ValueType = {
   [key: string]: number; // 定义对象的键为字符串，值为数字
 };
 
-export async function createAccount(uid: string) {
-  // 建立初始账户
-  const account = await prisma.account.create({
-    data: {
-      user_id: uid,
-      balance: 50,
-      gift_tokens: 50,
-      gifts: {
-        create: {
-          amount: 50,
-          type: 'WELCOME_GIFT',
-        },
-      },
-    },
-  });
-
-  return account;
-}
-
 // 添加充值记录
 export async function createRecharge(accountId: string, amount: number) {
   const rechargeTransaction = await prisma.$transaction([
@@ -236,17 +217,20 @@ export async function pointDetails(userId: string) {
   if (accountData && accountData.point) {
     const formatData = accountData.point.map((record: any) => ({
       type: record.type,
-      amount: record.amount < 0 ? `-${record.amount}` : `+${record.amount}`,
+      amount: record.amount < 0 ? `${record.amount}` : `+${record.amount}`,
       reason: record.reason,
       createdAt: utcToBeijing(record.created_at),
     }));
     return {
-      accountInfo: {
+      userData: {
         balance: accountData.balance,
         createdAt: utcToBeijing(accountData.created_at),
       },
       pointData: formatData,
     };
   }
-  return false;
+  return {
+    userData: null,
+    pointData: []
+  };
 }

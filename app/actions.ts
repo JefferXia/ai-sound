@@ -1,10 +1,11 @@
-'use server';
-import { streamText } from 'ai';
-import { createStreamableValue } from 'ai/rsc';
-import { groq } from '@/ai';
-import prisma from '@/lib/prisma';
-import { ContentType, FileFormat, TaskStatus } from '@prisma/client';
-import { createTransaction } from "@/lib/db"
+'use server'
+
+import { streamText } from 'ai'
+import { createStreamableValue } from 'ai/rsc'
+import { groq } from '@/ai'
+import { auth } from './(auth)/auth'
+import prisma from '@/lib/prisma'
+import { addPoint } from "@/lib/db"
 
 type GenerateParam = {
   userId: string
@@ -15,23 +16,24 @@ type GenerateParam = {
 };
 
 export async function generateSummary(data: GenerateParam) {
-  const { userId, systemPrompt, textMaterial, model, videoId } = data;
+  const { systemPrompt, textMaterial, model, videoId } = data
+  const session = await auth()
+  const userId = session?.user?.id
 
   if (!userId || !systemPrompt || !textMaterial || !model || !videoId) {
     return { error: "Missing required parameters" }
   }
 
-  const accountData = await prisma.account.findFirst({
+  const accountData = await prisma.user.findUnique({
     where: { 
-      user_id: userId,
+      id: userId,
     },
     select: {
-      id: true,
       balance: true,
     }
   });
 
-  if (!accountData || accountData.balance < 5) {
+  if (accountData && accountData.balance < 5) {
     return { error: "余额不足" }
   }
 
@@ -58,7 +60,7 @@ export async function generateSummary(data: GenerateParam) {
               summary: result?.text,
             }
           });
-          const transactionData = await createTransaction(accountData.id, ContentType.TEXT)
+          await addPoint(userId, -5, 'CONSUME', '消耗积分-生成脑图')
         } catch (error) {
           console.error('Error saving content work to database:', error);
         }

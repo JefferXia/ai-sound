@@ -3,16 +3,19 @@ export const maxDuration = 60;
 import axios from "axios"
 import { NextRequest, NextResponse } from 'next/server'
 import { cosUploadBuffer } from "@/lib/cosUpload"
+import { auth } from '@/app/(auth)/auth'
 import prisma from '@/lib/prisma'
 import { ContentType, FileFormat, TaskStatus } from '@prisma/client'
-import { createTransaction } from "@/lib/db"
+import { addPoint } from "@/lib/db"
 
 const GROUP_ID = process.env.MINIMAX_GROUP_ID
 const API_KEY = process.env.MINIMAX_API_KEY
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { userId, text, voiceId } = body
+  const { text, voiceId } = body
+  const session = await auth()
+  const userId = session?.user?.id
 
   if (!userId || !text || !voiceId) {
     return NextResponse.json(
@@ -21,17 +24,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const accountData = await prisma.account.findFirst({
+  const accountData = await prisma.user.findUnique({
     where: { 
-      user_id: userId,
+      id: userId,
     },
     select: {
-      id: true,
       balance: true,
     }
   });
 
-  if (!accountData || accountData.balance < 8) {
+  if (accountData && accountData.balance < 8) {
     return NextResponse.json(
       { error: "余额不足" },
       { status: 403 }
@@ -90,12 +92,12 @@ export async function POST(req: NextRequest) {
               }
             }
           }
-        });
-        const transactionData = await createTransaction(accountData.id, ContentType.AUDIO)
+        })
+        const transactionData = await addPoint(userId, -8, 'CONSUME', '消耗积分-生成音频')
 
         return Response.json(transactionData ? {
           ...resp,
-          balance: transactionData[1]?.balance
+          balance: transactionData[0]?.balance
         } : resp)
       } catch (error) {
         console.error('Error saving content work to database:', error);

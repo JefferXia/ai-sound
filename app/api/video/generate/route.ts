@@ -1,9 +1,11 @@
-import axios from "axios";
-import { NextRequest, NextResponse } from "next/server";
+export const maxDuration = 60;
+import axios from "axios"
+import { NextRequest, NextResponse } from "next/server"
 import { cosUploadBuffer } from "@/lib/cosUpload"
+import { auth } from '@/app/(auth)/auth'
 import prisma from '@/lib/prisma'
 import { ContentType, FileFormat, TaskStatus } from '@prisma/client'
-import { createTransaction } from "@/lib/db"
+import { addPoint } from "@/lib/db"
 
 const API_KEY = process.env.MINIMAX_API_KEY;
 const API_BASE_URL = "https://api.minimax.chat/v1";
@@ -108,27 +110,28 @@ const fetchVideoResult = async (fileId: string) => {
 };
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { userId, prompt, model } = body;
+  const body = await req.json()
+  const { prompt, model } = body
+  const session = await auth()
+  const userId = session?.user?.id
 
-  if (!prompt || !model) {
+  if (!userId || !prompt || !model) {
     return NextResponse.json(
       { error: "Missing required parameters" },
       { status: 400 }
     );
   }
 
-  const accountData = await prisma.account.findFirst({
+  const accountData = await prisma.user.findUnique({
     where: { 
-      user_id: userId,
+      id: userId,
     },
     select: {
-      id: true,
       balance: true,
     }
   });
 
-  if (!accountData || accountData.balance < 60) {
+  if (accountData && accountData.balance < 60) {
     return NextResponse.json(
       { error: "余额不足" },
       { status: 403 }
@@ -152,8 +155,8 @@ export async function POST(req: NextRequest) {
             }
           }
         }
-      });
-      const transactionData = await createTransaction(accountData.id, ContentType.VIDEO)
+      })
+      const transactionData = await addPoint(userId, -60, 'CONSUME', '消耗积分-生成视频')
     } else {
       return NextResponse.json(
         { error: "Video generation failed" },

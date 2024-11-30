@@ -1,34 +1,22 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { Crown, CalendarDays, Info } from 'lucide-react';
+'use client'
+
+import React, { useEffect, useState } from 'react'
+import { Crown, CalendarDays, Info } from 'lucide-react'
 import { useGlobalContext } from '@/app/globalContext'
 import { useRouter } from 'next/navigation'
 import { getFirstLetterAndUpperCase } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card"
-
-interface AccountInfo {
-  grade: string
-  balance: number
-  giftTokens: number
-  rechargeTokens: number
-  earnedTokens: number
-  createdAt: string
-}
+import { AccountData } from '@/app/profile/account/page'
 
 export function AccountInfo({
   accountInfo
 }: { 
-  accountInfo: AccountInfo
+  accountInfo?: AccountData
 }) {
   const { userInfo } = useGlobalContext()
   const router = useRouter()
 
-  useEffect(() => {}, []);
+  useEffect(() => {}, [])
 
   return (
     <div className="p-5 rounded-lg bg-muted">
@@ -40,7 +28,8 @@ export function AccountInfo({
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">{userInfo?.email}</h4>
             <p className="text-sm text-muted-foreground">
-              {accountInfo?.grade === 'REGULAR' ? '未开通会员' : `${accountInfo?.grade}会员`}
+              {/* {accountInfo?.grade === 'REGULAR' ? '未开通会员' : `${accountInfo?.grade}会员`} */}
+              未开通会员
             </p>
             <div className="flex items-center pt-1">
               <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
@@ -64,7 +53,7 @@ export function AccountInfo({
         <span className='text-muted-foreground'>账户余额：</span>
         <span className='text-4xl font-semibold mr-1'>{accountInfo?.balance}</span>
         <span className='text-muted-foreground mr-2'>积分</span>       
-        <HoverCard>
+        {/* <HoverCard>
           <HoverCardTrigger asChild>             
             <Info size={18} />
           </HoverCardTrigger>
@@ -75,7 +64,7 @@ export function AccountInfo({
               <p>赚取积分：{accountInfo?.earnedTokens}</p>
             </div>
           </HoverCardContent>
-        </HoverCard> 
+        </HoverCard>  */}
       </div>
     </div>
   );
