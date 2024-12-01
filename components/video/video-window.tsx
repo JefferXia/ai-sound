@@ -250,7 +250,7 @@ const VideoWindow = ({
             </h3>
             <VideoInfoBox videoInfo={videoInfo} />
 
-            {!markmapData && (
+            {(!markmapData && !generating) && (
               <div className="flex justify-center items-center h-56 shadow-sm rounded-lg bg-muted">
                 <BetterTooltip content="将消耗 5 积分">
                   <Button 
@@ -258,7 +258,6 @@ const VideoWindow = ({
                     onClick={handleGenerateSummary}
                     disabled={generating}
                   >
-                    {generating && <Loader2 className="mr-2 size-4 animate-spin" />}
                     <Route className="mr-2 h-4 w-4" />生成脑图
                   </Button>
                 </BetterTooltip>

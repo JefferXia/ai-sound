@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const videoBuffer = await videoUrlToBuffer(metadata.video?.play_addr?.url_list[2])
+    const videoBuffer = await videoUrlToBuffer(metadata.video?.download_addr?.url_list[0])
     const fileName = `va/videos/${metadata.aweme_id}.mp4`
     let videoUrl;
     if(videoBuffer) {
@@ -111,6 +111,7 @@ export async function POST(req: NextRequest) {
             duration: metadata.video?.duration,
             format: metadata.video?.format,
             play_addr: metadata.video?.play_addr,
+            download_url: `http://45.55.255.120/api/download?prefix=false&with_watermark=false&url=${url}`
           },
           author: {
             nickname: metadata.author?.nickname,
