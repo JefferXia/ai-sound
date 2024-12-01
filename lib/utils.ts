@@ -254,6 +254,16 @@ export async function videoUrlToBuffer(videoUrl: string) {
     const buffer = Buffer.from(response.data, 'binary');
     return buffer;
   } catch (error: any) {
-    console.error('Error downloading video:', error.message);
+    if (error.response) {
+      // 请求已发出，服务器以状态码响应
+      console.error('下载视频时出错:', error.response.status);
+      console.error('响应数据:', error.response.data);
+    } else if (error.request) {
+      // 请求已发出但未收到响应
+      console.error('未收到响应:', error.request);
+    } else {
+      // 设置请求时发生了错误
+      console.error('错误', error.message);
+    }
   }
 };

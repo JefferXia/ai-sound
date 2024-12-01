@@ -81,13 +81,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const videoBuffer = await videoUrlToBuffer(metadata.video?.download_addr?.url_list[0])
+    let videoUrl = metadata.video?.download_addr?.url_list[1]
+    const videoBuffer = await videoUrlToBuffer(metadata.video?.download_addr?.url_list[1])
     const fileName = `va/videos/${metadata.aweme_id}.mp4`
-    let videoUrl;
     if(videoBuffer) {
       const cosUploadUrl = await cosUploadBuffer(videoBuffer, fileName)
-      videoUrl = cosUploadUrl ? `https://${cosUploadUrl}` : metadata.video?.play_addr?.url_list[2]
-      console.log('上传视频成功')
+      if(cosUploadUrl) {
+        videoUrl = `https://${cosUploadUrl}`
+        console.log('上传视频成功')
+      }
     }
 
     const ocrContent = metadata.seo_info?.ocr_content;
@@ -110,7 +112,6 @@ export async function POST(req: NextRequest) {
             cover: metadata.video?.cover?.url_list[0],
             duration: metadata.video?.duration,
             format: metadata.video?.format,
-            play_addr: metadata.video?.play_addr,
             download_url: `http://45.55.255.120/api/download?prefix=false&with_watermark=false&url=${url}`
           },
           author: {
