@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { tecentAsr } from '@/lib/asr'
 import { cosUploadBuffer } from "@/lib/cosUpload"
-import { videoUrlToBuffer } from '@/lib/utils'
+import { videoUrlToBuffer, downloadVideoUrl } from '@/lib/utils'
 import { addPoint } from "@/lib/db"
 // 超时时间设置为60秒
 export const maxDuration = 60
@@ -80,23 +80,26 @@ export async function POST(req: NextRequest) {
         { status: 404 }
       );
     }
-
+    console.log('开始下载')
     let videoUrl = `http://45.55.255.120/video/douyin_${metadata.aweme_id}.mp4`
     let downloadUrl = `http://45.55.255.120/api/download?prefix=false&with_watermark=false&url=${url}`
-    const videoBuffer = await videoUrlToBuffer(downloadUrl)
-    const fileName = `va/videos/${metadata.aweme_id}.mp4`
-    if(videoBuffer) {
-      const cosUploadUrl = await cosUploadBuffer(videoBuffer, fileName)
-      if(cosUploadUrl) {
-        videoUrl = `https://${cosUploadUrl}`
-        console.log('上传视频成功')
-      }
-    }
-
+    downloadVideoUrl(downloadUrl)
+    // const videoBuffer = await videoUrlToBuffer(downloadUrl)
+    // const fileName = `va/videos/${metadata.aweme_id}.mp4`
+    // if(videoBuffer) {
+    //   const cosUploadUrl = await cosUploadBuffer(videoBuffer, fileName)
+    //   if(cosUploadUrl) {
+    //     videoUrl = `https://${cosUploadUrl}`
+    //     console.log('上传视频成功')
+    //   }
+    // }
+    const asrStart = Date.now()
     const ocrContent = metadata.seo_info?.ocr_content;
     const audioInfo = await tecentAsr(audioUrl);
     const videoScript = audioInfo ? audioInfo.result : ocrContent;
     const subtitles = (audioInfo && audioInfo.resultDetail) ? { asrData: audioInfo.resultDetail } : {};
+    const asrEnd = Date.now()
+    console.log('asr时间', Math.round((asrEnd-asrStart)/1000))
 
     await prisma.video.create({
       data: {

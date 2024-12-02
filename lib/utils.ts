@@ -282,3 +282,14 @@ export async function videoUrlToBuffer(videoUrl: string) {
     console.error('发生错误', error.message);
   }
 }
+
+export async function downloadVideoUrl(videoUrl: string) {
+  try {
+    axios({
+      method: 'GET',
+      url: videoUrl
+    })
+  } catch (error: any) {
+    console.error('发生错误', error.message);
+  }
+}
