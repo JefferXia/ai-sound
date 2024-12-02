@@ -1,13 +1,15 @@
-export const maxDuration = 60; // 设置为60秒
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { tecentAsr } from '@/lib/asr'
 import { cosUploadBuffer } from "@/lib/cosUpload"
 import { videoUrlToBuffer } from '@/lib/utils'
+import { addPoint } from "@/lib/db"
+// 超时时间设置为60秒
+export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { userId, url } = body;
+  const body = await req.json()
+  const { userId, url } = body
   if (!userId || !url) {
     return NextResponse.json(
       { error: '请输入视频链接' },
@@ -15,16 +17,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const accountData = await prisma.account.findFirst({
+  const accountData = await prisma.user.findUnique({
     where: { 
-      user_id: userId,
+      id: userId,
     },
     select: {
-      id: true,
-      balance: true,
-      grade: true
+      balance: true
     }
-  });
+  })
 
   if (!accountData || accountData.balance < 10) {
     return NextResponse.json(
@@ -81,8 +81,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let videoUrl = metadata.video?.download_addr?.url_list[1]
-    const videoBuffer = await videoUrlToBuffer(metadata.video?.download_addr?.url_list[1])
+    let videoUrl = `http://45.55.255.120/video/douyin_${metadata.aweme_id}.mp4`
+    let downloadUrl = `http://45.55.255.120/api/download?prefix=false&with_watermark=false&url=${url}`
+    const videoBuffer = await videoUrlToBuffer(downloadUrl)
     const fileName = `va/videos/${metadata.aweme_id}.mp4`
     if(videoBuffer) {
       const cosUploadUrl = await cosUploadBuffer(videoBuffer, fileName)
@@ -111,8 +112,7 @@ export async function POST(req: NextRequest) {
           video: {
             cover: metadata.video?.cover?.url_list[0],
             duration: metadata.video?.duration,
-            format: metadata.video?.format,
-            download_url: `http://45.55.255.120/api/download?prefix=false&with_watermark=false&url=${url}`
+            format: metadata.video?.format
           },
           author: {
             nickname: metadata.author?.nickname,
@@ -126,7 +126,8 @@ export async function POST(req: NextRequest) {
         },
         subtitles
       },
-    });
+    })
+    const transactionData = await addPoint(userId, -10, 'CONSUME', '消耗积分-分析视频')
 
     return Response.json({
       title: metadata.item_title,

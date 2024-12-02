@@ -5,12 +5,12 @@ import {
   generateId,
   Message,
   ToolInvocation,
-} from 'ai';
-import axios from 'axios';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-import { Chat } from '@/db/schema';
+} from 'ai'
+import axios from 'axios'
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+import { Readable } from 'stream'
+import { Chat } from '@/db/schema'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -246,24 +246,39 @@ export function utcToBeijing(time: Date|string) {
   return new Date(time).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })
 }
 
+const streamToBuffer = (stream: Readable): Promise<Buffer> => {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+
+    // 当流的数据到达时，收集数据块
+    stream.on('data', (chunk: Buffer) => {
+      chunks.push(chunk);
+    });
+
+    // 流结束时，将数据块合并为一个 Buffer
+    stream.on('end', () => {
+      resolve(Buffer.concat(chunks));
+    });
+
+    // 如果流出错，返回错误
+    stream.on('error', (err: Error) => {
+      reject(err);
+    });
+  });
+}
+
 export async function videoUrlToBuffer(videoUrl: string) {
   try {
-    const response = await axios.get(videoUrl, {
-      responseType: 'arraybuffer', // 确保响应是二进制数据
+    const response = await axios({
+      method: 'GET',
+      url: videoUrl,
+      responseType: 'stream'
     });
-    const buffer = Buffer.from(response.data, 'binary');
-    return buffer;
+    
+    // 将视频流转换为 Buffer
+    const videoBuffer = await streamToBuffer(response.data)
+    return videoBuffer
   } catch (error: any) {
-    if (error.response) {
-      // 请求已发出，服务器以状态码响应
-      console.error('下载视频时出错:', error.response.status);
-      console.error('响应数据:', error.response.data);
-    } else if (error.request) {
-      // 请求已发出但未收到响应
-      console.error('未收到响应:', error.request);
-    } else {
-      // 设置请求时发生了错误
-      console.error('错误', error.message);
-    }
+    console.error('发生错误', error.message);
   }
-};
+}
