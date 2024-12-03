@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
       );
     }
     console.log('开始下载')
-    let videoUrl = `http://45.55.255.120/video/douyin_${metadata.aweme_id}.mp4`
+    let videoUrl = `https://c.topmind.video/video/douyin_${metadata.aweme_id}.mp4`
     let downloadUrl = `http://45.55.255.120/api/download?prefix=false&with_watermark=false&url=${url}`
     downloadVideoUrl(downloadUrl)
     // const videoBuffer = await videoUrlToBuffer(downloadUrl)

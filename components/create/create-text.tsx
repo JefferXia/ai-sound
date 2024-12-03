@@ -139,14 +139,16 @@ export function CreateText() {
                 setLink(e.target.value)
               }}
             />
-            <Button 
-              className='bg-blue-600 hover:bg-blue-500 text-white rounded-lg' 
-              onClick={handleAnalysisLink}
-              disabled={analysising}
-            >
-              {analysising && <Loader2 className="mr-2 size-4 animate-spin" />}
-              {analysising ? '分析中' : '分析链接'}
-            </Button>
+            <BetterTooltip content="将消耗 10 积分">
+              <Button 
+                className='bg-blue-600 hover:bg-blue-500 text-white rounded-lg' 
+                onClick={handleAnalysisLink}
+                disabled={analysising}
+              >
+                {analysising && <Loader2 className="mr-2 size-4 animate-spin" />}
+                {analysising ? '分析中' : '分析链接'}
+              </Button>
+            </BetterTooltip>
           </div>
           <Label className="block mb-2 font-medium text-base">文案主题</Label>
           <div className="relative mb-5">
