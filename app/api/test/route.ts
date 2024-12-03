@@ -18,11 +18,11 @@ export async function GET(req: NextRequest) {
     })
     return Response.json({success: true})
   }
-  // const data =  await prisma.video.update({
-  //   where: { id: 'cm3q03ig8000037ryqqim69le' },
+  // await prisma.video.update({
+  //   where: { id: 'cm476fwwd00036llneer5cojm' },
   //   data: {
-  //     video_url: 'https://video-1255988328.cos.ap-nanjing.myqcloud.com/va/videos/7431065052020608268.mp4'
+  //     video_url: 'https://c.topmind.video/video/douyin_7439196403374607643.mp4'
   //   }
   // })
-  
+  // return Response.json({success: true})
 }

@@ -18,7 +18,7 @@ const Page = () => {
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
-  const pageCount = 10
+  const pageCount = 20
 
   const formatNumber = (num:number) => {
     if (num >= 10000) {
@@ -58,7 +58,7 @@ const Page = () => {
 
   const downloadVideo = (url:string) => {
     const a = document.createElement('a');
-    a.href = '//'+url;
+    a.href = url;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

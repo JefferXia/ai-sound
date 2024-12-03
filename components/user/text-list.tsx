@@ -22,7 +22,7 @@ export function TextList() {
   const [noMoreData, setNoMoreData] = useState(false)
   const { userInfo } = useGlobalContext()
   const { isCopied, copyToClipboard } = useCopyToClipboard({})
-  const pageCount = 10
+  const pageCount = 15
 
   const fetchList = async (page: number) => {
     setLoading(true)
@@ -68,36 +68,51 @@ export function TextList() {
     toast('复制成功！')
   }
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget
+    if (scrollHeight - scrollTop - clientHeight < 1 && !loading && !noMoreData) {
+      const nextPage = pageNum+1
+      fetchList(nextPage)
+      setPageNum(nextPage)
+    }
+  }
+
   return (
     <>
       <h2 className='mb-3 flex justify-between'>
         <span className='text-xl font-bold'>我创作的文案</span>
       </h2>
-      <div className='grid grid-cols-5 gap-4'>
-      {list.length > 0 && list.map((item: taskItem, index) => (
-        <div key={item.id} className='p-4 rounded-2xl bg-muted/50'>
-          <div className='text-sm font-bold'>
-            {BestPromptName[item.taskInfo?.parameters?.template] || '文案助手'}
-          </div>
-          <div className='relative my-3 text-base group cursor-pointer'>
-            <div className='text-base line-clamp-3'>
-              {item.content}
+      <div
+        className='overflow-y-auto' 
+        onScroll={handleScroll}
+        style={{ height: 'calc(100vh - 10rem)' }}
+      >
+        <div className='grid grid-cols-5 gap-4'>
+        {list.length > 0 && list.map((item: taskItem, index) => (
+          <div key={item.id} className='p-4 rounded-2xl bg-muted/50'>
+            <div className='text-sm font-bold'>
+              {BestPromptName[item.taskInfo?.parameters?.template] || '文案助手'}
             </div>
-            <div 
-              className='flex justify-center items-center absolute inset-0 bg-[rgba(0,0,0,0.7)] rounded invisible group-hover:visible'
-              onClick={() => handleCopyText(item.content)}
-            >
-              <Copy />
-              <span className='ml-2'>复制文本</span>
+            <div className='relative my-3 text-base group cursor-pointer'>
+              <div className='text-base line-clamp-3'>
+                {item.content}
+              </div>
+              <div 
+                className='flex justify-center items-center absolute inset-0 bg-[rgba(0,0,0,0.7)] rounded invisible group-hover:visible'
+                onClick={() => handleCopyText(item.content)}
+              >
+                <Copy />
+                <span className='ml-2'>复制文本</span>
+              </div>
+            </div>
+            <div className='text-sm text-muted-foreground/50 text-right'>
+              创建于 {item.createdAt}
             </div>
           </div>
-          <div className='text-sm text-muted-foreground/50 text-right'>
-            创建于 {item.createdAt}
-          </div>
-        </div>
-      ))}
-      </div> 
-      {loading && <Loading />}
+        ))}
+        </div> 
+        {loading && <Loading />}
+      </div>
     </>
   );
 }
