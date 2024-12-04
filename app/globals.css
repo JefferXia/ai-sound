@@ -227,7 +227,7 @@ li {
 }
 
 #typing {
-  width: 20ch;
+  width: 12em;
   animation: typing 2.5s steps(20), blink .5s step-end infinite alternate;
   white-space: nowrap;
   overflow: hidden;
