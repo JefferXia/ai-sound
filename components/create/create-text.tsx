@@ -25,12 +25,12 @@ import Loading from './loading'
 import { toast } from 'sonner'
 import { BetterTooltip } from '@/components/ui/tooltip'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
-import { BestPromptName, BestPromptText } from '@/lib/ai/prompt-template'
+import { BestPromptName } from '@/lib/ai/prompt-template'
 
 export function CreateText() {
   const [template, setTemplate] = useState('')
   const [link, setLink] = useState('')
-  const [systemPrompt, setSystemPrompt] = useState('')
+  // const [systemPrompt, setSystemPrompt] = useState('')
   const [scriptPrompt, setScriptPrompt] = useState('')
   const [scriptLen, setScriptLen] = useState(0)
   const [model, setModel] = useState('gpt-4o')
@@ -50,8 +50,8 @@ export function CreateText() {
     }
     setLoading(true)
     const res = await generate({
-      userId: userInfo.id,
-      systemPrompt,
+      // userId: userInfo.id,
+      // systemPrompt,
       textMaterial: scriptPrompt,
       model,
       template
@@ -72,13 +72,13 @@ export function CreateText() {
     copyToClipboard(generation)
   }
 
-  useEffect(() => {
-    if(template) {
-      setSystemPrompt(BestPromptText[template])
-    } else {
-      setSystemPrompt('')
-    }
-  }, [template])
+  // useEffect(() => {
+  //   if(template) {
+  //     setSystemPrompt(BestPromptText[template])
+  //   } else {
+  //     setSystemPrompt('')
+  //   }
+  // }, [template])
 
   const handleAnalysisLink = async () => {
     setAnalysising(true)
@@ -99,7 +99,7 @@ export function CreateText() {
       return
     }
     setTemplate('secondCreation')
-    setScriptPrompt(`视频标题为：${res?.title}，以下是视频文案：${res?.content}`)
+    setScriptPrompt(`${res?.content}`)
     setAnalysising(false)
   }
 
@@ -201,7 +201,7 @@ export function CreateText() {
               <Button
                 className="w-full text-base font-bold cursor-pointer"
                 onClick={handleGenerateBtn}
-                disabled={loading || !systemPrompt || !scriptPrompt}
+                disabled={loading || !template || !scriptPrompt}
               >
                 {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
                 生成

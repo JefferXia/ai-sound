@@ -6,21 +6,22 @@ import { auth } from '@/app/(auth)/auth'
 import prisma from '@/lib/prisma'
 import { ContentType, FileFormat, TaskStatus } from '@prisma/client'
 import { createTransaction, addPoint } from "@/lib/db"
+import { BestPromptText } from '@/lib/ai/prompt-template'
 
 type GenerateParam = {
-  userId: string
-  systemPrompt: string
+  // userId: string
+  // systemPrompt: string
+  template: string
   textMaterial: string
   model: string
-  template: string
 };
 
 export async function generate(data: GenerateParam) {
-  const { systemPrompt, textMaterial, model, template } = data
+  const { textMaterial, model, template } = data
   const session = await auth()
   const userId = session?.user?.id
 
-  if (!userId || !systemPrompt || !textMaterial || !model || !template) {
+  if (!userId || !textMaterial || !model || !template) {
     return { error: "Missing required parameters" }
   }
 
@@ -41,8 +42,8 @@ export async function generate(data: GenerateParam) {
   (async () => {
     // let accumulatedContent = ''
     const { textStream } = await streamText({
-      model: groq('llama-3.1-70b-versatile'),
-      system: systemPrompt,
+      model: groq('llama-3.3-70b-versatile'),
+      system: BestPromptText[template],
       messages: [
         {
           role: 'user',
@@ -62,7 +63,6 @@ export async function generate(data: GenerateParam) {
               task_info: {
                 model: model,
                 parameters: {
-                  systemPrompt,
                   textMaterial,
                   template
                 }
