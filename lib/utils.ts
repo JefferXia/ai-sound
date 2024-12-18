@@ -267,7 +267,7 @@ const streamToBuffer = (stream: Readable): Promise<Buffer> => {
   });
 }
 
-export async function videoUrlToBuffer(videoUrl: string) {
+export async function videoStreamToBuffer(videoUrl: string) {
   try {
     const response = await axios({
       method: 'GET',
@@ -291,5 +291,18 @@ export async function downloadVideoUrl(videoUrl: string) {
     })
   } catch (error: any) {
     console.error('发生错误', error.message);
+  }
+}
+
+export async function videoUrlToBuffer(videoUrl: string) {
+  try {
+    const response = await axios.get(videoUrl, {
+      responseType: "arraybuffer", // 确保响应是二进制数据
+    });
+
+    const buffer = Buffer.from(response.data);
+    return buffer;
+  } catch (error: any) {
+    console.error("Error downloading video:", error.message);
   }
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { tecentAsr } from '@/lib/asr'
 import { cosUploadBuffer } from "@/lib/cosUpload"
-import { videoUrlToBuffer, downloadVideoUrl } from '@/lib/utils'
+import { videoUrlToBuffer } from '@/lib/utils'
 import { addPoint } from "@/lib/db"
 // 超时时间设置为60秒
 export const maxDuration = 60
@@ -10,6 +10,7 @@ export const maxDuration = 60
 export async function POST(req: NextRequest) {
   const body = await req.json()
   const { userId, url } = body
+  console.log('链接', url)
   if (!userId || !url) {
     return NextResponse.json(
       { error: '请输入视频链接' },
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const res = await fetch(
-      `http://45.55.255.120/api/hybrid/video_data?url=${url}`,
+      `https://douyin-download-api-7wpc.onrender.com/api/hybrid/video_data?url=${url}`,
       {
         method: 'GET',
         headers: {
@@ -81,18 +82,19 @@ export async function POST(req: NextRequest) {
       );
     }
     console.log('开始下载')
-    let videoUrl = `https://c.topmind.video/video/douyin_${metadata.aweme_id}.mp4`
-    let downloadUrl = `http://45.55.255.120/api/download?prefix=false&with_watermark=false&url=${url}`
-    downloadVideoUrl(downloadUrl)
-    // const videoBuffer = await videoUrlToBuffer(downloadUrl)
-    // const fileName = `va/videos/${metadata.aweme_id}.mp4`
-    // if(videoBuffer) {
-    //   const cosUploadUrl = await cosUploadBuffer(videoBuffer, fileName)
-    //   if(cosUploadUrl) {
-    //     videoUrl = `https://${cosUploadUrl}`
-    //     console.log('上传视频成功')
-    //   }
-    // }
+    let videoUrl = ``
+    let downloadUrl = metadata.video?.download_addr?.url_list[1]
+    downloadUrl = downloadUrl?.replace(/watermark=1/, 'watermark=0') || ''
+    // let downloadUrl = `https://douyin-download-api-7wpc.onrender.com/api/download?prefix=false&with_watermark=false&url=${url}`
+    const videoBuffer = await videoUrlToBuffer(downloadUrl)
+    const fileName = `va/videos/${metadata.aweme_id}.mp4`
+    if(videoBuffer) {
+      const cosUploadUrl = await cosUploadBuffer(videoBuffer, fileName)
+      if(cosUploadUrl) {
+        videoUrl = `https://${cosUploadUrl}`
+        console.log('上传视频成功')
+      }
+    }
     const asrStart = Date.now()
     const ocrContent = metadata.seo_info?.ocr_content;
     const audioInfo = await tecentAsr(audioUrl);
@@ -115,7 +117,8 @@ export async function POST(req: NextRequest) {
           video: {
             cover: metadata.video?.cover?.url_list[0],
             duration: metadata.video?.duration,
-            format: metadata.video?.format
+            format: metadata.video?.format,
+            download_addr: metadata.video?.download_addr
           },
           author: {
             nickname: metadata.author?.nickname,
