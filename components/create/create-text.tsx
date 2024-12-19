@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { readStreamableValue } from 'ai/rsc'
 import { Clipboard, ClipboardCheck, Gem, Loader2, Link } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -82,13 +83,12 @@ export function CreateText() {
 
   const handleAnalysisLink = async () => {
     setAnalysising(true)
-    const response: any = await fetch('/api/analysis/douyin', {
-      method: 'post',
+    const response: any = await fetch('/api/analysis/dlp', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        userId: userInfo.id,
         url: link
       })
     })
@@ -99,7 +99,7 @@ export function CreateText() {
       return
     }
     setTemplate('secondCreation')
-    setScriptPrompt(`${res?.content}`)
+    setScriptPrompt(`${res?.data?.content}`)
     setAnalysising(false)
   }
 
@@ -129,12 +129,21 @@ export function CreateText() {
             ))}
             </ToggleGroup>
           </div>
-          <Label className="block mb-2 font-medium text-base">爆款链接（可选项）</Label>
+          <div className="mb-2 flex items-center">
+            <Label className="font-medium text-base">爆款链接（可选项）</Label>
+            <div className="ml-2 flex space-x-3">
+              <Image src="/images/tiktok.png" width={16} height={16} alt="tiktok logo" />
+              <Image src="/images/xiaohongshu.ico" width={16} height={16} alt="小红书logo" />
+              <Image src="/images/bilibili.png" width={16} height={16} alt="bilibili logo" />
+              <Image src="/images/youtube.png" width={16} height={16} alt="youtube logo" />
+              <Image src="/images/instagram.png" width={16} height={16} alt="instagram logo" />
+            </div>
+          </div>
           <div className='w-full mb-5 flex items-center gap-1 p-1 pl-5 border-2 rounded-lg'>
             <Link />
             <Input 
               className='border-none outline-0 bg-transparent ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 focus-visible:ring-0' 
-              placeholder='请输入爆款短视频链接，目前仅支持抖音'
+              placeholder='请输入爆款短视频链接'
               onChange={e => {
                 setLink(e.target.value)
               }}

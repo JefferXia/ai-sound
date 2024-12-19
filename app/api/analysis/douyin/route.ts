@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@/app/(auth)/auth'
 import prisma from '@/lib/prisma'
 import { tecentAsr } from '@/lib/asr'
 import { cosUploadBuffer } from "@/lib/cosUpload"
@@ -9,8 +10,10 @@ export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { userId, url } = body
-  console.log('链接', url)
+  const { url } = body
+  const session = await auth()
+  const userId = session?.user?.id
+  
   if (!userId || !url) {
     return NextResponse.json(
       { error: '请输入视频链接' },
@@ -62,8 +65,10 @@ export async function POST(req: NextRequest) {
 
     if(existVideo) {
       return Response.json({
-        title: existVideo.title,
-        content: existVideo.content,
+        data: {
+          title: existVideo.title,
+          content: existVideo.content,
+        }
       })
     }
 
@@ -99,7 +104,7 @@ export async function POST(req: NextRequest) {
     const ocrContent = metadata.seo_info?.ocr_content;
     const audioInfo = await tecentAsr(audioUrl);
     const videoScript = audioInfo ? audioInfo.result : ocrContent;
-    const subtitles = (audioInfo && audioInfo.resultDetail) ? { asrData: audioInfo.resultDetail } : {};
+    const subtitles = (audioInfo && audioInfo.resultDetail) ? audioInfo.resultDetail : null;
     const asrEnd = Date.now()
     console.log('asr时间', Math.round((asrEnd-asrStart)/1000))
 
@@ -136,8 +141,10 @@ export async function POST(req: NextRequest) {
     const transactionData = await addPoint(userId, -10, 'CONSUME', '消耗积分-分析视频')
 
     return Response.json({
-      title: metadata.item_title,
-      content: videoScript,
+      data: {
+        title: metadata.item_title,
+        content: videoScript,
+      }
     });
   } catch (error: any) {
     console.error(error.message);

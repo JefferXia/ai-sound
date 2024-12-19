@@ -105,11 +105,11 @@ const Page = () => {
               <div className=''>
                 <div className='flex justify-around py-4'>
                   <div className='text-center'>
-                    <p className='text-lg font-medium'>{formatNumber(video.metadata?.stat?.digg_count)}</p>
+                    <p className='text-lg font-medium'>{formatNumber(video.metadata?.stat?.digg_count || video.metadata?.stat?.like_count || 0)}</p>
                     <p className="text-sm text-gray-500">点赞</p>
                   </div>
                   <div className='text-center'>
-                    <p className='text-lg font-medium'>{formatNumber(video.metadata?.stat?.comment_count)}</p>
+                    <p className='text-lg font-medium'>{formatNumber(video.metadata?.stat?.comment_count || 0)}</p>
                     <p className="text-sm text-gray-500">评论</p>
                   </div>
                 </div>
