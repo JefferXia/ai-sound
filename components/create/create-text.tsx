@@ -83,7 +83,8 @@ export function CreateText() {
 
   const handleAnalysisLink = async () => {
     setAnalysising(true)
-    const response: any = await fetch('/api/analysis/dlp', {
+    const analysisUrl = link.includes('douyin.com') ? '/api/analysis/douyin' : '/api/analysis/dlp';
+    const response: any = await fetch(analysisUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -135,7 +136,7 @@ export function CreateText() {
               <Image src="/images/tiktok.png" width={16} height={16} alt="tiktok logo" />
               <Image src="/images/xiaohongshu.ico" width={16} height={16} alt="小红书logo" />
               <Image src="/images/bilibili.png" width={16} height={16} alt="bilibili logo" />
-              <Image src="/images/youtube.png" width={16} height={16} alt="youtube logo" />
+              {/* <Image src="/images/youtube.png" width={16} height={16} alt="youtube logo" /> */}
               <Image src="/images/instagram.png" width={16} height={16} alt="instagram logo" />
             </div>
           </div>

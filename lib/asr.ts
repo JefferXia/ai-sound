@@ -44,10 +44,10 @@ const pullRecTask = async (TaskId: any) => {
       // console.log(ResultDetail);
       const extractedDetails = ResultDetail.map((item: any) => ({
         text: item.FinalSentence,
-        startMs: item.StartMs,
-        endMs: item.EndMs,
-        startTime: formatTime(item.StartMs),
-        endTime: formatTime(item.EndMs),
+        start: item.StartMs/1000,
+        end: item.EndMs/1000,
+        // startTime: formatTime(item.StartMs),
+        // endTime: formatTime(item.EndMs),
       }));
 
       const mergedData = extractedDetails.reduce((acc: any, current: any) => {
@@ -57,8 +57,8 @@ const pullRecTask = async (TaskId: any) => {
           let lastChar = acc[acc.length-1].text.slice(-1);
           if(lastChar === '、') {           
             acc[acc.length-1].text += current.text; // 组合句子
-            acc[acc.length-1].endMs = current.endMs
-            acc[acc.length-1].endTime = current.endTime
+            acc[acc.length-1].end = current.end
+            // acc[acc.length-1].endTime = current.endTime
           } else {
             acc.push({ ...current });
           }

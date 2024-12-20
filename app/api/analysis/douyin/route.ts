@@ -13,8 +13,15 @@ export async function POST(req: NextRequest) {
   const { url } = body
   const session = await auth()
   const userId = session?.user?.id
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: '请先登录' },
+      { status: 400 }
+    );
+  }
   
-  if (!userId || !url) {
+  if (!url) {
     return NextResponse.json(
       { error: '请输入视频链接' },
       { status: 400 }
@@ -88,7 +95,8 @@ export async function POST(req: NextRequest) {
     }
     console.log('开始下载')
     let videoUrl = ``
-    let downloadUrl = metadata.video?.download_addr?.url_list[1]
+    const urlLength = metadata.video?.download_addr?.url_list.length
+    let downloadUrl = metadata.video?.download_addr?.url_list[urlLength - 1]
     downloadUrl = downloadUrl?.replace(/watermark=1/, 'watermark=0') || ''
     // let downloadUrl = `https://douyin-download-api-7wpc.onrender.com/api/download?prefix=false&with_watermark=false&url=${url}`
     const videoBuffer = await videoUrlToBuffer(downloadUrl)
