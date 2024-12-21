@@ -7,6 +7,10 @@ export async function GET(req: NextRequest) {
   const session = await auth()
   const userId = session?.user?.id
   const id = req.nextUrl.searchParams.get('id')
+
+  // await prisma.video.deleteMany({
+  //   where: { status: 'DELETED' },
+  // })
   
   if (!userId || !id) {
     return NextResponse.json(

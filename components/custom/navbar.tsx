@@ -62,8 +62,8 @@ export function Navbar({ user }: { user: User | undefined }) {
           <NavigationMenuItem>
             <NavigationMenuTrigger>开始创作</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
+              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                {/* <li className="row-span-3">
                   <NavigationMenuLink asChild>
                     <a
                       className="flex h-full w-full select-none flex-col rounded-md bg-gradient-to-b no-underline outline-none focus:shadow-md overflow-hidden"
@@ -78,7 +78,7 @@ export function Navbar({ user }: { user: User | undefined }) {
                       />
                     </a>
                   </NavigationMenuLink>
-                </li>
+                </li> */}
                 <ListItem href="/create/text" title="创作文案">
                   超强AI智能体帮你快速创作脚本文案
                 </ListItem>

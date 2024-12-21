@@ -1,14 +1,17 @@
 import { NextRequest } from 'next/server'
 
+import { auth } from '@/app/(auth)/auth'
 import prisma from '@/lib/prisma'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
   let { limit=10, offset } = body
+  const session = await auth()
+  const userId = session?.user?.id
 
   const list = await prisma.video.findMany({
     where: {
-      user_id: '52d1d6e4-b8a2-4a02-9aae-dcb18d0ceb25',
+      user_id: userId,
       status: 'SUCCESS'
     },
     orderBy: {

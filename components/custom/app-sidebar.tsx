@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, ScrollText, AudioLines, Youtube, CreditCard } from 'lucide-react';
+import { Plus, ScrollText, AudioLines, Youtube, FileVideo, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { type User } from 'next-auth';
 
@@ -83,6 +83,14 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                 <Link href="/profile/video">
                   <Youtube />
                   <span>我创作的视频</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/profile/analysis">
+                  <FileVideo />
+                  <span>我分析的视频</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

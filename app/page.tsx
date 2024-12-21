@@ -22,7 +22,10 @@ export default function Page() {
         </h2>
         <div className='w-[500px] mt-5 flex items-center gap-1 p-1 pl-5 border-2 rounded-full border-[#38495a]'>
           <Link />
-          <Input className='border-none outline-0 bg-transparent ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 focus-visible:ring-0' />
+          <Input 
+            className='border-none outline-0 bg-transparent ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 focus-visible:ring-0'
+            placeholder='输入视频链接'
+          />
           <Button 
             className='great-btn rounded-full' 
             onClick={() => {
