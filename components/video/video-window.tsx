@@ -17,19 +17,19 @@ import { useGlobalContext } from "@/app/globalContext"
 import { BestPromptText } from '@/lib/ai/prompt-template'
 
 export interface Scene {
-  startTime: number
-  endTime: number
+  start: number
+  end: number
   url: string
   relatedSubtitles?: Subtitle[]
 }
 export interface Subtitle {
   text: string
-  startMs: number
-  endMs: number
+  start: number
+  end: number
   speechSpeed?: number
   wordsNum?: number
-  startTime: string
-  endTime: string
+  startTime?: string
+  endTime?: string
 }
 export interface Subtitles {
   asrData: Subtitle[]
@@ -59,7 +59,7 @@ const VideoWindow = ({
   const [isReady, setIsReady] = useState(false)
   const [notFound, setNotFound] = useState(false)
   const [videoInfo, setVideoInfo] = useState<VideoInfo>()
-  const [subtitles, setSubtitles] = useState<Subtitles>()
+  const [subtitles, setSubtitles] = useState<Subtitle[]>()
   const [scene, setScene] = useState<Scene[]>()
   const [newScene, setNewScene] = useState<Scene[]>()
   const [markmapData, setMarkmapData] = useState('')
@@ -89,16 +89,23 @@ const VideoWindow = ({
 
       const data = await res.json();
       if (data?.video) {
-        const videoData = data.video
+        const videoData:any = data.video
 
-        setVideoInfo(videoData);
+        setVideoInfo(videoData)
 
         if (videoData.scene) {
-          setScene(data.video.scene?.frames)
+          setScene(videoData.scene)
+        } else {
+          generateScene(videoData.video_url)
         }
 
         if (videoData.subtitles) {
-          setSubtitles(data.video.subtitles)
+          const newSubtitles = videoData.subtitles.map((subItem: Subtitle) => ({
+            ...subItem,
+            startTime: formatToMMSS(subItem.start),
+            endTime: formatToMMSS(subItem.end),
+          }))
+          setSubtitles(newSubtitles)
         }
 
         if (videoData.summary) {
@@ -141,6 +148,38 @@ const VideoWindow = ({
     }
   }
 
+  // 将秒数转换为 mm:ss 格式的函数
+  const formatToMMSS = (seconds: number) => {
+    const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const secs = String(Math.floor(seconds % 60)).padStart(2, '0');
+    return `${minutes}:${secs}`;
+  }
+
+  const generateScene = async (url: string) => {
+    try {
+      const res = await fetch(
+        `/api/video/frame`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id,
+            url,
+          }),
+        },
+      );
+
+      const data = await res.json();
+      if (res.status === 200) {
+        setScene(data.scene)
+      }
+    } catch (error) {
+      console.error('generateScene catch error');
+    }
+  };
+
   useEffect(() => {
     (async() => {
       await loadVideoData()
@@ -151,13 +190,13 @@ const VideoWindow = ({
   useEffect(() => {
     if(scene) {
       const newSceneData = scene.map((s, index) => {
-        if(subtitles?.asrData && subtitles?.asrData.length > 0) {
+        if(subtitles && subtitles.length > 0) {
           // 找出当前 scene 包含的 subtitles
-          const relatedSubtitles = subtitles.asrData.filter((sub) =>
+          const relatedSubtitles = subtitles.filter((sub) =>
             index === scene.length - 1
-              ? sub.endMs >= s.startTime
-              : ((sub.startMs >= s.startTime && sub.endMs <= s.endTime) ||
-                (sub.startMs <= s.startTime && sub.endMs >= s.startTime))
+              ? sub.end >= s.start
+              : ((sub.start >= s.start && sub.end <= s.end) ||
+                (sub.start <= s.start && sub.end >= s.start))
           );
 
           // 返回新的 scene 对象，添加 relatedSubtitles 属性
@@ -200,7 +239,7 @@ const VideoWindow = ({
 
   const seekTo = (time: number) => {
     if(videoRef.current) {
-      videoRef.current.currentTime = Math.floor(time / 1000);
+      videoRef.current.currentTime = time;
       videoRef.current.play()
     }
   }

@@ -34,7 +34,7 @@ const VideoInfoBox = ({ videoInfo }: { videoInfo?: VideoInfo }) => {
       </div>
       <div className='shadow-sm rounded-lg bg-muted px-6 py-4'>
         <div className="mb-1">点赞数</div>
-        <div className='text-foreground'>{videoInfo?.metadata?.stat?.digg_count}</div>
+        <div className='text-foreground'>{videoInfo?.metadata?.stat?.digg_count || videoInfo?.metadata?.stat?.like_count}</div>
       </div>
       <div className='shadow-sm rounded-lg bg-muted px-6 py-4'>
         <div className="mb-1">评论数</div>

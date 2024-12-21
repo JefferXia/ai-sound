@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       {
         hostname: '*.cos.ap-nanjing.myqcloud.com'
       },
+      {
+        hostname: '*.cos.ap-shanghai.myqcloud.com'
+      },
     ],
   },
   reactStrictMode: false,

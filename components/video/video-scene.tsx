@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { LayoutList, LayoutGrid } from 'lucide-react'
 import { Scene, Subtitle } from '@/components/video/video-window'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import SrtBoxLoading from '@/components/video/srt-skeleton'
-import Image from 'next/image';
+import Loading from '@/components/create/loading'
 interface VideoSceneBoxProps {
   sceneData?: Scene[]
   handleSeek: (time: number) => void
 }
 
 const VideoSceneBox: React.FC<VideoSceneBoxProps> = ({ sceneData, handleSeek }) => {
-  
-  useEffect(() => {    
-    
-  }, []);
 
   return (
     <div className="p-8 shadow-sm rounded-lg bg-muted text-card-foreground">
@@ -46,7 +42,7 @@ const VideoSceneBox: React.FC<VideoSceneBoxProps> = ({ sceneData, handleSeek }) 
                         <>
                         <td className='py-3 border-b border-tbborder' rowSpan={s.relatedSubtitles?.length}>
                           <span 
-                            onClick={() => handleSeek(s.startTime)}
+                            onClick={() => handleSeek(s.start)}
                             className='flex justify-center items-center w-8 h-8 text-white bg-main-color rounded-full cursor-pointer'>
                             {sceneIndex+1}
                           </span>
@@ -54,14 +50,14 @@ const VideoSceneBox: React.FC<VideoSceneBoxProps> = ({ sceneData, handleSeek }) 
                         <td className='px-6 py-3 border-b border-tbborder' rowSpan={s.relatedSubtitles?.length}>
                           <Image
                             src={
-                              `//${s.url}`
+                              `${s.url}`
                             }
                             className='cursor-pointer'
                             alt={`Scene ${sceneIndex}`}
                             width={180}
                             height={320}
                             priority={false} // 表示启用懒加载
-                            onClick={() => handleSeek(s.startTime)}
+                            onClick={() => handleSeek(s.start)}
                           />
                         </td>
                         </>
@@ -82,7 +78,7 @@ const VideoSceneBox: React.FC<VideoSceneBoxProps> = ({ sceneData, handleSeek }) 
                   <tr key={`${sceneIndex}`}>
                     <td className='py-3 border-b border-tbborder'>
                       <span 
-                        onClick={() => handleSeek(s.startTime)}
+                        onClick={() => handleSeek(s.start)}
                         className='flex justify-center items-center w-8 h-8 text-white bg-main-color rounded-full cursor-pointer'>
                         {sceneIndex+1}
                       </span>
@@ -90,14 +86,14 @@ const VideoSceneBox: React.FC<VideoSceneBoxProps> = ({ sceneData, handleSeek }) 
                     <td className='px-6 py-3 border-b border-tbborder'>
                       <Image
                         src={
-                          `//${s.url}`
+                          `${s.url}`
                         }
                         className='cursor-pointer'
                         alt={`Scene ${sceneIndex}`}
                         width={180}
                         height={320}
                         priority={false} // 表示启用懒加载
-                        onClick={() => handleSeek(s.startTime)}
+                        onClick={() => handleSeek(s.start)}
                       />
                     </td>
                     <td className='px-6 py-3 border-b border-tbborder'></td>
@@ -114,11 +110,11 @@ const VideoSceneBox: React.FC<VideoSceneBoxProps> = ({ sceneData, handleSeek }) 
           {sceneData && sceneData.map((s:Scene, sceneIndex:number) => (
             <div key={`scene-${sceneIndex}`} className='p-3 bg-light-secondary dark:bg-dark-secondary rounded-md'>
               <div 
-                onClick={() => handleSeek(s.startTime)}
+                onClick={() => handleSeek(s.start)}
                 className='relative w-full pt-[100%] cursor-pointer'>
                 <Image
                   src={
-                    `//${s.url}`
+                    `${s.url}`
                   }
                   className='rounded-md'
                   alt={`Scene ${sceneIndex}`}
@@ -145,9 +141,11 @@ const VideoSceneBox: React.FC<VideoSceneBoxProps> = ({ sceneData, handleSeek }) 
         </TabsContent>
       </Tabs>
 
-      {/* {!sceneData && (
-        <SrtBoxLoading />
-      )} */}
+      {!sceneData && (
+        <div className='flex items-center h-[200px]'>
+          <Loading />
+        </div>
+      )}
     </div>
   );
 };

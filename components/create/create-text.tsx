@@ -131,9 +131,9 @@ export function CreateText() {
             </ToggleGroup>
           </div>
           <div className="mb-2 flex items-center">
-            <Label className="font-medium text-base">爆款链接（可选项）</Label>
+            <Label className="font-medium text-base">提取视频文案（可选项）</Label>
             <div className="ml-2 flex space-x-3">
-              <Image src="/images/tiktok.png" width={16} height={16} alt="tiktok logo" />
+              <Image src="/images/douyin.png" width={16} height={16} alt="tiktok logo" />
               <Image src="/images/xiaohongshu.ico" width={16} height={16} alt="小红书logo" />
               <Image src="/images/bilibili.png" width={16} height={16} alt="bilibili logo" />
               {/* <Image src="/images/youtube.png" width={16} height={16} alt="youtube logo" /> */}
