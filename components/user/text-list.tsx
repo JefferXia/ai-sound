@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import Loading from '@/components/create/loading'
 import { BestPromptName } from '@/lib/ai/prompt-template'
+import NoData from '@/components/user/no-data'
 
 interface taskItem {
   id: string,
@@ -87,6 +88,9 @@ export function TextList() {
         onScroll={handleScroll}
         style={{ height: 'calc(100vh - 10rem)' }}
       >
+        {!loading && list.length === 0 && (
+          <NoData />
+        )}
         <div className='grid grid-cols-5 gap-4'>
         {list.length > 0 && list.map((item: taskItem, index) => (
           <div key={item.id} className='p-4 rounded-2xl bg-muted/50'>

@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useGlobalContext } from '@/app/globalContext'
-import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import Loading from '@/components/create/loading'
+import NoData from '@/components/user/no-data'
+import { useGlobalContext } from '@/app/globalContext'
 
 interface taskItem {
   id: string,
@@ -63,6 +63,9 @@ export function VideoList() {
       <h2 className='flex justify-between mb-3'>
         <span className='text-xl font-bold'>我创作的视频</span>
       </h2>
+      {!loading && list.length === 0 && (
+        <NoData />
+      )}
       <div className='grid grid-cols-3 gap-4'>
       {list.length > 0 && list.map((item: taskItem, index) => (
         <div key={item.id} className='p-4 rounded-2xl bg-muted/50'>

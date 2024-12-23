@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import UrlInput from '@/components/create/url-input'
+import NoData from '@/components/user/no-data'
 
 export interface VideoItem {
   id: string;
@@ -162,11 +163,7 @@ const Page = () => {
           ))}
         </div>
       ) : (
-        <div className="flex flex-row items-center justify-center h-[360px]">
-          <p className="text-black/70 dark:text-white/70 text-base">
-            没有数据
-          </p>
-        </div>
+        <NoData />
       )}
     </>
   );
