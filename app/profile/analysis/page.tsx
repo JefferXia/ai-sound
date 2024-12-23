@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import UrlInput from '@/components/create/url-input'
 
 export interface VideoItem {
   id: string;
@@ -82,21 +83,16 @@ const Page = () => {
     }
   }
 
-  return loading ? (
-    <div className="flex flex-row items-center justify-center min-h-screen">
-      <Loading />
-    </div>
-  ) : (
+  return (
     <>
-      {videos.length === 0 && (
-        <div className="flex flex-row items-center justify-center min-h-screen">
-          <p className="text-black/70 dark:text-white/70 text-sm">
-          没有数据
-          </p>
+      <UrlInput analysisCallback={fetchVideos} />
+      {loading && (
+        <div className="flex flex-row items-center justify-center h-[360px]">
+          <Loading />
         </div>
       )}
-      {videos.length > 0 && (
-        <div className="p-6 pt-24 grid grid-cols-2 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 gap-4">
+      {videos.length > 0 ? (
+        <div className="p-6 grid grid-cols-2 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 gap-4">
           {videos.map((video, i) => (
             <div
               className="flex flex-col justify-between p-3 bg-muted rounded-lg"
@@ -164,6 +160,12 @@ const Page = () => {
               </div>
             </div>
           ))}
+        </div>
+      ) : (
+        <div className="flex flex-row items-center justify-center h-[360px]">
+          <p className="text-black/70 dark:text-white/70 text-base">
+            没有数据
+          </p>
         </div>
       )}
     </>

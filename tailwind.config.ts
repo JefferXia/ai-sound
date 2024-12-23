@@ -71,6 +71,9 @@ const config: Config = {
         },
         'main-color': '#24A0ED',
       },
+      animation: {
+        linespin: 'animation-linespin 2s ease-in-out infinite'
+      }
     },
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],

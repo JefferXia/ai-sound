@@ -291,6 +291,31 @@ li {
   100% { transform: scale(50) rotate(45deg); opacity: 0; }
 }
 
+@keyframes animation-linespin {
+  0% {
+    left: 0;
+    width: 37px;
+  }
+
+  25% {
+    width: 76px;
+  }
+
+  50% {
+    left: calc(100% - 37px);
+    width: 37px;
+  }
+
+  75% {
+    width: 76px;
+  }
+
+  100% {
+    left: 0;
+    width: 37px;
+  }
+}
+
 #space {
   height: 100%;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);

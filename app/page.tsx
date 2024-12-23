@@ -20,7 +20,12 @@ export default function Page() {
         <h2 id="typing">
           <span>AI创作无界 尽在天马行空</span>
         </h2>
-        <div className='w-[500px] mt-5 flex items-center gap-1 p-1 pl-5 border-2 rounded-full border-[#38495a]'>
+        <div 
+          className='w-[500px] mt-5 flex items-center gap-1 p-1 pl-5 border-2 rounded-full border-[#38495a]'
+          onClick={() => {
+            router.push('/profile/analysis')
+          }}
+        >
           <Link />
           <Input 
             className='border-none outline-0 bg-transparent ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 focus-visible:ring-0'
@@ -28,9 +33,6 @@ export default function Page() {
           />
           <Button 
             className='great-btn rounded-full' 
-            onClick={() => {
-              router.push('/create/text')
-            }}
           >
             分析链接
           </Button>
