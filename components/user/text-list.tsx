@@ -38,8 +38,7 @@ export function TextList() {
           limit: pageCount,
           offset: page * pageCount
         })
-      })
-      setLoading(false)
+      })     
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -52,7 +51,7 @@ export function TextList() {
       if(data?.length < pageCount) {
         setNoMoreData(true)
       }
-
+      setLoading(false)
     } catch (error) {
       setLoading(false)
       console.error('Error fetching user info:', error)
