@@ -24,8 +24,8 @@ const UrlInput: React.FC<UrlInputProps> = ({ analysisCallback }) => {
   const handleDownload = async(link: string) => {   
     setLoading(true)
     try {
-      const analysisUrl = link.includes('douyin.com') ? '/api/analysis/douyin' : '/api/analysis/dlp';
-      const response: any = await fetch(analysisUrl, {
+      // const analysisUrl = link.includes('douyin.com') ? '/api/analysis/douyin' : '/api/analysis/dlp';
+      const response: any = await fetch('/api/analysis/dlp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -36,13 +36,12 @@ const UrlInput: React.FC<UrlInputProps> = ({ analysisCallback }) => {
       })
       const res = await response.json()
       if (!response.ok) {
-        setLoading(false)
         toast.error(res?.error || '出错了~ 请重试')
         return
       }
+      setUrl('')
       analysisCallback(0)
     } catch (error) {
-      setLoading(false)
       console.error(error)
       toast.error(
         '出错了！请重试~',

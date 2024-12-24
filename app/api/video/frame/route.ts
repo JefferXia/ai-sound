@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await fetch(
-      'https://dlp-node-1-0-0-mh2b.onrender.com/api/frame',
+      `${process.env.DLP_API_URL}/api/frame`,
       {
         method: 'POST',
         headers: {

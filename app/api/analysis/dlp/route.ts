@@ -43,12 +43,12 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await fetch(
-      'https://dlp-node-1-0-0-mh2b.onrender.com/api/video_crawler',
+      `${process.env.DLP_API_URL}/api/video_crawler`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.DLP_API_KEY}`,
+          // 'Authorization': `Bearer ${process.env.DLP_API_KEY}`,
         },
         body: JSON.stringify({
           url,
