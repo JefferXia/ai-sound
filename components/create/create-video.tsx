@@ -2,44 +2,72 @@
 
 import { Download, Loader2, Gem } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { cn } from '@/lib/utils'
-import { useGlobalContext } from "@/app/globalContext"
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import Loading from './loading'
 import { toast } from 'sonner'
+import { sleep } from '@/lib/utils'
 import { BetterTooltip } from '@/components/ui/tooltip'
 
 export function CreateVideo() {
   const [script, setScript] = useState('')
   const [videoUrl, setVideoUrl] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const {
-    userInfo
-  } = useGlobalContext()
 
   const handleGenerateBtn = async () => {
     setVideoUrl('')
     setLoading(true)
-    const response: any = await fetch('/api/video/generate', {
+    const response = await fetch('/api/video/generate', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        userId: userInfo.id,
         prompt: script,
         model: "video-01"
       })
     })
-    setLoading(false)
     const res = await response.json()
     if (!response.ok) {
+      setLoading(false)
       toast.error(res?.error || '出错了~ 请重试')
-      throw new Error(`HTTP error! status: ${response.status}`)
+      return
     }   
-    setVideoUrl(res.downloadUrl)
+    await pollForTask(res.id, res.taskId)
+  }
+
+  const queryTask = async (id: string, taskId: string) => {
+    setLoading(true)
+    const response = await fetch('/api/video/query-task', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id,
+        taskId,
+      })
+    })
+    const res = await response.json()
+    if (!response.ok) {
+      return {}
+    }
+    return res
+  }
+
+  const pollForTask = async (id: string, taskId: string) => {
+    const poll = async () => {
+      const data = await queryTask(id, taskId)
+      if(data?.downloadUrl) {
+        setLoading(false)
+        setVideoUrl(data.downloadUrl)
+      } else {
+        await sleep(20000)
+        poll()
+      }
+    }
+    poll()
   }
 
   const handleDownload = () => {
