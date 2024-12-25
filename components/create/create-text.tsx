@@ -35,6 +35,7 @@ export function CreateText() {
   const [scriptPrompt, setScriptPrompt] = useState('')
   const [scriptLen, setScriptLen] = useState(0)
   const [model, setModel] = useState('gpt-4o')
+  const [writeStyle, setWriteStyle] = useState('')
   const [generation, setGeneration] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [analysising, setAnalysising] = useState(false)
@@ -50,10 +51,16 @@ export function CreateText() {
       setGeneration('')
     }
     setLoading(true)
+    let textMaterial = scriptPrompt
+    if(template === 'NewMediaEditor') {
+      textMaterial = `
+      请按照${writeStyle}对以下文案进行风格和措词的全面改写:
+      ${scriptPrompt}`
+    }
     const res = await generate({
       // userId: userInfo.id,
       // systemPrompt,
-      textMaterial: scriptPrompt,
+      textMaterial,
       model,
       template
     })
@@ -108,7 +115,7 @@ export function CreateText() {
     <div className="p-6 pt-24">
       {/* <h1 className="text-2xl font-medium text-center">文案助手</h1> */}
       <div className="flex flex-row w-full">
-        <div className="flex flex-col w-1/2 mr-12">
+        <div className="flex flex-col w-[600px]">
           <Label className="block mb-2 font-medium text-base">选择智能助手</Label>
           <div className="mb-5">
             <ToggleGroup 
@@ -144,7 +151,7 @@ export function CreateText() {
             <Link />
             <Input 
               className='border-none outline-0 bg-transparent ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 focus-visible:ring-0' 
-              placeholder='请输入爆款短视频链接'
+              placeholder='请输入短视频链接'
               onChange={e => {
                 setLink(e.target.value)
               }}
@@ -160,12 +167,12 @@ export function CreateText() {
               </Button>
             </BetterTooltip>
           </div>
-          <Label className="block mb-2 font-medium text-base">文案主题</Label>
+          <Label className="block mb-2 font-medium text-base">文案</Label>
           <div className="relative mb-5">
             <Textarea
               rows={8}
-              maxLength={3000}
-              placeholder='输入你的文案主题或者大纲'
+              maxLength={5000}
+              placeholder='请输入你的文案'
               value={scriptPrompt}
               className="w-full border p-2 bg-muted rounded-lg placeholder:text-sm placeholder:leading-[22px] text-sm leading-[22px] resize-none"
               onChange={e => {
@@ -174,7 +181,7 @@ export function CreateText() {
               }}
             />
             <div className="absolute right-3 bottom-3 text-sm text-black/80 dark:text-white/80">
-              {scriptLen} / 3000
+              {scriptLen} / 5000
             </div>
           </div>
           <div className="flex space-x-8">
@@ -191,6 +198,30 @@ export function CreateText() {
                 </SelectContent>
               </Select>
             </div>
+
+            {template === 'NewMediaEditor' && (
+              <div>
+                <Label className="block mb-2 font-medium text-base">
+                  改写风格
+                </Label>
+                <Select onValueChange={setWriteStyle} value={writeStyle}>
+                  <SelectTrigger className="w-[180px] rounded-lg">
+                    <SelectValue placeholder="选择文风" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="正式文风">正式文风</SelectItem>
+                    <SelectItem value="广告营销文风">营销文风</SelectItem>
+                    <SelectItem value="评论分析文风">评论分析文风</SelectItem>
+                    <SelectItem value="故事叙述文风">故事叙述文风</SelectItem>
+                    <SelectItem value="社交媒体文风">社交媒体文风</SelectItem>
+                    <SelectItem value="情感诉求文风">情感诉求文风</SelectItem>
+                    <SelectItem value="幽默风格">幽默风格</SelectItem>
+                    <SelectItem value="公关文风">公关文风</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            
             <div className="flex-1">
               {/* <Label className="block mb-2 font-medium text-base">
               API KEY
@@ -211,7 +242,7 @@ export function CreateText() {
               <Button
                 className="w-full text-base font-bold cursor-pointer"
                 onClick={handleGenerateBtn}
-                disabled={loading || !template || !scriptPrompt}
+                disabled={loading || !template || !scriptPrompt || (template === 'NewMediaEditor' && !writeStyle)}
               >
                 {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
                 生成
@@ -224,36 +255,39 @@ export function CreateText() {
         </div>
 
         <div className="flex-1">
-          <div className="flex justify-between mb-2">
-            <span className="font-medium text-base">生成结果</span>
-            <div
-              className="flex items-center text-sm cursor-pointer"
-              onClick={handleCopyScript}
-            >
-              {isCopied ? (
-                <>
-                  <ClipboardCheck size={16} className="mr-1" />
-                  已复制
-                </>
-              ) : (
-                <>
-                  <Clipboard size={16} className="mr-1" />
-                  复制
-                </>
-              )}
+          <div className='px-10 mx-auto max-w-2xl'>
+            <div className="flex justify-between mb-2">
+              <span className="font-medium text-base">生成结果</span>
+              <div
+                className="flex items-center text-sm cursor-pointer"
+                onClick={handleCopyScript}
+              >
+                {isCopied ? (
+                  <>
+                    <ClipboardCheck size={16} className="mr-1" />
+                    已复制
+                  </>
+                ) : (
+                  <>
+                    <Clipboard size={16} className="mr-1" />
+                    复制
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-          <div className='overflow-y-scroll' style={{ maxHeight: 'calc(100vh - 160px)' }}>
-          {generation && (
-            <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-              <Markdown>{generation as string}</Markdown>
+            <div className='overflow-y-scroll' style={{ maxHeight: 'calc(100vh - 160px)' }}>
+            {generation && (
+              <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
+                <Markdown>{generation as string}</Markdown>
+              </div>
+            )}
             </div>
-          )}
+            {loading && (
+              <Loading />
+            )}
           </div>
-          {loading && (
-            <Loading />
-          )}
         </div>
+
       </div>
     </div>
   )
