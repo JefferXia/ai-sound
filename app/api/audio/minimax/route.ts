@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await axios.post(url, payload, { headers });
-    if(response.status === 200) {
+    if(response.status === 200 && response?.data) {
       const minimaxResponse = response.data
       // console.log(minimaxResponse)
       const timestamp = Date.now()

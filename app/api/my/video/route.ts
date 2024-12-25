@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
   const textTasks = await prisma.createTask.findMany({
     where: {
       user_id: userId,
-      content_type: 'VIDEO'
+      content_type: 'VIDEO',
+      is_deleted: false
     },
     orderBy: {
       created_at: 'desc'

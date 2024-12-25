@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Copy } from 'lucide-react'
+import { Copy, Trash2 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '@/app/globalContext'
 import { toast } from 'sonner'
@@ -9,6 +9,17 @@ import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import Loading from '@/components/create/loading'
 import { BestPromptName } from '@/lib/ai/prompt-template'
 import NoData from '@/components/user/no-data'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface taskItem {
   id: string,
@@ -23,7 +34,7 @@ export function TextList() {
   const [noMoreData, setNoMoreData] = useState(false)
   const { userInfo } = useGlobalContext()
   const { isCopied, copyToClipboard } = useCopyToClipboard({})
-  const pageCount = 15
+  const pageCount = 20
 
   const fetchList = async (page: number) => {
     setLoading(true)
@@ -77,6 +88,13 @@ export function TextList() {
     }
   }
 
+  const deleteText = async(id: string) => {
+    const response = await fetch(`/api/audio/delete?id=${id}`)
+    if(response.status === 200) {
+      fetchList(0)
+    }
+  }
+
   return (
     <>
       <h2 className='mb-3 flex justify-between'>
@@ -93,8 +111,27 @@ export function TextList() {
         <div className='grid grid-cols-5 gap-4'>
         {list.length > 0 && list.map((item: taskItem, index) => (
           <div key={item.id} className='p-4 rounded-2xl bg-muted/50'>
-            <div className='text-sm font-bold'>
-              {BestPromptName[item.taskInfo?.parameters?.template] || '文案助手'}
+            <div className='flex justify-between items-center'>
+              <span className='text-sm font-bold'>
+                {BestPromptName[item.taskInfo?.parameters?.template] || '文案助手'}
+              </span>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Trash2 className='cursor-pointer' size={20} />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>确认</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      确定要删除该文案吗？
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>取消</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => deleteText(item.id)}>确定</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
             <div className='relative my-3 text-base group cursor-pointer'>
               <div className='text-base line-clamp-3'>

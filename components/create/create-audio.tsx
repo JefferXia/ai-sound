@@ -48,7 +48,7 @@ export function CreateAudio({
     const res = await response.json()
     if (!response.ok) {
       toast.error(res?.error || '出错了~ 请重试')
-      throw new Error(`HTTP error! status: ${response.status}`)
+      return
     }
     setAudioUrl(res?.audioUrl)
     setAudioDownloadUrl(audioUrl)

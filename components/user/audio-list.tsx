@@ -1,11 +1,24 @@
 'use client'
 
+import { Trash2 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '@/app/globalContext'
 import { toast } from 'sonner'
 import Loading from '@/components/create/loading'
 import NoData from '@/components/user/no-data'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
+import { MinimaxVoiceNameMap } from '@/lib/config'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface taskItem {
   id: string,
@@ -70,6 +83,13 @@ export function AudioList() {
     }
   }
 
+  const deleteAudio = async(id: string) => {
+    const response = await fetch(`/api/audio/delete?id=${id}`)
+    if(response.status === 200) {
+      fetchList(0)
+    }
+  }
+
   return (
     <>
       <h2 className='flex justify-between mb-3'>
@@ -88,7 +108,24 @@ export function AudioList() {
         {list.length > 0 && list.map((item: taskItem, index) => (
           <div key={item.id} className='p-4 rounded-2xl bg-muted/50'>
             <div className='flex justify-between items-center'>  
-              <span className='text-sm font-bold'>{item.taskInfo?.model}</span>
+              <span className='text-sm font-bold'>{MinimaxVoiceNameMap[item.taskInfo?.parameters?.voice_id]}</span>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Trash2 className='cursor-pointer' size={20} />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>确认</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      确定要删除该音频吗？
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>取消</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => deleteAudio(item.id)}>确定</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
             <div className='relative my-3'>
               <div className='mb-3'>

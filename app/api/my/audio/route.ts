@@ -7,10 +7,11 @@ export async function POST(req: NextRequest) {
   const body: GetAudioWorkFeedReq = await req.json()
   let { userId, limit=10, offset } = body
 
-  const textTasks = await prisma.createTask.findMany({
+  const audioTasks = await prisma.createTask.findMany({
     where: {
       user_id: userId,
-      content_type: 'AUDIO'
+      content_type: 'AUDIO',
+      is_deleted: false
     },
     orderBy: {
       created_at: 'desc'
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
   // console.log(textTasks)
 
   // 格式化输出
-  const formattedData = textTasks.map(task => ({
+  const formattedData = audioTasks.map(task => ({
     id: task.id,
     content: task.content,
     taskInfo: task.task_info,
