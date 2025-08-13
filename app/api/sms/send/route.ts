@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-// const twilio = require("twilio")
+import { createHash, createHmac } from 'crypto'
 
 // 超时时间设置为60秒
 export const maxDuration = 60
-
-// const accountSid = process.env.TWILIO_ACCOUNT_SID;
-// const authToken = process.env.TWILIO_AUTH_TOKEN;
-// const client = twilio(accountSid, authToken);
-
-import { Signer } from '@volcengine/openapi'
 
 // 验证手机号格式的函数
 function isValidPhoneNumber(phone: string): boolean {
@@ -18,6 +12,68 @@ function isValidPhoneNumber(phone: string): boolean {
   // 2. 支持 +86 前缀
   const phoneRegex = /^(\+86)?1[3-9]\d{9}$/
   return phoneRegex.test(phone)
+}
+
+// 生成签名
+function generateSignature(
+  method: string,
+  uri: string,
+  query: string,
+  headers: Record<string, string>,
+  body: string,
+  accessKeyId: string,
+  secretKey: string
+): string {
+  // 1. 创建规范化请求字符串
+  const canonicalHeaders = Object.keys(headers)
+    .sort()
+    .map(key => `${key.toLowerCase()}:${headers[key]}`)
+    .join('\n')
+  
+  const signedHeaders = Object.keys(headers)
+    .sort()
+    .map(key => key.toLowerCase())
+    .join(';')
+  
+  const hashedPayload = createHash('sha256').update(body).digest('hex')
+  
+  const canonicalRequest = [
+    method,
+    uri,
+    query,
+    canonicalHeaders,
+    '',
+    signedHeaders,
+    hashedPayload
+  ].join('\n')
+  
+  // 2. 创建待签名字符串
+  const algorithm = 'HMAC-SHA256'
+  const timestamp = new Date().toISOString().replace(/[:\-]|\.\d{3}/g, '').slice(0, 15) + 'Z'
+  const date = timestamp.slice(0, 8)
+  const credentialScope = `${date}/cn-north-1/volcSMS/request`
+  
+  const hashedCanonicalRequest = createHash('sha256').update(canonicalRequest).digest('hex')
+  
+  const stringToSign = [
+    algorithm,
+    timestamp,
+    credentialScope,
+    hashedCanonicalRequest
+  ].join('\n')
+  
+  // 3. 计算签名
+  const kDate = createHmac('sha256', secretKey).update(date).digest()
+  const kRegion = createHmac('sha256', kDate).update('cn-north-1').digest()
+  const kService = createHmac('sha256', kRegion).update('volcSMS').digest()
+  const kSigning = createHmac('sha256', kService).update('request').digest()
+  
+  const signature = createHmac('sha256', kSigning).update(stringToSign).digest('hex')
+  
+  // 4. 创建授权头
+  const authorization = `${algorithm} Credential=${accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`
+  
+  return authorization
 }
 
 export async function POST(req: NextRequest) {
@@ -59,7 +115,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const payload: Record<string, any> = {
+    const payload = {
       SmsAccount: smsAccount,
       Sign: smsSign,
       TemplateID: smsTemplateId,
@@ -69,31 +125,36 @@ export async function POST(req: NextRequest) {
       Scene: '注册验证码',
     }
 
-    // 组装并签名请求
-    const openApiRequestData = {
-      method: 'POST',
-      region: 'cn-north-1',
-      params: {
-        Action: 'SendSmsVerifyCode',
-        Version: '2020-01-01',
-      },
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Host: 'sms.volcengineapi.com',
-      } as Record<string, string>,
-      body: JSON.stringify(payload),
+    const requestBody = JSON.stringify(payload)
+    const timestamp = new Date().toISOString().replace(/[:\-]|\.\d{3}/g, '').slice(0, 15) + 'Z'
+    
+    // 准备请求头
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Host': 'sms.volcengineapi.com',
+      'X-Date': timestamp,
+      'X-Content-Sha256': createHash('sha256').update(requestBody).digest('hex')
     }
 
-    // 使用正确的服务名进行签名（volcSMS）
-    const signer = new Signer(openApiRequestData as any, 'volcSMS')
-    signer.addAuthorization({ accessKeyId, secretKey, sessionToken: '' })
+    // 生成授权签名
+    const authorization = generateSignature(
+      'POST',
+      '/',
+      'Action=SendSmsVerifyCode&Version=2020-01-01',
+      headers,
+      requestBody,
+      accessKeyId,
+      secretKey
+    )
+
+    headers.Authorization = authorization
 
     const url = 'https://sms.volcengineapi.com/?Action=SendSmsVerifyCode&Version=2020-01-01'
 
     const resp = await fetch(url, {
       method: 'POST',
-      headers: openApiRequestData.headers,
-      body: openApiRequestData.body as string,
+      headers,
+      body: requestBody,
     })
 
     const data = await resp.json().catch(() => ({}))
