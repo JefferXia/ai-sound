@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
     })
     return Response.json({success: true})
   }
+  return Response.json({success: true})
   // await prisma.video.update({
   //   where: { id: 'cm476fwwd00036llneer5cojm' },
   //   data: {

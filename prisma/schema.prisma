@@ -16,8 +16,9 @@ datasource db {
 
 model User {
   id         String      @id @default(uuid())
-  email      String      @unique @db.VarChar(64) // 唯一的电子邮件字段
+  email      String?     @unique @db.VarChar(64) // 唯一的电子邮件字段，改为可选
   password   String?     @db.VarChar(64)         // 可选的密码字段
+  phone      String?     @unique @db.VarChar(20)         // 可选的手机号字段
   name       String      @db.VarChar(50)
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
@@ -168,4 +169,18 @@ model Video {
   updated_at  DateTime  @updatedAt                     // 更新时间
 
   @@index([user_id, created_at(sort: Desc)])
+}
+
+model WeiRecord {
+  id            Int      @id @default(autoincrement())
+  phone         String   @db.VarChar(20)
+  product_id    String   @db.VarChar(64) @unique
+  product_name  String?  @db.VarChar(255)
+  product_url   String?  @db.Text
+  image_caption String?  @db.Text
+  report        String?  @db.Text
+  created_at    DateTime @default(now())
+  is_deleted    Boolean  @default(false)
+
+  @@index([phone, created_at(sort: Desc)])
 }
