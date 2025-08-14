@@ -246,3 +246,35 @@ export async function checkPoint(userId: string) {
   });
   return userData?.balance || 0;
 }
+
+
+export async function userDetails(userId: string) {
+  const userData: any = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      name: true,
+      phone: true,
+      balance: true,
+      weiRecord: {
+        orderBy: {
+          created_at: 'desc',
+        },
+      },
+    },
+  });
+  
+  if (userData) {
+    const data = {
+      name: userData.name,
+      phone: userData.phone,
+      balance: userData.balance,
+      weiTotal: '--',
+    };
+    if(userData.weiRecord) {
+      data.weiTotal = userData.weiRecord?.length || 0;
+    }
+    return data;
+  }
+}

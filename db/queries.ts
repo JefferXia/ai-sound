@@ -55,6 +55,17 @@ export async function getUserByPhone(phone: string) {
   }
 }
 
+export async function getUserById(id: string) {
+  try {
+    return await prisma.user.findUnique({
+      where: { id },
+    })
+  } catch (error) {
+    console.error("Failed to get user from database");
+    throw error;
+  }
+}
+
 export async function createUserByPhone(phone: string) {
   const name = phone;
 

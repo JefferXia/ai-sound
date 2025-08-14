@@ -18,12 +18,13 @@ model User {
   id         String      @id @default(uuid())
   email      String?     @unique @db.VarChar(64) // 唯一的电子邮件字段，改为可选
   password   String?     @db.VarChar(64)         // 可选的密码字段
-  phone      String?     @unique @db.VarChar(20)         // 可选的手机号字段
+  phone      String?     @unique @db.VarChar(20) // 可选的手机号字段
   name       String      @db.VarChar(50)
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   balance    Int         @default(0)             // 余额
   point      Point[]                             // 用户与积分账户的关系
+  weiRecord  WeiRecord[] 
 }
 
 model Point {
@@ -181,6 +182,10 @@ model WeiRecord {
   report        String?  @db.Text
   created_at    DateTime @default(now())
   is_deleted    Boolean  @default(false)
+  status        String   @default("PROCESSING")
+  user_id       String                                // 外键，关联用户
+  user          User     @relation(fields: [user_id], references: [id])
 
-  @@index([phone, created_at(sort: Desc)])
+  @@index([phone, is_deleted, created_at(sort: Desc)])
+  @@index([user_id, is_deleted, created_at(sort: Desc)])
 }

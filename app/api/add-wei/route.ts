@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import prisma from '@/lib/prisma'
 import { addPoint } from '@/lib/db'
-import { getUserByPhone } from '@/db/queries'
+import { getUserById } from '@/db/queries'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const {
+      user_id,
       phone,
       product_id,
       product_name,
@@ -18,14 +19,14 @@ export async function POST(req: NextRequest) {
 
     // console.log('body', body)
 
-    if (!phone) {
-      return NextResponse.json({ error: '缺少参数: phone' }, { status: 400 })
+    if (!user_id) {
+      return NextResponse.json({ error: '缺少参数: user_id' }, { status: 400 })
     }
     if (!product_id) {
       return NextResponse.json({ error: '缺少参数: product_id' }, { status: 400 })
     }
 
-    const user = await getUserByPhone(String(phone))
+    const user = await getUserById(user_id)
     if (!user) {
       return NextResponse.json({ error: '用户不存在' }, { status: 404 })
     }
@@ -33,8 +34,8 @@ export async function POST(req: NextRequest) {
     // 先检查是否已存在该用户和product_id的记录
     const existing = await prisma.weiRecord.findFirst({
       where: { 
-        phone: String(phone),
-        product_id: String(product_id) 
+        user_id,
+        product_id: String(product_id)
       },
     })
 
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
           product_url: product_url ?? existing.product_url,
           image_caption: image_caption ?? existing.image_caption,
           report: report ?? existing.report,
+          status: report ? 'SUCCESS' : existing.status,
         },
       })
 
@@ -62,12 +64,14 @@ export async function POST(req: NextRequest) {
     // 不存在则创建并扣除 10 积分
     const created = await prisma.weiRecord.create({
       data: {
+        user_id: user.id,
         phone: String(phone),
         product_id: String(product_id),
         product_name: product_name ? String(product_name) : undefined,
         product_url: product_url ? String(product_url) : undefined,
         image_caption: image_caption ? String(image_caption) : undefined,
         report: report ? String(report) : undefined,
+        status: report ? 'SUCCESS' : 'PROCESSING',
       },
     })
 
