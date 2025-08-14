@@ -234,3 +234,15 @@ export async function pointDetails(userId: string) {
     pointData: []
   };
 }
+
+export async function checkPoint(userId: string) {
+  const userData: any = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      balance: true,
+    },
+  });
+  return userData?.balance || 0;
+}

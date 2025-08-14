@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       report,
     } = body || {}
 
-    console.log('body', body)
+    // console.log('body', body)
 
     if (!phone) {
       return NextResponse.json({ error: '缺少参数: phone' }, { status: 400 })
@@ -30,9 +30,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '用户不存在' }, { status: 404 })
     }
 
-    // 先检查是否已存在该 product_id 的记录（按“唯一”处理）
+    // 先检查是否已存在该用户和product_id的记录
     const existing = await prisma.weiRecord.findFirst({
-      where: { product_id: String(product_id) },
+      where: { 
+        phone: String(phone),
+        product_id: String(product_id) 
+      },
     })
 
     if (existing) {

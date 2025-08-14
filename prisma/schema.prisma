@@ -174,7 +174,7 @@ model Video {
 model WeiRecord {
   id            Int      @id @default(autoincrement())
   phone         String   @db.VarChar(20)
-  product_id    String   @db.VarChar(64) @unique
+  product_id    String   @db.VarChar(64)
   product_name  String?  @db.VarChar(255)
   product_url   String?  @db.Text
   image_caption String?  @db.Text
