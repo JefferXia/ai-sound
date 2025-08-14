@@ -71,8 +71,22 @@ const config: Config = {
         },
         'main-color': '#24A0ED',
       },
+      keyframes: {
+        'flip': {
+          to: {
+            transform: "rotate(360deg)",
+          },
+        },
+        'rotate': {
+          to: {
+            transform: "rotate(90deg)",
+          },
+        },
+      },
       animation: {
-        linespin: 'animation-linespin 2s ease-in-out infinite'
+        linespin: 'animation-linespin 2s ease-in-out infinite',
+        'flip': "flip 6s infinite steps(2, end)",
+        'rotate': "rotate 3s linear infinite both",
       }
     },
   },
