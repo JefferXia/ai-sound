@@ -88,7 +88,16 @@ export default function InstallPage() {
             <p className="text-muted-foreground mb-6">
               点击下方按钮下载极效火眼扩展程序文件
             </p>
-            <button className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-full hover:shadow-xl transition-all transform hover:scale-105">
+            <button 
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-full hover:shadow-xl transition-all transform hover:scale-105"
+              onClick={() => {
+                // 创建下载链接
+                const link = document.createElement('a')
+                link.href = '/extension/极效火眼1.0.0.zip'
+                link.download = '极效火眼1.0.0.zip'
+                link.click()
+              }}
+            >
               <Download className="w-5 h-5 mr-2" />
               下载极效火眼 v1.0.0
             </button>

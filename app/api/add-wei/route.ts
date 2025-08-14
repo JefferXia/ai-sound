@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       report,
     } = body || {}
 
-    // console.log('body', body)
+    console.log('body', body)
 
     if (!user_id) {
       return NextResponse.json({ error: '缺少参数: user_id' }, { status: 400 })
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     // 先检查是否已存在该用户和product_id的记录
     const existing = await prisma.weiRecord.findFirst({
       where: { 
-        user_id,
+        user_id: user.id,
         product_id: String(product_id)
       },
     })

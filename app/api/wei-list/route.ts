@@ -5,11 +5,11 @@ import { utcToBeijing } from '@/lib/utils'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  let { phone, limit=100, offset=0 } = body
+  let { userId, limit=100, offset=0 } = body
 
   const records = await prisma.weiRecord.findMany({
     where: {
-      phone,
+      user_id: userId,
       is_deleted: false
     },
     orderBy: {

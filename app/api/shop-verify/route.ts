@@ -32,11 +32,6 @@ function extractPasswordFromShopUrl(shopUrl: string): string | null {
   }
 }
 
-function omitPassword<T extends Record<string, any>>(user: T): Omit<T, 'password'> {
-  const { password: _omit, ...rest } = user as any;
-  return rest as Omit<T, 'password'>;
-}
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -70,14 +65,30 @@ export async function POST(req: NextRequest) {
     if (user) {
       const passwordsMatch = await compare(password, user.password!);
       if (passwordsMatch) {
-        return NextResponse.json({ status: 'user_exists', userInfo: omitPassword(user) });
+        return NextResponse.json({ 
+          status: 'user_exists', 
+          userInfo: {
+            id: user.id,
+            name: user.name,
+            phone: user.phone,
+            balance: user.balance,
+          } 
+        });
       }
-      return NextResponse.json({ status: 'fail', message: '店铺不匹配' });
+      return NextResponse.json({ status: 'fail', message: '手机号与店铺不匹配' });
     } else {
       const newUser = await createUserByShop(phone, shopName, password);
       console.log('创建user', newUser)
 
-      return NextResponse.json({ status: "new_user", userInfo: omitPassword(newUser) });
+      return NextResponse.json({ 
+        status: "new_user", 
+        userInfo: {
+          id: newUser.id,
+          name: newUser.name,
+          phone: newUser.phone,
+          balance: newUser.balance,
+        } 
+      });
     }
   } catch (error) {
     console.error('JSON parsing error:', error)
