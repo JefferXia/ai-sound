@@ -24,7 +24,8 @@ model User {
   updated_at DateTime    @updatedAt
   balance    Int         @default(0)             // 余额
   point      Point[]                             // 用户与积分账户的关系
-  weiRecord  WeiRecord[] 
+  weiRecord  WeiRecord[]
+  payments   PaymentRecord[]                     // 用户支付记录 
 }
 
 model Point {
@@ -188,4 +189,52 @@ model WeiRecord {
 
   @@index([phone, is_deleted, created_at(sort: Desc)])
   @@index([user_id, is_deleted, created_at(sort: Desc)])
+}
+
+// 支付方式枚举
+enum PaymentType {
+  alipay    // 支付宝
+  wxpay     // 微信支付
+  qqpay     // QQ钱包
+  tenpay    // 财付通
+}
+
+// 支付状态枚举
+enum PaymentStatus {
+  PENDING   // 待支付
+  SUCCESS   // 支付成功
+  FAILED    // 支付失败
+  REFUNDED  // 已退款
+  CANCELLED // 已取消
+}
+
+model PaymentRecord {
+  id            String        @id @default(uuid())
+  userId        String        // 用户ID
+  amount        Decimal       @db.Decimal(10, 2)  // 支付金额，保留2位小数
+  productName   String        @db.VarChar(255)    // 商品名称
+  paymentType   PaymentType   // 支付方式
+  status        PaymentStatus // 支付状态
+  createTime    DateTime      @default(now())     // 创建时间
+  updateTime    DateTime      @updatedAt          // 更新时间
+  
+  // ZPAY相关字段
+  outTradeNo    String        @unique             // 商户订单号，唯一
+  tradeNo       String?       @db.VarChar(64)     // ZPAY订单号
+  buyer         String?       @db.VarChar(100)    // 支付者账号
+  
+  // 充值相关字段
+  pointAmount   Int           @default(0)         // 充值获得的积分数量
+  rechargeType  String        @default("POINT")   // 充值类型：POINT(积分充值)
+  
+  // 关联用户
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // 索引
+  @@index([userId, status, createTime(sort: Desc)])
+  @@index([outTradeNo])
+  @@index([tradeNo])
+  @@index([status, createTime(sort: Desc)])
+  @@index([paymentType, status])
+  @@index([rechargeType, status])
 }
