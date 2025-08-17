@@ -20,13 +20,13 @@ export class RechargeService {
    * 创建充值订单
    */
   static async createRechargeOrder(
+    orderId: string,
     userId: string,
     amount: number,
     paymentType: PaymentType,
     pointAmount: number // 新增参数：积分数量
   ): Promise<PaymentRecord> {
-    const paymentUtils = createPaymentUtils()
-    const outTradeNo = paymentUtils.generateOrderId()
+    const outTradeNo = orderId
     
     // 使用传入的积分数量，而不是通过金额换算
     const paymentRecord = await (prisma as any).paymentRecord.create({

@@ -43,6 +43,7 @@ export async function POST(request: NextRequest) {
     
     // 创建充值订单记录
     const rechargeRecord = await RechargeService.createRechargeOrder(
+      orderId,
       body.userId,
       body.amount,
       body.paymentType,
