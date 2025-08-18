@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
 
     const transactionData = await addPoint(
       user.id,
-      -10,
+      -100,
       'CONSUME',
       '消耗积分-检测违规'
     )

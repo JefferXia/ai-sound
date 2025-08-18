@@ -100,12 +100,12 @@ export async function createUserByShop(phone: string, name: string, password: st
         phone,
         name,
         password: hash,
-        balance: 20, // 创建账户时设置总余额
+        balance: 200, // 创建账户时设置总余额
         point: {
           create: {
-            amount: 20,
+            amount: 200,
             type: 'SYSTEM',
-            reason: '首次注册送新人礼20积分'
+            reason: '首次注册送新人礼200积分'
           }
         }
       },
