@@ -1,110 +1,124 @@
 'use client';
 
-import { useState } from 'react';
-import { generateWeChatAuthUrl } from '@/lib/wechat';
+import { useEffect, useRef, useState } from 'react';
+import { wechatConfig } from '@/lib/wechat';
 
-interface WeChatLoginSimpleProps {
+interface WeChatLoginQRProps {
   onSuccess?: (userInfo: any) => void;
   onError?: (error: string) => void;
   className?: string;
 }
 
-export function WeChatLoginSimple({
+declare global {
+  interface Window {
+    WxLogin: any;
+  }
+}
+
+// 内嵌二维码版本（使用微信官方wxLogin.js）
+export function WeChatLoginQR({
   onSuccess,
   onError,
   className = '',
-}: WeChatLoginSimpleProps) {
-  const [isLoading, setIsLoading] = useState(false);
+}: WeChatLoginQRProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleWeChatLogin = () => {
-    setIsLoading(true);
+  useEffect(() => {
+    const initWeChatLogin = () => {
+      try {
+        // 生成state参数用于防止CSRF攻击
+        const state = Math.random().toString(36).substring(2, 15);
 
-    try {
-      // 生成state参数用于防止CSRF攻击
-      const state = Math.random().toString(36).substring(2, 15);
+        // 初始化微信登录
+        new window.WxLogin({
+          self_redirect: false,
+          id: 'wechat-login-container',
+          appid: wechatConfig.appId,
+          scope: 'snsapi_login',
+          redirect_uri: encodeURIComponent(wechatConfig.redirectUri),
+          state: state,
+          style: 'black',
+          href: '',
+          onReady: function (isReady: boolean) {
+            console.log('WeChat login ready:', isReady);
+            if (isReady) {
+              setIsLoading(false);
+            }
+          },
+          onQRcodeReady: function () {
+            console.log('QR code ready');
+            setIsLoading(false);
+          },
+        });
 
-      // 生成微信授权URL并跳转
-      const authUrl = generateWeChatAuthUrl(state);
-      window.location.href = authUrl;
-    } catch (error) {
-      setIsLoading(false);
-      onError?.(error instanceof Error ? error.message : '微信登录失败');
-    }
-  };
+        setIsLoading(false);
+      } catch (err) {
+        setError('Failed to initialize WeChat login widget');
+        setIsLoading(false);
+      }
+    };
+    initWeChatLogin();
+  }, []);
 
-  return (
-    <div className={`text-center ${className}`}>
-      <button
-        onClick={handleWeChatLogin}
-        disabled={isLoading}
-        className="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      >
-        {isLoading ? (
-          <>
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-500 mr-2"></div>
-            登录中...
-          </>
-        ) : (
-          <>
-            <svg
-              className="w-5 h-5 mr-2"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.212 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.42 4.882-1.92 7.432-.823-.576-3.583-3.98-6.348-7.924-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18 0 .653-.52 1.182-1.162 1.182-.641 0-1.162-.529-1.162-1.182 0-.651.521-1.18 1.162-1.18zm5.82 0c.641 0 1.162.529 1.162 1.18 0 .653-.521 1.182-1.162 1.182-.642 0-1.162-.529-1.162-1.182 0-.651.52-1.18 1.162-1.18z" />
-            </svg>
-            微信登录
-          </>
-        )}
-      </button>
+  // 监听微信登录成功事件
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // 处理微信登录成功后的消息
+      if (event.data && event.data.type === 'wechat_login_success') {
+        onSuccess?.(event.data.userInfo);
+      }
+    };
 
-      <p className="text-xs text-gray-400 mt-2">使用微信账号快速登录</p>
-    </div>
-  );
-}
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [onSuccess]);
 
-// 内嵌二维码版本（需要微信开放平台支持）
-export function WeChatLoginQR({ className = '' }: { className?: string }) {
-  const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
-
-  // 生成微信登录二维码URL
-  const generateQRCode = () => {
-    const state = Math.random().toString(36).substring(2, 15);
-    const params = new URLSearchParams({
-      appid: process.env.NEXT_PUBLIC_WECHAT_APP_ID || '',
-      redirect_uri: encodeURIComponent(
-        process.env.NEXT_PUBLIC_WECHAT_REDIRECT_URI || ''
-      ),
-      response_type: 'code',
-      scope: 'snsapi_login',
-      state: state,
-    });
-
-    const qrUrl = `https://open.weixin.qq.com/connect/qrconnect?${params.toString()}#wechat_redirect`;
-    setQrCodeUrl(qrUrl);
-  };
-
-  return (
-    <div className={`text-center ${className}`}>
-      {qrCodeUrl ? (
-        <div className="mb-4">
-          <iframe
-            src={qrCodeUrl}
-            className="w-full h-80 border border-gray-300 rounded-lg"
-            title="微信登录"
-            sandbox="allow-scripts allow-same-origin allow-forms"
-          />
+  if (error) {
+    return (
+      <div className={`text-center p-4 ${className}`}>
+        <div className="text-red-500 text-sm mb-2">
+          <svg
+            className="w-5 h-5 mx-auto mb-2"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {error}
         </div>
-      ) : (
         <button
-          onClick={generateQRCode}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          onClick={() => window.location.reload()}
+          className="text-blue-500 text-sm hover:underline bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded transition-colors"
         >
-          显示微信登录二维码
+          重试
         </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`text-center ${className}`}>
+      {isLoading && (
+        <div className="mb-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="text-sm text-gray-500 mt-2">加载微信登录中...</p>
+        </div>
       )}
 
-      <p className="text-xs text-gray-400 mt-2">扫描二维码登录微信</p>
+      <div
+        ref={containerRef}
+        id="wechat-login-container"
+        className="min-h-[220px] flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300"
+        style={{ minWidth: '220px' }}
+      />
+
+      <p className="text-xs text-gray-400 mt-2">使用微信扫码登录</p>
     </div>
   );
 }

@@ -1,25 +1,27 @@
-import { Metadata } from 'next'
-import { Toaster } from 'sonner'
-import { ThemeProvider } from '@/components/custom/theme-provider'
+import { Metadata } from 'next';
+import { Toaster } from 'sonner';
+import { ThemeProvider } from '@/components/custom/theme-provider';
 // import { Navbar } from '@/components/custom/navbar'
-import { GlobalContextProvider } from './globalContext'
-import { auth } from './(auth)/auth'
-import { cookies } from 'next/headers'
+import { GlobalContextProvider } from './globalContext';
+import { auth } from './(auth)/auth';
+import { cookies } from 'next/headers';
 import './globals.css';
-import { Inter } from "next/font/google";
+import { Inter } from 'next/font/google';
+import Script from 'next/script';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ai.topmind.video'),
-  title: "极效火眼 - AI驱动的网页信息提取工具",
-  description: "我眼即你眼，为你洞察繁杂的网页信息。AI驱动的浏览器扩展，智能识别、提取和处理网页内容。",
-  keywords: "浏览器扩展,Chrome扩展,网页信息提取,AI工具,内容识别",
-  authors: [{ name: "光环效应(杭州)人工智能应用技术有限公司" }],
+  title: '极效火眼 - AI驱动的网页信息提取工具',
+  description:
+    '我眼即你眼，为你洞察繁杂的网页信息。AI驱动的浏览器扩展，智能识别、提取和处理网页内容。',
+  keywords: '浏览器扩展,Chrome扩展,网页信息提取,AI工具,内容识别',
+  authors: [{ name: '光环效应(杭州)人工智能应用技术有限公司' }],
   openGraph: {
-    title: "极效火眼 - AI驱动的网页信息提取工具",
-    description: "我眼即你眼，为你洞察繁杂的网页信息",
-    type: "website",
+    title: '极效火眼 - AI驱动的网页信息提取工具',
+    description: '我眼即你眼，为你洞察繁杂的网页信息',
+    type: 'website',
   },
 };
 
@@ -52,13 +54,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [session, cookieStore] = await Promise.all([auth(), cookies()])
+  const [session, cookieStore] = await Promise.all([auth(), cookies()]);
 
   return (
-    <html
-      lang="zh-CN"
-      suppressHydrationWarning
-    >
+    <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -67,6 +66,10 @@ export default async function RootLayout({
         />
       </head>
       <body className={inter.className}>
+        <Script
+          src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"
+          strategy="beforeInteractive"
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

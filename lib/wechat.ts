@@ -25,16 +25,16 @@ export interface WeChatUserInfo {
 }
 
 export const wechatConfig: WeChatConfig = {
-  appId: process.env.WECHAT_APP_ID || '',
+  appId: process.env.NEXT_PUBLIC_WECHAT_APP_ID || '',
   appSecret: process.env.WECHAT_APP_SECRET || '',
-  redirectUri: process.env.WECHAT_REDIRECT_URI || 'http://localhost:3000/api/wx-login',
+  redirectUri: process.env.NEXT_PUBLIC_WECHAT_REDIRECT_URI || '',
 };
 
 // 生成微信授权URL
 export function generateWeChatAuthUrl(state: string = ''): string {
   const params = new URLSearchParams({
     appid: wechatConfig.appId,
-    redirect_uri: wechatConfig.redirectUri,
+    redirect_uri: encodeURIComponent(wechatConfig.redirectUri),
     response_type: 'code',
     scope: 'snsapi_login',
     state: state,

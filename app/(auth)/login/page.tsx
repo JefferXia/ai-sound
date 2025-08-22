@@ -7,10 +7,7 @@ import { toast } from 'sonner';
 
 import { AuthForm } from '@/components/custom/auth-form';
 import { SubmitButton } from '@/components/custom/submit-button';
-import {
-  WeChatLoginSimple,
-  WeChatLoginQR,
-} from '@/components/custom/wechat-login-simple';
+import { WeChatLoginQR } from '@/components/custom/wechat-login-simple';
 
 import { login, LoginActionState } from '../actions';
 
@@ -18,7 +15,6 @@ export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
-  const [loginType, setLoginType] = useState<'button' | 'qr'>('button');
   const [loginResult, setLoginResult] = useState<any>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -93,42 +89,14 @@ export default function Page() {
   return (
     <div className="flex h-dvh w-full items-start pt-12 md:pt-0 md:items-center justify-center bg-background">
       <div className="w-[400px] mx-auto">
-        <h1 className="text-2xl font-bold text-center mb-8">微信登录测试</h1>
-
-        {/* 登录方式选择 */}
-        <div className="flex space-x-4 mb-6">
-          <button
-            onClick={() => setLoginType('button')}
-            className={`flex-1 py-2 px-4 rounded-lg ${
-              loginType === 'button'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-          >
-            按钮登录
-          </button>
-          <button
-            onClick={() => setLoginType('qr')}
-            className={`flex-1 py-2 px-4 rounded-lg ${
-              loginType === 'qr'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-          >
-            二维码登录
-          </button>
-        </div>
+        <h1 className="text-2xl font-bold text-center mb-8">微信登录</h1>
 
         {/* 微信登录组件 */}
         <div className="mb-6">
-          {loginType === 'button' ? (
-            <WeChatLoginSimple
-              onSuccess={handleWeChatSuccess}
-              onError={handleWeChatError}
-            />
-          ) : (
-            <WeChatLoginQR />
-          )}
+          <WeChatLoginQR
+            onSuccess={handleWeChatSuccess}
+            onError={handleWeChatError}
+          />
         </div>
 
         {/* 登录结果展示 */}
@@ -154,10 +122,9 @@ export default function Page() {
             </div>
           </div>
         )}
-      </div>
 
-      {/* 分割线 */}
-      {/* <div className="relative px-4 sm:px-16">
+        {/* 分割线 */}
+        {/* <div className="relative px-4 sm:px-16 my-6">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300 dark:border-gray-600" />
           </div>
@@ -166,10 +133,10 @@ export default function Page() {
               或者使用邮箱登录
             </span>
           </div>
-        </div>
+        </div> */}
 
         {/* 邮箱登录表单 */}
-      {/* <div className="px-4 sm:px-16">
+        {/* <div className="px-4 sm:px-16">
           <AuthForm action={handleSubmit} defaultEmail={email}>
             <SubmitButton>邮箱登录</SubmitButton>
             <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
@@ -183,6 +150,7 @@ export default function Page() {
             </p>
           </AuthForm>
         </div> */}
+      </div>
     </div>
   );
 }
