@@ -1,9 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
-import { ArrowLeft, Download, Settings, Pin, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
+import React from 'react';
+import {
+  ArrowLeft,
+  Download,
+  Settings,
+  Pin,
+  CheckCircle2,
+  AlertCircle,
+  ExternalLink,
+} from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function InstallPage() {
   const [openFaq, setOpenFaq] = React.useState<number | null>(null);
@@ -14,20 +22,21 @@ export default function InstallPage() {
 
   const steps = [
     {
-      title: "打开扩展程序管理页面",
-      description: "在 Chrome 浏览器中，依次选择“更多”图标 展开 → 扩展程序 → 管理扩展程序。",
-      image: "extension_step1.png"
+      title: '打开扩展程序管理页面',
+      description:
+        '在 Chrome 浏览器中，依次选择“更多”图标 展开 → 扩展程序 → 管理扩展程序。',
+      image: 'extension_step1.png',
     },
     {
-      title: "加载扩展程序",
-      description: "开启开发者模式，将下载的文件拖放到扩展程序页面",
-      image: "extension_step2.png"
+      title: '加载扩展程序',
+      description: '开启开发者模式，将下载的文件拖放到扩展程序页面',
+      image: 'extension_step2.png',
     },
     {
-      title: "固定到工具栏",
-      description: "点击浏览器右上角的扩展程序图标，找到极效火眼并点击固定按钮",
-      image: "extension_step3.png"
-    }
+      title: '固定到工具栏',
+      description: '点击浏览器右上角的扩展程序图标，找到极效火眼并点击固定按钮',
+      image: 'extension_step3.png',
+    },
   ];
 
   return (
@@ -36,24 +45,64 @@ export default function InstallPage() {
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 hover:opacity-80 transition"
+            >
               <ArrowLeft className="w-5 h-5" />
               <div className="w-10 h-10 relative">
                 <svg viewBox="0 0 200 200" className="w-full h-full">
                   <defs>
-                    <linearGradient id="installEyeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient
+                      id="installEyeGradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
                       <stop offset="0%" stopColor="#22d3ee" />
                       <stop offset="50%" stopColor="#3b82f6" />
                       <stop offset="100%" stopColor="#a855f7" />
                     </linearGradient>
                   </defs>
-                  <path d="M100 60 Q150 100 100 140 Q50 100 100 60" fill="none" stroke="url(#installEyeGradient)" strokeWidth="6"/>
-                  <circle cx="100" cy="100" r="25" fill="url(#installEyeGradient)" opacity="0.8"/>
-                  <circle cx="100" cy="100" r="10" fill="#1e293b"/>
-                  <path d="M30 30 L30 50 M30 30 L50 30" stroke="url(#installEyeGradient)" strokeWidth="4" fill="none"/>
-                  <path d="M170 30 L150 30 M170 30 L170 50" stroke="url(#installEyeGradient)" strokeWidth="4" fill="none"/>
-                  <path d="M30 170 L30 150 M30 170 L50 170" stroke="url(#installEyeGradient)" strokeWidth="4" fill="none"/>
-                  <path d="M170 170 L170 150 M170 170 L150 170" stroke="url(#installEyeGradient)" strokeWidth="4" fill="none"/>
+                  <path
+                    d="M100 60 Q150 100 100 140 Q50 100 100 60"
+                    fill="none"
+                    stroke="url(#installEyeGradient)"
+                    strokeWidth="6"
+                  />
+                  <circle
+                    cx="100"
+                    cy="100"
+                    r="25"
+                    fill="url(#installEyeGradient)"
+                    opacity="0.8"
+                  />
+                  <circle cx="100" cy="100" r="10" fill="#1e293b" />
+                  <path
+                    d="M30 30 L30 50 M30 30 L50 30"
+                    stroke="url(#installEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M170 30 L150 30 M170 30 L170 50"
+                    stroke="url(#installEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M30 170 L30 150 M30 170 L50 170"
+                    stroke="url(#installEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M170 170 L170 150 M170 170 L150 170"
+                    stroke="url(#installEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
                 </svg>
               </div>
               <span className="text-xl font-bold">极效火眼</span>
@@ -74,7 +123,9 @@ export default function InstallPage() {
 
           <div className="inline-flex items-center px-6 py-3 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-8">
             <AlertCircle className="w-5 h-5 text-amber-500 mr-3" />
-            <span className="text-sm">目前扩展程序处于内测阶段，需要手动安装</span>
+            <span className="text-sm">
+              目前扩展程序处于内测阶段，需要手动安装
+            </span>
           </div>
         </div>
       </section>
@@ -88,14 +139,14 @@ export default function InstallPage() {
             <p className="text-muted-foreground mb-6">
               点击下方按钮下载极效火眼扩展程序文件
             </p>
-            <button 
+            <button
               className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-full hover:shadow-xl transition-all transform hover:scale-105"
               onClick={() => {
                 // 创建下载链接
-                const link = document.createElement('a')
-                link.href = '/extension/极效火眼-1.0.0.zip'
-                link.download = '极效火眼1.0.0.zip'
-                link.click()
+                const link = document.createElement('a');
+                link.href = '/extension/极效火眼-1.0.1.zip';
+                link.download = '极效火眼1.0.1.zip';
+                link.click();
               }}
             >
               <Download className="w-5 h-5 mr-2" />
@@ -117,20 +168,31 @@ export default function InstallPage() {
 
           <div className="space-y-12">
             {steps.map((step, index) => (
-              <div key={index} className="flex flex-col md:flex-row gap-8 items-center">
+              <div
+                key={index}
+                className="flex flex-col md:flex-row gap-8 items-center"
+              >
                 <div className="flex-1 order-2 md:order-1">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-600/20 flex items-center justify-center">
-                      <span className="text-cyan-400 font-bold">{index + 1}</span>
+                      <span className="text-cyan-400 font-bold">
+                        {index + 1}
+                      </span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                      <p className="text-muted-foreground">{step.description}</p>
+                      <h3 className="text-xl font-semibold mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-muted-foreground">
+                        {step.description}
+                      </p>
 
                       {index === 0 && (
                         <div className="mt-4 p-4 bg-muted/50 rounded-lg">
                           <p className="text-sm">或者直接在地址栏输入：</p>
-                          <code className="text-cyan-400 text-sm">chrome://extensions/</code>
+                          <code className="text-cyan-400 text-sm">
+                            chrome://extensions/
+                          </code>
                         </div>
                       )}
 
@@ -151,7 +213,12 @@ export default function InstallPage() {
                     <div className="bg-card rounded-lg aspect-video flex items-center justify-center">
                       {/* Placeholder for screenshots */}
                       <div className="text-center">
-                        <Image src={`/images/${step.image}`} width={589} height={383} alt={step.title} />
+                        <Image
+                          src={`/images/${step.image}`}
+                          width={589}
+                          height={383}
+                          alt={step.title}
+                        />
                       </div>
                     </div>
                   </div>
@@ -201,17 +268,20 @@ export default function InstallPage() {
           <div className="space-y-4">
             {[
               {
-                question: "如何使用极效火眼？",
-                answer: "由于极效火眼目前处于测试阶段，尚未发布到 Chrome 网上应用店。开发者模式允许您安装来自第三方的扩展程序。这是完全安全的，不会影响您的浏览器性能。"
+                question: '如何使用极效火眼？',
+                answer:
+                  '由于极效火眼目前处于测试阶段，尚未发布到 Chrome 网上应用店。开发者模式允许您安装来自第三方的扩展程序。这是完全安全的，不会影响您的浏览器性能。',
               },
               {
-                question: "极效火眼需要哪些权限？",
-                answer: "极效火眼需要以下权限：\n• 读取和更改您访问的网站上的数据（用于内容识别）\n• 存储权限（用于保存您的设置）\n• 剪贴板权限（用于复制提取的内容）\n所有数据处理都在本地完成，不会上传到任何服务器。"
+                question: '极效火眼需要哪些权限？',
+                answer:
+                  '极效火眼需要以下权限：\n• 读取和更改您访问的网站上的数据（用于内容识别）\n• 存储权限（用于保存您的设置）\n• 剪贴板权限（用于复制提取的内容）\n所有数据处理都在本地完成，不会上传到任何服务器。',
               },
               {
-                question: "如何卸载扩展？",
-                answer: "您可以随时卸载极效火眼：进入 chrome://extensions/，找到极效火眼扩展，点击【移除】按钮即可完全卸载。"
-              }
+                question: '如何卸载扩展？',
+                answer:
+                  '您可以随时卸载极效火眼：进入 chrome://extensions/，找到极效火眼扩展，点击【移除】按钮即可完全卸载。',
+              },
             ].map((faq, index) => (
               <div key={index} className="gradient-border rounded-lg p-6">
                 <button
@@ -219,7 +289,9 @@ export default function InstallPage() {
                   className="w-full cursor-pointer font-semibold flex items-center justify-between text-left"
                 >
                   <span>{faq.question}</span>
-                  <span className={`text-cyan-400 transition-transform duration-200 ${openFaq === index ? 'rotate-180' : ''}`}>
+                  <span
+                    className={`text-cyan-400 transition-transform duration-200 ${openFaq === index ? 'rotate-180' : ''}`}
+                  >
                     ▼
                   </span>
                 </button>
@@ -242,19 +314,56 @@ export default function InstallPage() {
               <div className="w-8 h-8 relative">
                 <svg viewBox="0 0 200 200" className="w-full h-full">
                   <defs>
-                    <linearGradient id="footerInstallEyeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient
+                      id="footerInstallEyeGradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
                       <stop offset="0%" stopColor="#22d3ee" />
                       <stop offset="50%" stopColor="#3b82f6" />
                       <stop offset="100%" stopColor="#a855f7" />
                     </linearGradient>
                   </defs>
-                  <path d="M100 60 Q150 100 100 140 Q50 100 100 60" fill="none" stroke="url(#footerInstallEyeGradient)" strokeWidth="6"/>
-                  <circle cx="100" cy="100" r="25" fill="url(#footerInstallEyeGradient)" opacity="0.8"/>
-                  <circle cx="100" cy="100" r="10" fill="#1e293b"/>
-                  <path d="M30 30 L30 50 M30 30 L50 30" stroke="url(#footerInstallEyeGradient)" strokeWidth="4" fill="none"/>
-                  <path d="M170 30 L150 30 M170 30 L170 50" stroke="url(#footerInstallEyeGradient)" strokeWidth="4" fill="none"/>
-                  <path d="M30 170 L30 150 M30 170 L50 170" stroke="url(#footerInstallEyeGradient)" strokeWidth="4" fill="none"/>
-                  <path d="M170 170 L170 150 M170 170 L150 170" stroke="url(#footerInstallEyeGradient)" strokeWidth="4" fill="none"/>
+                  <path
+                    d="M100 60 Q150 100 100 140 Q50 100 100 60"
+                    fill="none"
+                    stroke="url(#footerInstallEyeGradient)"
+                    strokeWidth="6"
+                  />
+                  <circle
+                    cx="100"
+                    cy="100"
+                    r="25"
+                    fill="url(#footerInstallEyeGradient)"
+                    opacity="0.8"
+                  />
+                  <circle cx="100" cy="100" r="10" fill="#1e293b" />
+                  <path
+                    d="M30 30 L30 50 M30 30 L50 30"
+                    stroke="url(#footerInstallEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M170 30 L150 30 M170 30 L170 50"
+                    stroke="url(#footerInstallEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M30 170 L30 150 M30 170 L50 170"
+                    stroke="url(#footerInstallEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M170 170 L170 150 M170 170 L150 170"
+                    stroke="url(#footerInstallEyeGradient)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
                 </svg>
               </div>
               <span className="text-lg font-semibold">极效火眼</span>
