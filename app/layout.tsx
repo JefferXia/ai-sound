@@ -67,7 +67,7 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <Script
-          src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"
+          src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"
           strategy="beforeInteractive"
         />
         <ThemeProvider
