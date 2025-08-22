@@ -26,6 +26,12 @@ model User {
   point      Point[]                             // 用户与积分账户的关系
   weiRecord  WeiRecord[]
   payments   PaymentRecord[]                     // 用户支付记录 
+  
+  // 微信登录相关字段
+  wechatOpenId    String?     @unique @db.VarChar(64)  // 微信OpenID，唯一
+  wechatUnionId   String?     @db.VarChar(64)          // 微信UnionID
+  wechatNickname  String?     @db.VarChar(100)         // 微信昵称
+  wechatAvatar    String?     @db.Text                  // 微信头像URL
 }
 
 model Point {
