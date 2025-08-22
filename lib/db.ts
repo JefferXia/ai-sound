@@ -226,6 +226,9 @@ export async function pointDetails(userId: string) {
     }));
     return {
       userData: {
+        name: accountData.name,
+        phone: accountData.phone,
+        avatar: accountData.wechatAvatar,
         balance: accountData.balance,
         createdAt: utcToBeijing(accountData.created_at),
       },
@@ -273,6 +276,7 @@ export async function userDetails(userId: string) {
     const data = {
       name: userData.name,
       phone: userData.phone,
+      avatar: userData.wechatAvatar,
       balance: userData.balance,
       weiTotal: '--',
     };

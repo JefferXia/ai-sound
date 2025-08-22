@@ -12,14 +12,14 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 export default function InstallPage() {
-  const [openFaq, setOpenFaq] = React.useState<number | null>(null);
-
-  const toggleFaq = (index: number) => {
-    setOpenFaq(openFaq === index ? null : index);
-  };
-
   const steps = [
     {
       title: '打开扩展程序管理页面',
@@ -150,7 +150,7 @@ export default function InstallPage() {
               }}
             >
               <Download className="w-5 h-5 mr-2" />
-              下载极效火眼 v1.0.0
+              下载极效火眼
             </button>
             {/* <p className="text-sm text-muted-foreground mt-4">
               文件大小：2.3 MB | 格式：.crx
@@ -265,44 +265,42 @@ export default function InstallPage() {
             <span className="gradient-text">常见问题</span>
           </h2>
 
-          <div className="space-y-4">
-            {[
-              {
-                question: '如何使用极效火眼？',
-                answer:
-                  '由于极效火眼目前处于测试阶段，尚未发布到 Chrome 网上应用店。开发者模式允许您安装来自第三方的扩展程序。这是完全安全的，不会影响您的浏览器性能。',
-              },
-              {
-                question: '极效火眼需要哪些权限？',
-                answer:
-                  '极效火眼需要以下权限：\n• 读取和更改您访问的网站上的数据（用于内容识别）\n• 存储权限（用于保存您的设置）\n• 剪贴板权限（用于复制提取的内容）\n所有数据处理都在本地完成，不会上传到任何服务器。',
-              },
-              {
-                question: '如何卸载扩展？',
-                answer:
-                  '您可以随时卸载极效火眼：进入 chrome://extensions/，找到极效火眼扩展，点击【移除】按钮即可完全卸载。',
-              },
-            ].map((faq, index) => (
-              <div key={index} className="gradient-border rounded-lg p-6">
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="w-full cursor-pointer font-semibold flex items-center justify-between text-left"
-                >
-                  <span>{faq.question}</span>
-                  <span
-                    className={`text-cyan-400 transition-transform duration-200 ${openFaq === index ? 'rotate-180' : ''}`}
-                  >
-                    ▼
-                  </span>
-                </button>
-                {openFaq === index && (
-                  <p className="mt-4 text-muted-foreground whitespace-pre-line">
-                    {faq.answer}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>如何使用极效火眼？</AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-4 text-balance">
+                <p>
+                  由于极效火眼目前处于内测阶段，尚未发布到 Chrome
+                  网上应用店。开发者模式允许您安装来自第三方的扩展程序。这是完全安全的，不会影响您的浏览器性能。
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>极效火眼有什么不一样？</AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-4 text-balance">
+                <p>
+                  极效火眼是一款基于 AI
+                  的浏览器扩展，可以一键提取屏幕上的任何内容，并提供以下功能：
+                </p>
+                <p>目前支持以下功能：</p>
+                <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                  <li>一键检测淘宝/天猫/京东/抖音商品详情页的违禁词</li>
+                  <li>一键提取视频文案，深度分析价值</li>
+                  <li>实时分析屏幕上的任何内容</li>
+                  <li>AI检测文本、表格、图片、视频或源码并分析内容结构</li>
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger>如何卸载扩展？</AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-4 text-balance">
+                <p>
+                  您可以随时卸载极效火眼：进入
+                  chrome://extensions/，找到极效火眼扩展，点击【移除】按钮即可完全卸载。
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
 
