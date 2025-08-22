@@ -204,6 +204,9 @@ export async function pointDetails(userId: string) {
       id: userId,
     },
     select: {
+      name: true,
+      phone: true,
+      wechatAvatar: true,
       balance: true,
       created_at: true,
       point: {
@@ -257,6 +260,7 @@ export async function userDetails(userId: string) {
       name: true,
       phone: true,
       balance: true,
+      wechatAvatar: true,
       weiRecord: {
         orderBy: {
           created_at: 'desc',

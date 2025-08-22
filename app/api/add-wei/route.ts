@@ -19,6 +19,12 @@ export async function POST(req: NextRequest) {
 
     console.log('body', body)
 
+    // 处理 product_name 长度，超过255则截断
+    let processedProductName = product_name
+    if (product_name && product_name.length > 255) {
+      processedProductName = product_url
+    }
+
     if (!user_id) {
       return NextResponse.json({ error: '缺少参数: user_id' }, { status: 400 })
     }
@@ -45,7 +51,7 @@ export async function POST(req: NextRequest) {
         where: { id: existing.id },
         data: {
           // 更新提供的字段，未提供则保持不变
-          product_name: product_name ?? existing.product_name,
+          product_name: processedProductName ?? existing.product_name,
           product_url: product_url ?? existing.product_url,
           image_caption: image_caption ?? existing.image_caption,
           report: report ?? existing.report,
@@ -67,7 +73,7 @@ export async function POST(req: NextRequest) {
         user_id: user.id,
         phone: String(phone),
         product_id: String(product_id),
-        product_name: product_name ? String(product_name) : undefined,
+        product_name: processedProductName ? String(processedProductName) : undefined,
         product_url: product_url ? String(product_url) : undefined,
         image_caption: image_caption ? String(image_caption) : undefined,
         report: report ? String(report) : undefined,
