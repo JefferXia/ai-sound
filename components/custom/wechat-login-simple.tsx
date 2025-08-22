@@ -62,19 +62,6 @@ export function WeChatLoginQR({
     initWeChatLogin();
   }, []);
 
-  // 监听微信登录成功事件
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // 处理微信登录成功后的消息
-      if (event.data && event.data.type === 'wechat_login_success') {
-        onSuccess?.(event.data.userInfo);
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [onSuccess]);
-
   if (error) {
     return (
       <div className={`text-center p-4 ${className}`}>
@@ -114,11 +101,8 @@ export function WeChatLoginQR({
       <div
         ref={containerRef}
         id="wechat-login-container"
-        className="min-h-[220px] flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300"
-        style={{ minWidth: '220px' }}
+        className="min-w-[220px] min-h-[220px] flex items-center justify-center bg-gray-50 rounded-lg text-gray-500"
       />
-
-      <p className="text-xs text-gray-400 mt-2">使用微信扫码登录</p>
     </div>
   );
 }
