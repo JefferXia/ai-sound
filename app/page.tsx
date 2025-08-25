@@ -378,7 +378,7 @@ export default function Home() {
 
                   {/* Contact Button */}
                   <div className="mt-6">
-                    <div className="inline-flex items-center px-6 py-3 bg-blue-500/20 border border-blue-500/30 rounded-xl text-green-400 font-medium">
+                    <div className="inline-flex items-center px-6 py-3 bg-green-500/20 border border-blue-500/30 rounded-xl text-green-400 font-medium">
                       <svg
                         className="w-5 h-5 mr-2"
                         fill="currentColor"
@@ -416,7 +416,7 @@ export default function Home() {
 
                   {/* Contact Button */}
                   <div className="mt-6">
-                    <div className="inline-flex items-center px-6 py-3 bg-green-500/20 border border-green-500/30 rounded-xl text-blue-400 font-medium">
+                    <div className="inline-flex items-center px-6 py-3 bg-blue-500/20 border border-green-500/30 rounded-xl text-blue-400 font-medium">
                       <svg
                         className="w-5 h-5 mr-2"
                         fill="currentColor"

@@ -13,14 +13,16 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ai.topmind.video'),
-  title: '极效火眼 - AI驱动的网页信息提取工具',
+  title: '极效火眼 - AI驱动的网页任务助手',
   description:
-    '我眼即你眼，为你洞察繁杂的网页信息。AI驱动的浏览器扩展，智能识别、提取和处理网页内容。',
-  keywords: '浏览器扩展,Chrome扩展,网页信息提取,AI工具,内容识别',
+    '洞若观火，为你洞察繁杂的网页信息。AI驱动的浏览器扩展，智能提取各类网页内容，并进行分析和处理。',
+  keywords:
+    '浏览器扩展,Chrome扩展,网页信息提取,AI工具,内容识别,违规检测,监控竞品,舆情跟踪',
   authors: [{ name: '光环效应(杭州)人工智能应用技术有限公司' }],
   openGraph: {
-    title: '极效火眼 - AI驱动的网页信息提取工具',
-    description: '我眼即你眼，为你洞察繁杂的网页信息',
+    title: '极效火眼 - AI驱动的网页任务助手',
+    description:
+      '洞若观火，为你洞察繁杂的网页信息。AI驱动的浏览器扩展，智能提取各类网页内容，并进行分析和处理。',
     type: 'website',
   },
 };
