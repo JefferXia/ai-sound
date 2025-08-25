@@ -8,12 +8,12 @@ import {
   Brain,
   Download,
   Chrome,
-  Github,
   Play,
-  CheckCircle,
   Sparkles,
+  Globe,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function Home() {
@@ -54,63 +54,12 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 relative">
-                <svg viewBox="0 0 200 200" className="w-full h-full">
-                  <defs>
-                    <linearGradient
-                      id="eyeGradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop offset="0%" stopColor="#22d3ee" />
-                      <stop offset="50%" stopColor="#3b82f6" />
-                      <stop offset="100%" stopColor="#a855f7" />
-                    </linearGradient>
-                  </defs>
-                  {/* Eye outline */}
-                  <path
-                    d="M100 60 Q150 100 100 140 Q50 100 100 60"
-                    fill="none"
-                    stroke="url(#eyeGradient)"
-                    strokeWidth="6"
-                  />
-                  {/* Eye iris */}
-                  <circle
-                    cx="100"
-                    cy="100"
-                    r="25"
-                    fill="url(#eyeGradient)"
-                    opacity="0.8"
-                  />
-                  {/* Eye pupil */}
-                  <circle cx="100" cy="100" r="10" fill="#1e293b" />
-                  {/* Corner brackets */}
-                  <path
-                    d="M30 30 L30 50 M30 30 L50 30"
-                    stroke="url(#eyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 30 L150 30 M170 30 L170 50"
-                    stroke="url(#eyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M30 170 L30 150 M30 170 L50 170"
-                    stroke="url(#eyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 170 L170 150 M170 170 L150 170"
-                    stroke="url(#eyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                </svg>
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="text-xl font-bold">极效火眼</span>
             </div>
@@ -161,10 +110,12 @@ export default function Home() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            <span className="gradient-text">我眼即你眼</span>
+            <span className="gradient-text">洞若观火</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
             为你洞察繁杂的网页信息
+            <br />
+            用它来监控竞品、舆情跟踪，简直是神器
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -262,28 +213,14 @@ export default function Home() {
                   01
                 </div>
                 <div className="w-16 h-16 bg-[#0a1324]/60 border border-[#00d4ff]/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#00f5d4] group-hover:scale-110 group-hover:border-[#ff6b9d] group-hover:bg-[#ff6b9d]/10 group-hover:text-[#ff6b9d] transition-all duration-300">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-camera h-8 w-8"
-                  >
-                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
-                    <circle cx="12" cy="13" r="3"></circle>
-                  </svg>
+                  <Globe size={32} />
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-xl font-bold text-[#ffffff] mb-4">
-                    截图
+                    定位待分析网页
                   </h3>
                   <p className="text-[#b8d4f0] leading-relaxed">
-                    一键捕获屏幕上的任何内容。
+                    打开要分析的竞品页面、活动页面或后台报表。
                   </p>
                 </div>
               </div>
@@ -355,10 +292,10 @@ export default function Home() {
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-xl font-bold text-[#ffffff] mb-4">
-                    结构化输出
+                    结构化报告
                   </h3>
                   <p className="text-[#b8d4f0] leading-relaxed">
-                    一键导出为Markdown、JSON、CSV等格式。
+                    信息从混乱到清晰，所有整理好的数据一键导出报告。
                   </p>
                 </div>
               </div>
@@ -391,65 +328,206 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Contact Developer Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <div
+            className="p-12 rounded-3xl text-center"
+            style={{
+              background: 'rgba(255, 255, 255, 0.02)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <div className="mb-8">
+              <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 mb-6">
+                <span className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></span>
+                产品开发中
+              </span>
+            </div>
+            <h2 className="text-5xl font-bold mb-6 text-white">
+              联系 极效火眼 开发者
+            </h2>
+            <p className="text-xl mb-8 text-gray-300 leading-relaxed">
+              我们正在全力开发 极效火眼，添加联系方式直接沟通，获得产品最新进展
+            </p>
+
+            {/* Contact Methods */}
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              {/* QQ Contact */}
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+                {/* QQ QR Code */}
+                <div className="w-48 h-48 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg p-4">
+                  <img
+                    src="/images/mu_qiwei.png"
+                    alt="企微二维码"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                {/* Instructions */}
+                <div className="space-y-3">
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    扫码添加企微
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    扫描上方二维码，添加我的微信
+                    <br />
+                    直接沟通，获得第一手产品信息
+                  </p>
+
+                  {/* Contact Button */}
+                  <div className="mt-6">
+                    <div className="inline-flex items-center px-6 py-3 bg-blue-500/20 border border-blue-500/30 rounded-xl text-green-400 font-medium">
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                      </svg>
+                      微信专属服务
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feishu Contact */}
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+                {/* Feishu QR Code */}
+                <div className="w-48 h-48 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg p-4">
+                  <img
+                    src="/images/mu_feishu.png"
+                    alt="飞书二维码"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                {/* Instructions */}
+                <div className="space-y-3">
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    扫码添加飞书
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    扫描上方二维码，添加我的飞书
+                    <br />
+                    直接沟通，获得第一手产品信息
+                  </p>
+
+                  {/* Contact Button */}
+                  <div className="mt-6">
+                    <div className="inline-flex items-center px-6 py-3 bg-green-500/20 border border-green-500/30 rounded-xl text-blue-400 font-medium">
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                      </svg>
+                      飞书专属服务
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Tips */}
+            <div className="mt-12 text-center">
+              <p className="text-gray-400 text-base md:text-lg font-medium">
+                💡 提示：请备注&quot;极效火眼&quot;以便快速通过好友申请
+              </p>
+            </div>
+
+            {/* Benefits */}
+            <div className="grid md:grid-cols-3 gap-10 mt-12 text-left">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mt-1">
+                  <svg
+                    className="w-4 h-4 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold mb-1">实时沟通</h3>
+                  <p className="text-gray-400 text-sm">
+                    直接对话，实时了解开发进展
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mt-1">
+                  <svg
+                    className="w-4 h-4 text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold mb-1">专属服务</h3>
+                  <p className="text-gray-400 text-sm">
+                    一对一咨询，定制化解决方案
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mt-1">
+                  <svg
+                    className="w-4 h-4 text-purple-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold mb-1">优先体验</h3>
+                  <p className="text-gray-400 text-sm">
+                    内测资格，抢先试用新功能
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-border py-12 px-4">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 relative">
-                <svg viewBox="0 0 200 200" className="w-full h-full">
-                  <defs>
-                    <linearGradient
-                      id="footerEyeGradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop offset="0%" stopColor="#22d3ee" />
-                      <stop offset="50%" stopColor="#3b82f6" />
-                      <stop offset="100%" stopColor="#a855f7" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M100 60 Q150 100 100 140 Q50 100 100 60"
-                    fill="none"
-                    stroke="url(#footerEyeGradient)"
-                    strokeWidth="6"
-                  />
-                  <circle
-                    cx="100"
-                    cy="100"
-                    r="25"
-                    fill="url(#footerEyeGradient)"
-                    opacity="0.8"
-                  />
-                  <circle cx="100" cy="100" r="10" fill="#1e293b" />
-                  <path
-                    d="M30 30 L30 50 M30 30 L50 30"
-                    stroke="url(#footerEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 30 L150 30 M170 30 L170 50"
-                    stroke="url(#footerEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M30 170 L30 150 M30 170 L50 170"
-                    stroke="url(#footerEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 170 L170 150 M170 170 L150 170"
-                    stroke="url(#footerEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                </svg>
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="text-lg font-semibold">极效火眼</span>
             </div>

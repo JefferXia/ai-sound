@@ -49,61 +49,13 @@ export default function InstallPage() {
               href="/"
               className="flex items-center space-x-2 hover:opacity-80 transition"
             >
-              <ArrowLeft className="w-5 h-5" />
               <div className="w-10 h-10 relative">
-                <svg viewBox="0 0 200 200" className="w-full h-full">
-                  <defs>
-                    <linearGradient
-                      id="installEyeGradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop offset="0%" stopColor="#22d3ee" />
-                      <stop offset="50%" stopColor="#3b82f6" />
-                      <stop offset="100%" stopColor="#a855f7" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M100 60 Q150 100 100 140 Q50 100 100 60"
-                    fill="none"
-                    stroke="url(#installEyeGradient)"
-                    strokeWidth="6"
-                  />
-                  <circle
-                    cx="100"
-                    cy="100"
-                    r="25"
-                    fill="url(#installEyeGradient)"
-                    opacity="0.8"
-                  />
-                  <circle cx="100" cy="100" r="10" fill="#1e293b" />
-                  <path
-                    d="M30 30 L30 50 M30 30 L50 30"
-                    stroke="url(#installEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 30 L150 30 M170 30 L170 50"
-                    stroke="url(#installEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M30 170 L30 150 M30 170 L50 170"
-                    stroke="url(#installEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 170 L170 150 M170 170 L150 170"
-                    stroke="url(#installEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                </svg>
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="text-xl font-bold">极效火眼</span>
             </Link>
@@ -310,59 +262,12 @@ export default function InstallPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 relative">
-                <svg viewBox="0 0 200 200" className="w-full h-full">
-                  <defs>
-                    <linearGradient
-                      id="footerInstallEyeGradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop offset="0%" stopColor="#22d3ee" />
-                      <stop offset="50%" stopColor="#3b82f6" />
-                      <stop offset="100%" stopColor="#a855f7" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M100 60 Q150 100 100 140 Q50 100 100 60"
-                    fill="none"
-                    stroke="url(#footerInstallEyeGradient)"
-                    strokeWidth="6"
-                  />
-                  <circle
-                    cx="100"
-                    cy="100"
-                    r="25"
-                    fill="url(#footerInstallEyeGradient)"
-                    opacity="0.8"
-                  />
-                  <circle cx="100" cy="100" r="10" fill="#1e293b" />
-                  <path
-                    d="M30 30 L30 50 M30 30 L50 30"
-                    stroke="url(#footerInstallEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 30 L150 30 M170 30 L170 50"
-                    stroke="url(#footerInstallEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M30 170 L30 150 M30 170 L50 170"
-                    stroke="url(#footerInstallEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    d="M170 170 L170 150 M170 170 L150 170"
-                    stroke="url(#footerInstallEyeGradient)"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                </svg>
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="text-lg font-semibold">极效火眼</span>
             </div>
