@@ -31,7 +31,19 @@ model User {
   wechatOpenId    String?     @unique @db.VarChar(64)  // 微信OpenID，唯一
   wechatUnionId   String?     @db.VarChar(64)          // 微信UnionID
   wechatNickname  String?     @db.VarChar(100)         // 微信昵称
-  wechatAvatar    String?     @db.Text                  // 微信头像URL
+  wechatAvatar    String?     @db.Text                 // 微信头像URL
+  isFirstLogin    Boolean     @default(true)           // 是否是第一次登录
+  
+  // 邀请码相关字段
+  invite_code     String?     @unique @db.VarChar(8)   // 8位邀请码，唯一
+  invited_by      String?                              // 被谁邀请（邀请码）
+  
+  // 关联关系
+  inviteRecords   InviteRecord[] @relation("Inviter")  // 邀请的用户列表
+  invitedByRecord InviteRecord? @relation("Invitee")   // 被谁邀请的记录
+  
+  @@index([invite_code])
+  @@index([invited_by])
 }
 
 model Point {
@@ -243,4 +255,20 @@ model PaymentRecord {
   @@index([status, createTime(sort: Desc)])
   @@index([paymentType, status])
   @@index([rechargeType, status])
+}
+
+model InviteRecord {
+  id              String   @id @default(uuid())
+  inviter_id      String                           // 邀请人ID
+  invitee_id      String                           // 被邀请人ID
+  invite_code     String                           // 使用的邀请码
+  created_at      DateTime @default(now())
+  
+  // 关联关系
+  inviter         User     @relation("Inviter", fields: [inviter_id], references: [id])
+  invitee         User     @relation("Invitee", fields: [invitee_id], references: [id])
+  
+  @@index([inviter_id])
+  @@index([invitee_id])
+  @@unique([invitee_id]) // 每个用户只能被邀请一次
 }

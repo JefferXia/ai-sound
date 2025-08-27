@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { userDetails } from '@/lib/db'
+import { getInviteStats } from '@/lib/invite';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,9 +17,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '用户不存在' }, { status: 404 })
     }
 
+    const stats = await getInviteStats(user_id);
+
     return NextResponse.json({
       success: true,
-      data: userData
+      data: userData,
+      stats
     })
   } catch (error) {
     console.error('user-details error:', error)

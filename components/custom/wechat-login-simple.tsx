@@ -7,6 +7,7 @@ interface WeChatLoginQRProps {
   onSuccess?: (userInfo: any) => void;
   onError?: (error: string) => void;
   className?: string;
+  inviteCode?: string;
 }
 
 declare global {
@@ -20,6 +21,7 @@ export function WeChatLoginQR({
   onSuccess,
   onError,
   className = '',
+  inviteCode = '',
 }: WeChatLoginQRProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,8 +30,10 @@ export function WeChatLoginQR({
   useEffect(() => {
     const initWeChatLogin = () => {
       try {
-        // 生成state参数用于防止CSRF攻击
-        const state = Math.random().toString(36).substring(2, 15);
+        // 清空容器
+        if (containerRef.current) {
+          containerRef.current.innerHTML = '';
+        }
 
         // 初始化微信登录
         new window.WxLogin({
@@ -38,9 +42,10 @@ export function WeChatLoginQR({
           appid: wechatConfig.appId,
           scope: 'snsapi_login',
           redirect_uri: encodeURIComponent(wechatConfig.redirectUri),
-          state: state,
+          state: inviteCode, // 将邀请码作为state参数传递
           style: 'black',
           href: '',
+          stylelite: 1,
           onReady: function (isReady: boolean) {
             console.log('WeChat login ready:', isReady);
             if (isReady) {
@@ -59,8 +64,10 @@ export function WeChatLoginQR({
         setIsLoading(false);
       }
     };
+
+    // 当邀请码变化时重新初始化
     initWeChatLogin();
-  }, []);
+  }, [inviteCode]); // 添加inviteCode作为依赖
 
   if (error) {
     return (
@@ -90,7 +97,7 @@ export function WeChatLoginQR({
   }
 
   return (
-    <div className={`text-center ${className}`}>
+    <div className={`min-w-[220px] text-center ${className}`}>
       {isLoading && (
         <div className="mb-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
@@ -101,7 +108,7 @@ export function WeChatLoginQR({
       <div
         ref={containerRef}
         id="wechat-login-container"
-        className="min-w-[220px] min-h-[220px] flex items-center justify-center bg-gray-50 rounded-lg text-gray-500"
+        className="mx-auto w-[160px] h-[160px] flex items-start justify-center overflow-hidden"
       />
     </div>
   );
