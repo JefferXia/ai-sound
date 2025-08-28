@@ -59,6 +59,7 @@ export async function GET(request: NextRequest) {
         action: 'login',
         userId: existingUser.id,
         isFirstLogin: false,
+        inviteCode: existingUser.invite_code,
       }));
 
       return NextResponse.redirect(redirectUrl);
@@ -96,8 +97,10 @@ export async function GET(request: NextRequest) {
         }
 
         // 为新用户生成邀请码
+        let newCode = '';
         try {
-          await generateUniqueInviteCode(newUser.id);
+          const code = await generateUniqueInviteCode(newUser.id);
+          newCode = code;
           console.log(`为用户 ${newUser.id} 生成邀请码成功`);
         } catch (error) {
           console.error('生成邀请码失败:', error);
@@ -114,6 +117,7 @@ export async function GET(request: NextRequest) {
           action: 'login',
           userId: newUser.id,
           isFirstLogin: true,
+          inviteCode: newCode,
         }));
 
         return NextResponse.redirect(redirectUrl);

@@ -23,6 +23,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [inviteCode, setInviteCode] = useState('');
+  const [myInviteCode, setMyInviteCode] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [inviteCodeStatus, setInviteCodeStatus] = useState<
     'idle' | 'validating' | 'valid' | 'invalid'
@@ -41,6 +42,10 @@ export default function Page() {
     const wechatUser = searchParams.get('wechat_user');
     if (wechatUser) {
       setIsLoggedIn(true);
+      const userInfo = JSON.parse(wechatUser);
+      if (userInfo.inviteCode) {
+        setMyInviteCode(userInfo.inviteCode);
+      }
     }
 
     const error = searchParams.get('error');
@@ -110,6 +115,9 @@ export default function Page() {
           </div>
           <h2 className="text-2xl font-bold text-white">登录成功</h2>
           <p className="text-gray-300">您已成功登录极效火眼</p>
+        </div>
+        <div className="text-white text-base mt-3">
+          <p>您的邀请码: {myInviteCode}</p>
         </div>
       </div>
     );
