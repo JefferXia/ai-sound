@@ -29,6 +29,7 @@ export default function Page() {
     'idle' | 'validating' | 'valid' | 'invalid'
   >('idle');
   const [rightInviteCode, setRightInviteCode] = useState('');
+  const [countdown, setCountdown] = useState(5);
 
   const [state, formAction] = useActionState<LoginActionState, FormData>(
     login,
@@ -53,6 +54,21 @@ export default function Page() {
       toast.error('微信登录失败，请重试');
     }
   }, [searchParams]);
+
+  // 倒计时逻辑
+  useEffect(() => {
+    if (isLoggedIn && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (isLoggedIn && countdown === 0) {
+      // 倒计时结束，关闭页面
+      window.close();
+      // 如果window.close()不起作用，则跳转到主页
+      router.push('/');
+    }
+  }, [isLoggedIn, countdown, router]);
 
   useEffect(() => {
     if (state.status === 'failed') {
@@ -115,6 +131,11 @@ export default function Page() {
           </div>
           <h2 className="text-2xl font-bold text-white">登录成功</h2>
           <p className="text-gray-300">您已成功登录极效火眼</p>
+          <div className="text-center">
+            <p className="text-yellow-400 text-sm mb-2">
+              ⏰ 页面将在 {countdown} 秒后自动关闭
+            </p>
+          </div>
         </div>
         <div className="text-white text-base mt-3">
           <p>您的邀请码: {myInviteCode}</p>

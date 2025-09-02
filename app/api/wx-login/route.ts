@@ -58,6 +58,7 @@ export async function GET(request: NextRequest) {
         unionid: userInfo.unionid,
         action: 'login',
         userId: existingUser.id,
+        phone: existingUser.phone,
         isFirstLogin: false,
         inviteCode: existingUser.invite_code,
       }));
