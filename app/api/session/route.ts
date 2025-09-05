@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/app/(auth)/auth';
+import { getUserById } from '@/db/queries';
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,15 +24,48 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 返回用户session信息
+    // 获取用户完整信息
+    const userInfo = await getUserById(session.user.id);
+    
+    if (!userInfo) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: '用户信息不存在',
+          authenticated: false 
+        },
+        { 
+          status: 404,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          }
+        }
+      );
+    }
+
+    // 返回用户完整信息
     return NextResponse.json({
       success: true,
       authenticated: true,
       user: {
-        id: session.user.id,
-        email: session.user.email,
-        name: session.user.name,
-        image: session.user.image,
+        id: userInfo.id,
+        email: userInfo.email,
+        phone: userInfo.phone,
+        name: userInfo.name,
+        balance: userInfo.balance,
+        createdAt: userInfo.created_at,
+        // updated_at: userInfo.updated_at,
+        // 微信登录相关信息
+        // wechatOpenId: userInfo.wechatOpenId,
+        // wechatUnionId: userInfo.wechatUnionId,
+        // wechatNickname: userInfo.wechatNickname,
+        avatar: userInfo.wechatAvatar,
+        isFirstLogin: userInfo.isFirstLogin,
+        // 邀请码相关信息
+        // invite_code: userInfo.invite_code,
+        // invited_by: userInfo.invited_by,
       },
       session: {
         expires: session.expires,
