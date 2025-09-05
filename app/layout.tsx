@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/components/custom/theme-provider';
-// import { Navbar } from '@/components/custom/navbar'
+import { Navbar } from '@/components/custom/navbar';
 import { GlobalContextProvider } from './globalContext';
 import { auth } from './(auth)/auth';
 import { cookies } from 'next/headers';
@@ -12,7 +12,7 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ai.topmind.video'),
+  metadataBase: new URL('https://eye.ultimateai.vip'),
   title: '极效火眼 - AI驱动的网页任务助手',
   description:
     '洞若观火，为你洞察繁杂的网页信息。AI驱动的浏览器扩展，智能提取各类网页内容，并进行分析和处理。',
@@ -80,7 +80,7 @@ export default async function RootLayout({
         >
           <Toaster position="top-center" />
           <GlobalContextProvider user={session?.user}>
-            {/* <Navbar user={session?.user} /> */}
+            <Navbar user={session?.user} />
             {children}
           </GlobalContextProvider>
         </ThemeProvider>

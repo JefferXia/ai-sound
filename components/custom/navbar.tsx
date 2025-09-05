@@ -1,14 +1,15 @@
 'use client';
 
-import { Plus } from 'lucide-react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { type User } from 'next-auth'
-import React, { useEffect, useState } from 'react'
-import { UserNav } from '@/components/custom/navbar-user-nav'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { BetterTooltip } from '@/components/ui/tooltip'
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { type User } from 'next-auth';
+import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { UserNav } from '@/components/custom/navbar-user-nav';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { BetterTooltip } from '@/components/ui/tooltip';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,11 +18,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+} from '@/components/ui/navigation-menu';
 
 const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
+  React.ElementRef<'a'>,
+  React.ComponentPropsWithoutRef<'a'>
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
@@ -29,7 +30,7 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
             className
           )}
           {...props}
@@ -41,19 +42,41 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = 'ListItem';
 
 export function Navbar({ user }: { user: User | undefined }) {
+  const pathname = usePathname();
+
+  // 定义不需要显示导航栏的页面路径
+  const hiddenPaths = ['/login', '/register', '/install', '/'];
+
+  // 检查当前路径是否需要隐藏导航栏
+  const shouldHideNavbar =
+    hiddenPaths.includes(pathname) || pathname.startsWith('/video-analysis/');
+
+  // 如果应该隐藏导航栏，直接返回null
+  if (shouldHideNavbar) {
+    return null;
+  }
 
   return (
     <div className="fixed left-0 top-0 z-20 w-full h-16 px-7 flex items-center justify-between bg-sidebar backdrop-blur-md">
-      <div className='flex items-center space-x-5'>
-        <Link href="/">
-          <span className="text-lg font-semibold font-mono tracking-tighter">
-            Topmind
-          </span>
+      <div className="flex items-center space-x-5">
+        <Link
+          href="/"
+          className="flex items-center space-x-2 hover:opacity-80 transition"
+        >
+          <div className="w-10 h-10 relative">
+            <Image
+              src="/images/logo.png"
+              alt="Logo"
+              fill
+              className="object-contain"
+            />
+          </div>
+          <span className="text-xl font-bold">极效火眼</span>
         </Link>
       </div>
 
@@ -111,14 +134,10 @@ export function Navbar({ user }: { user: User | undefined }) {
       {user ? (
         <UserNav user={user} />
       ) : (
-        <Button
-          size="sm"
-          className="rounded-lg"
-        >
+        <Button size="sm" className="rounded-lg">
           <Link href="/login">登录</Link>
         </Button>
       )}
-      
     </div>
   );
 }

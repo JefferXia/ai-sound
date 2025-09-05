@@ -44,9 +44,9 @@ export default function AccountPage() {
           <AccountInfo accountInfo={accountInfo} />
 
           {/* 邀请码显示 */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <InviteCodeDisplay />
-          </div>
+          </div> */}
 
           <div className="mt-6">
             <AccountList list={accountRecords} />

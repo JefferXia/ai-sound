@@ -1,6 +1,13 @@
 'use client';
 
-import { Plus, ScrollText, AudioLines, Youtube, FileVideo, CreditCard } from 'lucide-react';
+import {
+  Plus,
+  ScrollText,
+  AudioLines,
+  Youtube,
+  FileVideo,
+  CreditCard,
+} from 'lucide-react';
 import Link from 'next/link';
 import { type User } from 'next-auth';
 
@@ -28,7 +35,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-  SidebarSeparator
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { BetterTooltip } from '@/components/ui/tooltip';
 
@@ -43,7 +50,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
             <SidebarMenuButton asChild>
               <Link href="/" onClick={() => setOpenMobile(false)}>
                 <span className="text-lg font-semibold font-mono tracking-tighter">
-                  Chatbot
+                  极效火眼
                 </span>
               </Link>
             </SidebarMenuButton>
@@ -57,7 +64,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className='pt-8'>
+      <SidebarContent className="pt-8">
         {/* <SidebarHistory user={user} /> */}
         <SidebarGroup>
           <SidebarGroupLabel>我的项目</SidebarGroupLabel>
