@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
       {
         hostname: '*.cos.ap-shanghai.myqcloud.com'
       },
+      {
+        hostname: 'thirdwx.qlogo.cn'
+      },
     ],
   },
   reactStrictMode: false,

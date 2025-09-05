@@ -1,43 +1,45 @@
-'use client'
-import { ChevronDown } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { type User } from 'next-auth'
-import { signOut } from 'next-auth/react'
-import { useTheme } from 'next-themes'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+'use client';
+import { ChevronDown } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { type User } from 'next-auth';
+import { signOut } from 'next-auth/react';
+import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { useEffect } from 'react'
+} from '@/components/ui/dropdown-menu';
+import { useEffect } from 'react';
 
 export function UserNav({ user }: { user: User }) {
-  const { setTheme, theme } = useTheme()
-  const router = useRouter()
+  const { setTheme, theme } = useTheme();
+  const router = useRouter();
 
-  useEffect(() => {
-    if(theme === 'light') {
-      setTheme('dark')
-    }
-  }, [theme])
-  
+  // useEffect(() => {
+  //   if (theme === 'light') {
+  //     setTheme('dark');
+  //   }
+  // }, [theme]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent h-10">
           <Image
-            src={`https://avatar.vercel.sh/${user.email}`}
-            alt={user.email ?? '用户'}
+            src={`https://avatar.vercel.sh/${user.name}`}
+            alt={user.name ?? '用户'}
             width={24}
             height={24}
             className="rounded-full"
           />
-          <span className='max-w-26 text-primary line-clamp-1'>{user?.name}</span>
+          <span className="max-w-26 text-primary line-clamp-1">
+            {user?.name}
+          </span>
           <ChevronDown className="ml-auto" />
         </Button>
       </DropdownMenuTrigger>
@@ -47,7 +49,7 @@ export function UserNav({ user }: { user: User }) {
       >
         <DropdownMenuItem
           onSelect={() => {
-            router.push("/member/upgrade")
+            router.push('/member/upgrade');
           }}
         >
           升级会员
@@ -55,23 +57,16 @@ export function UserNav({ user }: { user: User }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
-            router.push("/profile/text")
+            router.push('/profile/account');
           }}
         >
-          个人主页
+          我的账户
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => {
-            router.push("/profile/account")
-          }}
-        >
-          账户明细
-        </DropdownMenuItem>
-        {/* <DropdownMenuItem
           onSelect={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           切换主题色
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <button

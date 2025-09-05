@@ -4,11 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { getAccountInfo } from '../actions';
 import { AccountInfo } from '@/components/user/account-info';
 import { AccountList } from '@/components/user/account-list';
-import { InviteCodeDisplay } from '@/components/user/invite-code-display';
 import Loading from '@/components/create/loading';
 import { useGlobalContext } from '@/app/globalContext';
 
 export interface AccountData {
+  name: string;
+  phone: string;
+  avatar: string;
   balance: number;
   createdAt: string;
 }
@@ -42,11 +44,6 @@ export default function AccountPage() {
       ) : (
         <div className="p-6 pt-24">
           <AccountInfo accountInfo={accountInfo} />
-
-          {/* 邀请码显示 */}
-          {/* <div className="mt-6">
-            <InviteCodeDisplay />
-          </div> */}
 
           <div className="mt-6">
             <AccountList list={accountRecords} />

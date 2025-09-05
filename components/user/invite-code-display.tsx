@@ -52,37 +52,36 @@ export function InviteCodeDisplay() {
   if (loading) {
     return (
       <div className="animate-pulse">
-        <div className="h-20 bg-gray-200 rounded-lg"></div>
+        <div className="h-20 bg-muted rounded-lg"></div>
       </div>
     );
   }
 
   if (!stats?.canInvite) {
     return (
-      <div className="p-4 bg-gray-50 rounded-lg border">
-        <p className="text-gray-500 text-center">邀请码生成中...</p>
+      <div className="p-4 bg-muted rounded-lg border">
+        <p className="text-muted-foreground text-center">邀请码生成中...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg border shadow-sm">
-      <h3 className="text-lg font-semibold mb-4 text-gray-900">我的邀请码</h3>
+    <div className="p-6 bg-card rounded-lg border shadow-sm">
+      <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+        我的邀请链接
+      </h3>
 
       <div className="space-y-4">
         {/* 邀请码显示 */}
         <div className="flex items-center space-x-3">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              邀请码
-            </label>
             <div className="flex items-center space-x-2">
-              <div className="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md font-mono text-lg tracking-wider">
-                {stats.inviteCode}
+              <div className="flex-1 px-3 py-2 bg-muted border rounded-md font-mono text-lg tracking-wider text-card-foreground">
+                https://eye.ultimateai.vip/?code={stats.inviteCode}
               </div>
               <button
                 onClick={copyToClipboard}
-                className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                className="px-3 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors flex items-center space-x-2"
               >
                 {copied ? (
                   <>
@@ -101,22 +100,24 @@ export function InviteCodeDisplay() {
         </div>
 
         {/* 邀请统计 */}
-        <div className="flex items-center space-x-4 p-4 bg-blue-50 rounded-lg">
+        <div className="flex items-center space-x-4 p-4 text-muted-foreground bg-muted rounded-lg">
           <div className="flex items-center space-x-2">
-            <Users className="w-5 h-5 text-blue-600" />
-            <span className="text-sm text-gray-600">已邀请</span>
+            <Users className="w-5 h-5 text-primary" />
+            <span className="text-sm">已成功邀请</span>
           </div>
-          <div className="text-2xl font-bold text-blue-600">
+          <div className="text-2xl font-bold text-primary">
             {stats.inviteCount}
           </div>
-          <span className="text-sm text-gray-500">人</span>
+          <span className="text-sm">人</span>
         </div>
 
         {/* 邀请说明 */}
-        <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-          <p>• 分享您的邀请码给朋友，邀请他们注册使用</p>
-          <p>• 每个邀请码只能使用一次</p>
-          <p>• 邀请码注册后自动建立邀请关系</p>
+        <div className="text-sm text-muted-foreground bg-muted p-3 rounded-lg space-y-3">
+          <p>• 分享您的邀请链接给朋友，邀请他们注册使用</p>
+          <p>• 他人通过邀请链接注册后自动建立邀请关系</p>
+          <p>• 邀请的用户充值后才能产生佣金</p>
+          <p>• 我们将根据您的邀请记录定期结算相应比例的佣金</p>
+          <p>• 具体如何结算以及佣金比例请联系商务</p>
         </div>
       </div>
     </div>

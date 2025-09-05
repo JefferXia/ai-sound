@@ -19,16 +19,16 @@ export function AccountInfo({ accountInfo }: { accountInfo?: AccountData }) {
     <div className="p-5 rounded-lg bg-muted">
       <div className="flex justify-between items-center">
         <div className="flex">
-          <span className="flex items-center justify-center text-xl font-medium rounded-full w-12 h-12 mr-4 text-white bg-[linear-gradient(225deg,_rgb(255,_58,_212)_0%,_rgb(151,_107,_255)_33%,_rgb(67,_102,_255)_66%,_rgb(89,_187,_252)_100%)]">
+          {/* <span className="flex items-center justify-center text-xl font-medium rounded-full w-12 h-12 mr-4 text-white bg-[linear-gradient(225deg,_rgb(255,_58,_212)_0%,_rgb(151,_107,_255)_33%,_rgb(67,_102,_255)_66%,_rgb(89,_187,_252)_100%)]">
             {getFirstLetterAndUpperCase(userInfo?.name)}
-            {/* <Image
-              src={userInfo.wechatAvatar}
-              alt={userInfo.name}
-              width={48}
-              height={48}
-              className="mr-4 rounded-full object-cover"
-            /> */}
-          </span>
+          </span> */}
+          <Image
+            src={userInfo.image}
+            alt={userInfo.name}
+            width={48}
+            height={48}
+            className="mr-4 rounded-full object-cover"
+          />
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">{userInfo?.name}</h4>
             <div className="flex items-center pt-1">

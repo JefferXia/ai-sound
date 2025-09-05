@@ -8,6 +8,7 @@ import {
   FileVideo,
   CreditCard,
   History,
+  Share2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { type User } from 'next-auth';
@@ -121,6 +122,14 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                 <Link href="/profile/account">
                   <CreditCard />
                   <span>账户明细</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/profile/invite">
+                  <Share2 />
+                  <span>邀请码</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
