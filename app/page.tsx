@@ -11,10 +11,142 @@ import {
   Play,
   Sparkles,
   Globe,
+  Link as ExternalLink,
+  AlertCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { isProductDetailUrl } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+
+// ProductUrlInput Component
+function ProductUrlInput() {
+  const [url, setUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+  const router = useRouter();
+
+  const validateUrl = (url: string) => {
+    return isProductDetailUrl(url);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!url.trim()) {
+      setMessage('请输入商品详情页地址');
+      setMessageType('error');
+      return;
+    }
+
+    if (!validateUrl(url)) {
+      setMessage('请输入有效的商品详情页地址（支持淘宝、天猫、京东、抖音）');
+      setMessageType('error');
+      return;
+    }
+
+    setIsLoading(true);
+    setMessage('');
+
+    try {
+      const response = await fetch('/api/product-check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ product_url: url }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setMessage('商品已提交检测，请稍后查看结果');
+        setMessageType('success');
+        setUrl('');
+      } else {
+        // 如果是未登录错误，直接跳转到登录页
+        if (data.authenticated === false) {
+          router.push('/login');
+          return;
+        } else {
+          setMessage(data.error || '提交失败，请重试');
+          setMessageType('error');
+        }
+      }
+    } catch (error) {
+      setMessage('网络错误，请重试');
+      setMessageType('error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 直接显示输入表单
+  return (
+    <div className="max-w-4xl mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* 主输入区域 - 严格按照设计参考 */}
+        <div className="relative bg-gray-800/50 border border-gray-600 rounded-2xl overflow-hidden">
+          <div className="flex items-center">
+            {/* URL输入框 */}
+            <div className="flex-1 relative">
+              <ExternalLink className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white z-10" />
+              <Input
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="输入淘宝/天猫/京东/抖音的商品详情链接"
+                className="pl-12 pr-4 py-4 bg-transparent text-white placeholder-gray-400 focus:outline-none text-lg border-0 focus:ring-0 focus:border-0 rounded-none rounded-l-2xl"
+                disabled={isLoading}
+              />
+            </div>
+
+            {/* 提交按钮 */}
+            <Button
+              type="submit"
+              disabled={isLoading || !url.trim()}
+              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-none rounded-r-2xl font-medium hover:from-purple-700 hover:to-purple-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed border-0"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  检测中...
+                </div>
+              ) : (
+                '立即检测'
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {/* 消息提示 */}
+        {message && (
+          <div
+            className={`flex items-center gap-3 p-4 rounded-xl border ${
+              messageType === 'success'
+                ? 'bg-green-500/10 border-green-500/20 text-green-400'
+                : 'bg-red-500/10 border-red-500/20 text-red-400'
+            }`}
+          >
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm font-medium">{message}</span>
+          </div>
+        )}
+
+        {/* 支持平台说明 */}
+        <div className="text-center">
+          <p className="text-sm text-gray-400">
+            支持平台：淘宝、天猫、京东、抖音
+          </p>
+        </div>
+      </form>
+    </div>
+  );
+}
 
 export default function Home() {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -140,6 +272,24 @@ export default function Home() {
               <Play className="w-5 h-5 mr-2" />
               观看演示
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Product URL Input Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <div className="gradient-border rounded-2xl p-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="gradient-text">商品违规检测</span>
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                输入商品详情页地址，AI智能检测违规风险
+              </p>
+            </div>
+
+            <ProductUrlInput />
           </div>
         </div>
       </section>

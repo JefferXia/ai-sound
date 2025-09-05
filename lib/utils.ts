@@ -306,3 +306,77 @@ export async function videoUrlToBuffer(videoUrl: string) {
     console.error("Error downloading video:", error.message);
   }
 }
+
+/**
+ * 检测URL是否为支持的商品详情页URL
+ * 支持的平台：京东(JD)、天猫(Tmall)、淘宝(Taobao)
+ * @param url - 要检测的URL字符串
+ * @returns 如果是支持的详情页URL返回true，否则返回false
+ */
+export function isProductDetailUrl(url: string): boolean {
+  try {
+    const urlObj = new URL(url)
+    const hostname = urlObj.hostname.toLowerCase()
+    const pathname = urlObj.pathname.toLowerCase()
+    
+    // 京东商品详情页
+    if (hostname === 'item.jd.com' && pathname.includes('.html')) {
+      return true
+    }
+    
+    // 天猫商品详情页
+    if (hostname === 'detail.tmall.com' && urlObj.searchParams.has('id')) {
+      return true
+    }
+    
+    // 淘宝商品详情页
+    if (hostname === 'item.taobao.com' && urlObj.searchParams.has('id')) {
+      return true
+    }
+    
+    // 抖音商品详情页
+    if (hostname === 'haohuo.jinritemai.com' && urlObj.searchParams.has('id')) {
+      return true
+    }
+    
+    return false
+  } catch (error) {
+    console.error('检测商品详情URL失败:', error)
+    return false
+  }
+}
+
+/**
+ * 从URL中提取商品ID
+ * 支持从URL参数和路径中提取ID
+ * @param url - 要解析的URL字符串
+ * @returns 商品ID字符串，如果未找到则返回null
+ */
+export function extractProductId(url: string): string | null {
+  try {
+    // 首先检测是否为支持的详情页URL
+    if (!isProductDetailUrl(url)) {
+      return null
+    }
+    
+    const urlObj = new URL(url)
+    const hostname = urlObj.hostname.toLowerCase()
+    let productId: string | null = null
+    
+    // 京东商品ID提取 - 从路径中提取
+    if (hostname.includes('jd.com')) {
+      const regex = /\/(\d+)\.html/
+      const match = url.match(regex)
+      if (match && match[1]) {
+        productId = match[1]
+      }
+    } else {
+      productId = urlObj.searchParams.get('id')
+    }
+    
+    return productId
+  } catch (error) {
+    console.error('提取商品ID失败:', error)
+    return null
+  }
+}
