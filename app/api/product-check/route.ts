@@ -74,6 +74,7 @@ export async function POST(request: NextRequest) {
         user_id: session.user.id,
         product_id: productId,
         product_url: product_url,
+        product_name: '待检测商品',
         status: 'PROCESSING',
       },
     });

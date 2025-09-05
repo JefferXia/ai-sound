@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {
-  ArrowLeft,
   Download,
   Settings,
   Pin,
@@ -41,28 +40,6 @@ export default function InstallPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link
-              href="/"
-              className="flex items-center space-x-2 hover:opacity-80 transition"
-            >
-              <div className="w-10 h-10 relative">
-                <Image
-                  src="/images/logo.png"
-                  alt="Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <span className="text-xl font-bold">极效火眼</span>
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="pt-32 pb-12 px-4 hero-gradient">
         <div className="container mx-auto text-center">

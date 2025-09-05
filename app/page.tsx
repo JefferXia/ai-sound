@@ -99,7 +99,7 @@ function ProductUrlInput() {
                 type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="输入淘宝/天猫/京东/抖音的商品详情链接"
+                placeholder="https://item.taobao.com/item.htm?id=xxx"
                 className="pl-12 pr-4 py-4 bg-transparent text-white placeholder-gray-400 focus:outline-none text-lg border-0 focus:ring-0 focus:border-0 rounded-none rounded-l-2xl"
                 disabled={isLoading}
               />
@@ -180,58 +180,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 relative">
-                <Image
-                  src="/images/logo.png"
-                  alt="Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <span className="text-xl font-bold">极效火眼</span>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <Link
-                href="#features"
-                className="text-muted-foreground hover:text-foreground transition"
-              >
-                功能特性
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="text-muted-foreground hover:text-foreground transition"
-              >
-                使用方法
-              </Link>
-              <Link
-                href="#demo"
-                className="text-muted-foreground hover:text-foreground transition"
-              >
-                演示
-              </Link>
-              <Link
-                href="#contact"
-                className="text-muted-foreground hover:text-foreground transition"
-              >
-                联系我们
-              </Link>
-              <Link
-                href="/install"
-                className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition"
-              >
-                <Download className="w-4 h-4 inline mr-2" />
-                安装扩展
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 hero-gradient">
         <div className="container mx-auto text-center">

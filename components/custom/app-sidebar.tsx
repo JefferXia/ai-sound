@@ -7,6 +7,7 @@ import {
   Youtube,
   FileVideo,
   CreditCard,
+  History,
 } from 'lucide-react';
 import Link from 'next/link';
 import { type User } from 'next-auth';
@@ -69,7 +70,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
         <SidebarGroup>
           <SidebarGroupLabel>我的项目</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenuItem>
+            {/* <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <Link href="/profile/text">
                   <ScrollText />
@@ -98,6 +99,14 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                 <Link href="/profile/analysis">
                   <FileVideo />
                   <span>我分析的视频</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem> */}
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/history">
+                  <History />
+                  <span>检测历史记录</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
