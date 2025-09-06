@@ -59,6 +59,22 @@ export async function POST(req: NextRequest) {
         },
       })
 
+      // 如果report不为空，则更新所有相同product_id且status为PENDING的记录
+      if (report) {
+        await prisma.weiRecord.updateMany({
+          where: {
+            product_id: String(product_id),
+            status: 'PENDING',
+            id: { not: existing.id }, // 排除当前更新的记录
+          },
+          data: {
+            product_name: processedProductName ?? existing.product_name,
+            report: String(report),
+            status: 'SUCCESS',
+          },
+        })
+      }
+
       return NextResponse.json({
         success: true,
         existing: true,
@@ -67,7 +83,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // 不存在则创建并扣除 10 积分
+    // 不存在则创建并扣除 100 积分
     const created = await prisma.weiRecord.create({
       data: {
         user_id: user.id,
@@ -85,7 +101,7 @@ export async function POST(req: NextRequest) {
       user.id,
       -100,
       'CONSUME',
-      '消耗积分-检测违规'
+      '消耗积分-商品违规检测'
     )
 
     return NextResponse.json({

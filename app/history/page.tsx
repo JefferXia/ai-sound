@@ -7,11 +7,9 @@ import {
   FileText,
   History,
   Package,
-  User,
   AlertCircle,
-  ExternalLink,
 } from 'lucide-react';
-import { Markdown } from '@/components/custom/markdown';
+import Markdown from 'markdown-to-jsx';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +22,7 @@ interface ProductItem {
   image_caption: string;
   report: string;
   createdAt: string;
-  status?: 'completed' | 'processing' | 'pending';
+  status?: 'SUCCESS' | 'PENDING' | 'PROCESSING' | 'CANCELLED';
 }
 
 function LoadingPage() {
@@ -66,9 +64,9 @@ function LoadingPage() {
 
         {/* 右侧加载骨架 */}
         <div className="h-[100vh] flex-1 bg-background pb-6">
-          <div className="flex h-full justify-center overflow-y-auto">
+          <div className="flex h-full justify-center items-center overflow-y-auto">
             <div className="w-2/3 max-w-4xl pt-6">
-              <Skeleton className="h-96 w-full rounded-lg" />
+              <Skeleton className="h-[80vh] w-full rounded-lg" />
             </div>
           </div>
         </div>
@@ -97,21 +95,13 @@ export default function HistoryPage() {
         const result = await historyResponse.json();
 
         if (result.success && result.data && Array.isArray(result.data)) {
-          // 为每个商品添加状态信息
-          const processedData = result.data.map((item: ProductItem) => ({
-            ...item,
-            status:
-              item.report && item.report.trim() ? 'completed' : 'processing',
-          }));
+          // 直接使用数据库中的状态，不需要额外处理
+          setProductItems(result.data);
 
-          setProductItems(processedData);
-
-          // 默认选择第一个已完成的商品
-          const firstCompleted = processedData.find(
-            (p: ProductItem) => p.status === 'completed'
-          );
-          if (firstCompleted) {
-            setSelectedProduct(firstCompleted);
+          // 默认选择第一个商品
+          const firstItem = result.data[0];
+          if (firstItem) {
+            setSelectedProduct(firstItem);
           }
         } else {
           setProductItems([]);
@@ -129,23 +119,23 @@ export default function HistoryPage() {
 
   const getStatusInfo = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'SUCCESS':
         return {
           text: '已完成',
           color: 'text-green-600',
           bgColor: 'bg-green-50',
           variant: 'default' as const,
         };
-      case 'processing':
+      case 'PROCESSING':
         return {
           text: '处理中',
           color: 'text-yellow-600',
           bgColor: 'bg-yellow-50',
           variant: 'secondary' as const,
         };
-      case 'pending':
+      case 'PENDING':
         return {
-          text: '等待中',
+          text: '排队中',
           color: 'text-gray-600',
           bgColor: 'bg-gray-50',
           variant: 'outline' as const,
@@ -203,24 +193,33 @@ export default function HistoryPage() {
 
           {/* 统计信息 */}
           <div className="border-b border-border p-4">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
                 <div className="text-lg font-bold text-green-600">
                   {
-                    productItems.filter((item) => item.status === 'completed')
+                    productItems.filter((item) => item.status === 'SUCCESS')
                       .length
                   }
                 </div>
                 <div className="text-xs text-muted-foreground">已完成</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-yellow-600">
+                <div className="text-lg font-bold text-blue-600">
                   {
-                    productItems.filter((item) => item.status === 'processing')
+                    productItems.filter((item) => item.status === 'PROCESSING')
                       .length
                   }
                 </div>
                 <div className="text-xs text-muted-foreground">处理中</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-yellow-600">
+                  {
+                    productItems.filter((item) => item.status === 'PENDING')
+                      .length
+                  }
+                </div>
+                <div className="text-xs text-muted-foreground">排队中</div>
               </div>
             </div>
           </div>
@@ -238,7 +237,7 @@ export default function HistoryPage() {
                 <div className="space-y-2">
                   {productItems.map((item) => {
                     const statusInfo = getStatusInfo(
-                      item.status || 'processing'
+                      item.status || 'PROCESSING'
                     );
                     const isSelected = selectedProduct?.id === item.id;
 
@@ -288,7 +287,17 @@ export default function HistoryPage() {
                               <div className="mt-2 flex items-center justify-between">
                                 <Badge
                                   variant={statusInfo.variant}
-                                  className="text-xs"
+                                  className={`text-xs ${
+                                    item.status === 'SUCCESS'
+                                      ? 'bg-green-100 text-green-700'
+                                      : item.status === 'PROCESSING'
+                                        ? 'bg-blue-100 text-blue-700'
+                                        : item.status === 'PENDING'
+                                          ? 'bg-yellow-100 text-yellow-700'
+                                          : item.status === 'CANCELLED'
+                                            ? 'bg-red-100 text-red-700'
+                                            : ''
+                                  }`}
                                 >
                                   {statusInfo.text}
                                 </Badge>
@@ -313,31 +322,41 @@ export default function HistoryPage() {
           <div className="flex h-full justify-center overflow-y-auto">
             {selectedProduct ? (
               <div className="w-2/3 max-w-4xl pt-6">
-                {selectedProduct.status === 'completed' &&
+                {selectedProduct.status === 'SUCCESS' &&
                 selectedProduct.report ? (
                   <Card>
                     <CardHeader>
                       <div className="flex items-center gap-3">
-                        <FileText className="h-6 w-6 text-primary" />
+                        <div className="flex items-center justify-center h-8 w-8 rounded bg-blue-100 dark:bg-blue-900/20 mr-2">
+                          <FileText className="h-5 w-5 text-blue-500" />
+                        </div>
                         <div>
                           <CardTitle>检测报告</CardTitle>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="mt-2 text-sm text-muted-foreground">
                             <a
                               href={selectedProduct.product_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-primary hover:underline"
+                              className="inline-flex items-center gap-1 text-blue-500 hover:underline"
                             >
                               {selectedProduct.product_name}
-                              <ExternalLink className="h-3 w-3" />
                             </a>
                           </p>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="prose prose-sm max-w-none dark:prose-invert">
+                      {/* <div className="prose prose-sm max-w-none dark:prose-invert">
                         <Markdown>{selectedProduct.report}</Markdown>
+                      </div> */}
+                      <div className="markdown-content text-sm">
+                        <Markdown
+                          options={{
+                            forceBlock: true, // 让解析更接近 GFM
+                          }}
+                        >
+                          {selectedProduct.report}
+                        </Markdown>
                       </div>
                     </CardContent>
                   </Card>
@@ -350,12 +369,12 @@ export default function HistoryPage() {
                             <Clock className="h-8 w-8 text-yellow-600 dark:text-yellow-400" />
                           </div>
                           <h3 className="mb-2 text-lg font-medium">
-                            {selectedProduct.status === 'processing'
+                            {selectedProduct.status === 'PROCESSING'
                               ? '报告生成中'
                               : '等待处理'}
                           </h3>
                           <p className="mx-auto max-w-sm text-sm text-muted-foreground">
-                            {selectedProduct.status === 'processing'
+                            {selectedProduct.status === 'PROCESSING'
                               ? '正在分析商品信息，预计1-3分钟完成'
                               : '商品检测请求已提交，等待系统处理'}
                           </p>

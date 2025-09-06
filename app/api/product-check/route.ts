@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/app/(auth)/auth';
 import prisma from '@/lib/prisma';
 import { isProductDetailUrl, extractProductId } from '@/lib/utils';
+import { addPoint, checkPoint } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
@@ -54,7 +55,10 @@ export async function POST(request: NextRequest) {
         product_id: productId,
         is_deleted: false,
       },
-    });
+    })
+
+    // 获取用户当前余额
+    const currentBalance = await checkPoint(session.user.id);
 
     if (existingRecord) {
       return NextResponse.json({
@@ -65,7 +69,18 @@ export async function POST(request: NextRequest) {
           status: existingRecord.status,
           created_at: existingRecord.created_at,
         },
-      });
+        balance: currentBalance, // 返回当前余额
+      })
+    }
+
+    // 检查用户余额是否足够（检测费用为100积分）
+    const requiredPoints = 100;
+    if (currentBalance < requiredPoints) {
+      return NextResponse.json({
+        success: false,
+        error: `余额不足，检测需要 ${requiredPoints} 积分，当前余额：${currentBalance}`,
+        balance: currentBalance,
+      }, { status: 400 });
     }
 
     // 创建新的检测记录
@@ -75,9 +90,17 @@ export async function POST(request: NextRequest) {
         product_id: productId,
         product_url: product_url,
         product_name: '待检测商品',
-        status: 'PROCESSING',
+        status: 'PENDING',
       },
-    });
+    })
+
+    // 扣除积分
+    const transactionData = await addPoint(
+      session.user.id,
+      -1*requiredPoints,
+      'CONSUME',
+      '消耗积分-商品违规检测'
+    );
 
     return NextResponse.json({
       success: true,
@@ -88,6 +111,7 @@ export async function POST(request: NextRequest) {
         status: newRecord.status,
         created_at: newRecord.created_at,
       },
+      balance: transactionData?.[0]?.balance, // 返回扣费后的余额
     });
 
   } catch (error) {
@@ -97,17 +121,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
-
-
-// 处理OPTIONS预检请求
-export async function OPTIONS(request: NextRequest) {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-  });
 }

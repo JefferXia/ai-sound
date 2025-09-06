@@ -63,9 +63,9 @@ export async function GET(request: NextRequest) {
     }
 
     // 从URL参数获取分页参数
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '100');
-    const offset = parseInt(searchParams.get('offset') || '0');
+    // const { searchParams } = new URL(request.url);
+    // const limit = parseInt(searchParams.get('limit') || '100');
+    // const offset = parseInt(searchParams.get('offset') || '0');
 
     // 获取用户的检测记录
     const records = await prisma.weiRecord.findMany({
@@ -76,8 +76,8 @@ export async function GET(request: NextRequest) {
       orderBy: {
         created_at: 'desc',
       },
-      take: limit,
-      skip: offset,
+      // take: limit,
+      // skip: offset,
     });
 
     // 格式化输出

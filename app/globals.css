@@ -16,9 +16,9 @@
   }
 }
 
-li {
+/* li {
   list-style: none !important;
-}
+} */
 .dark .markmap-foreign {
   color: #fff !important;
   font-weight: 400;
@@ -398,5 +398,57 @@ li {
 
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+.markdown-content {
+  table {
+    margin: 16px 0;
+    border-collapse: collapse;
+    width: 100%
+  }
+
+  th, td {
+      padding: 8px 16px;
+      border: 1px solid #e5e6eb
+  }
+
+  th {
+      background-color: #f5f6f7;
+      .dark & {
+        background-color: #23272f;
+      }
+      font-weight: 500
+  }
+
+  a {
+      color: #3370ff!important;
+      text-decoration: none
+  }
+
+  a:hover {
+      text-decoration: underline
+  }
+
+  p {
+    margin: 16px 0;
+    line-height: 1.8;
+  }
+  ol {
+    padding-left: 16px;
+    margin: 8px 0;
+    list-style-type: decimal;
+    li {
+      margin: 16px 0;
+    }
+  }
+  ul {
+    padding-left: 16px;
+    margin: 8px 0;
+    list-style-type: disc;
+    list-style-position: outside;
+    li {
+      margin: 7px 0;
+    }
   }
 }
