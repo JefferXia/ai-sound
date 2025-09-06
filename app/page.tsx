@@ -74,7 +74,14 @@ function ProductUrlInput() {
       } else {
         // 如果是未登录错误，直接跳转到登录页
         if (data.authenticated === false) {
-          router.push('/login');
+          // 判断url中是否带有code参数，如果有则带过去
+          const urlObj = new URL(window.location.href);
+          const code = urlObj.searchParams.get('code');
+          if (code) {
+            router.push(`/login?code=${encodeURIComponent(code)}`);
+          } else {
+            router.push('/login');
+          }
           return;
         } else {
           setMessage(data.error || '提交失败，请重试');

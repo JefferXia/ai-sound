@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { type User } from 'next-auth';
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { UserNav } from '@/components/custom/navbar-user-nav';
 import { Button } from '@/components/ui/button';
 
@@ -33,14 +33,22 @@ const Logo = ({
 );
 
 // 用户状态组件
-const UserSection = ({ user }: { user: User | undefined }) =>
-  user ? (
+const UserSection = ({ user }: { user: User | undefined }) => {
+  const searchParams = useSearchParams();
+  const code = searchParams.get('code');
+
+  const loginHref = code ? `/login?code=${code}` : '/login';
+
+  return user ? (
     <UserNav user={user} />
   ) : (
     <Button size="sm" className="rounded-lg">
-      <Link href="/login">登录</Link>
+      <Link href={loginHref} className="text-white">
+        登录
+      </Link>
     </Button>
   );
+};
 
 // 首页导航链接
 const HomeNavLinks = () => (

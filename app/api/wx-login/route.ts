@@ -58,18 +58,19 @@ export async function GET(request: NextRequest) {
         });
         
         // 重定向到登录成功页面
-        const redirectUrl = new URL('/login', request.url);
-        redirectUrl.searchParams.set('wechat_user', JSON.stringify({
-          openid: userInfo.openid,
-          nickname: userInfo.nickname,
-          headimgurl: userInfo.headimgurl,
-          unionid: userInfo.unionid,
-          action: 'login',
-          userId: existingUser.id,
-          phone: existingUser.phone,
-          isFirstLogin: false,
-          inviteCode: existingUser.invite_code,
-        }));
+        // const redirectUrl = new URL('/login', request.url);
+        // redirectUrl.searchParams.set('wechat_user', JSON.stringify({
+        //   openid: userInfo.openid,
+        //   nickname: userInfo.nickname,
+        //   headimgurl: userInfo.headimgurl,
+        //   unionid: userInfo.unionid,
+        //   action: 'login',
+        //   userId: existingUser.id,
+        //   phone: existingUser.phone,
+        //   isFirstLogin: false,
+        //   inviteCode: existingUser.invite_code,
+        // }));
+        const redirectUrl = new URL('/', request.url);
 
         return NextResponse.redirect(redirectUrl);
       } catch (error) {
@@ -87,12 +88,12 @@ export async function GET(request: NextRequest) {
             wechatNickname: userInfo.nickname,
             wechatAvatar: userInfo.headimgurl,
             isFirstLogin: true, // 新用户是第一次登录
-            balance: 200, // 新用户赠送200积分
+            balance: state ? 200 : 100, // 新用户赠送200积分
             point: {
               create: {
-                amount: 200,
+                amount: state ? 200 : 100,
                 type: 'SYSTEM',
-                reason: '微信登录新用户赠送200积分'
+                reason: '新用户注册赠送积分'
               }
             }
           }
@@ -128,17 +129,18 @@ export async function GET(request: NextRequest) {
           });
           
           // 重定向到登录成功页面
-          const redirectUrl = new URL('/login', request.url);
-          redirectUrl.searchParams.set('wechat_user', JSON.stringify({
-            openid: userInfo.openid,
-            nickname: userInfo.nickname,
-            headimgurl: userInfo.headimgurl,
-            unionid: userInfo.unionid,
-            action: 'login',
-            userId: newUser.id,
-            isFirstLogin: true,
-            inviteCode: newCode,
-          }));
+          // const redirectUrl = new URL('/login', request.url);
+          // redirectUrl.searchParams.set('wechat_user', JSON.stringify({
+          //   openid: userInfo.openid,
+          //   nickname: userInfo.nickname,
+          //   headimgurl: userInfo.headimgurl,
+          //   unionid: userInfo.unionid,
+          //   action: 'login',
+          //   userId: newUser.id,
+          //   isFirstLogin: true,
+          //   inviteCode: newCode,
+          // }));
+          const redirectUrl = new URL('/', request.url);
 
           return NextResponse.redirect(redirectUrl);
         } catch (error) {
