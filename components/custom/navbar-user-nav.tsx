@@ -49,10 +49,10 @@ export function UserNav({ user }: { user: User }) {
       >
         <DropdownMenuItem
           onSelect={() => {
-            router.push('/member/upgrade');
+            router.push('/recharge');
           }}
         >
-          升级会员
+          购买套餐
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

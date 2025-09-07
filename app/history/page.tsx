@@ -8,8 +8,10 @@ import {
   History,
   Package,
   AlertCircle,
+  Home,
 } from 'lucide-react';
 import Markdown from 'markdown-to-jsx';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -318,7 +320,20 @@ export default function HistoryPage() {
         </div>
 
         {/* 右侧报告区域 */}
-        <div className="h-[100vh] flex-1 bg-background pb-6">
+        <div className="h-[100vh] flex-1 bg-background pb-6 relative">
+          {/* 返回首页按钮 - 绝对定位在左上角 */}
+          <div className="absolute top-4 left-4 z-10">
+            <Link href="/">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm"
+              >
+                <Home className="h-4 w-4" />
+                返回首页
+              </Button>
+            </Link>
+          </div>
           <div className="flex h-full justify-center overflow-y-auto">
             {selectedProduct ? (
               <div className="w-2/3 max-w-4xl pt-6">

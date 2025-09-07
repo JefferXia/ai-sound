@@ -73,8 +73,8 @@ export default function InstallPage() {
               onClick={() => {
                 // 创建下载链接
                 const link = document.createElement('a');
-                link.href = '/extension/极效火眼-1.0.5.zip';
-                link.download = '极效火眼1.0.5.zip';
+                link.href = '/extension/极效火眼-1.0.6.zip';
+                link.download = '极效火眼1.0.6.zip';
                 link.click();
               }}
             >

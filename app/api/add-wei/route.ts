@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
           product_url: product_url ?? existing.product_url,
           image_caption: image_caption ?? existing.image_caption,
           report: report ?? existing.report,
-          status: report ? 'SUCCESS' : existing.status,
+          status: report ? 'SUCCESS' : 'PROCESSING',
         },
       })
 

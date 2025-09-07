@@ -42,11 +42,11 @@ export function AccountInfo({ accountInfo }: { accountInfo?: AccountData }) {
         <Button
           className="text-[#79402e] bg-[#F8da51] hover:bg-[#ffefd1] flex items-center justify-center"
           onClick={() => {
-            router.push('/member/upgrade');
+            router.push('/recharge');
           }}
         >
           <Crown className="mr-1 h-4 w-4" />
-          升级会员
+          购买套餐
         </Button>
       </div>
       <div className="flex items-center mt-5 pt-5 border-t border-tbborder text-sm">
