@@ -9,6 +9,8 @@ import {
   Package,
   AlertCircle,
   Home,
+  Crown,
+  Unlock,
 } from 'lucide-react';
 import Markdown from 'markdown-to-jsx';
 import Link from 'next/link';
@@ -43,7 +45,11 @@ function LoadingPage() {
             </div>
           </div>
           <div className="border-b border-border p-4">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="text-center">
+                <Skeleton className="h-6 w-8 mx-auto mb-1" />
+                <Skeleton className="h-3 w-12 mx-auto" />
+              </div>
               <div className="text-center">
                 <Skeleton className="h-6 w-8 mx-auto mb-1" />
                 <Skeleton className="h-3 w-12 mx-auto" />
@@ -84,6 +90,7 @@ export default function HistoryPage() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
+  const [userGrade, setUserGrade] = useState<string>('');
 
   useEffect(() => {
     const loadData = async () => {
@@ -99,6 +106,11 @@ export default function HistoryPage() {
         if (result.success && result.data && Array.isArray(result.data)) {
           // 直接使用数据库中的状态，不需要额外处理
           setProductItems(result.data);
+
+          // 设置用户等级
+          if (result.userGrade) {
+            setUserGrade(result.userGrade);
+          }
 
           // 默认选择第一个商品
           const firstItem = result.data[0];
@@ -361,18 +373,61 @@ export default function HistoryPage() {
                       </div>
                     </CardHeader>
                     <CardContent>
-                      {/* <div className="prose prose-sm max-w-none dark:prose-invert">
-                        <Markdown>{selectedProduct.report}</Markdown>
-                      </div> */}
-                      <div className="markdown-content text-sm">
-                        <Markdown
-                          options={{
-                            forceBlock: true, // 让解析更接近 GFM
-                          }}
-                        >
-                          {selectedProduct.report}
-                        </Markdown>
-                      </div>
+                      {/* 如果是V0用户，显示模糊的报告和升级提示 */}
+                      {userGrade === 'V0' ? (
+                        <div className="relative">
+                          {/* 模糊的报告内容 */}
+                          <div className="markdown-content text-sm blur-sm select-none pointer-events-none">
+                            <Markdown
+                              options={{
+                                forceBlock: true,
+                              }}
+                            >
+                              {selectedProduct.report}
+                            </Markdown>
+                          </div>
+
+                          {/* 升级提示覆盖层 */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+                            <Card className="w-80 shadow-lg border-2 border-primary/20">
+                              <CardContent className="pt-6">
+                                <div className="text-center space-y-4">
+                                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-orange-500">
+                                    <Crown className="h-8 w-8 text-white" />
+                                  </div>
+                                  <div>
+                                    <h3 className="text-lg font-semibold mb-2">
+                                      查看完整报告
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground mb-4">
+                                      升级套餐即可查看完整详细报告
+                                    </p>
+                                  </div>
+                                  <div className="space-y-2">
+                                    <Link href="/recharge">
+                                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-medium">
+                                        <Unlock className="mr-2 h-4 w-4" />
+                                        立即升级套餐
+                                      </Button>
+                                    </Link>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </div>
+                        </div>
+                      ) : (
+                        // 正常显示完整报告
+                        <div className="markdown-content text-sm">
+                          <Markdown
+                            options={{
+                              forceBlock: true, // 让解析更接近 GFM
+                            }}
+                          >
+                            {selectedProduct.report}
+                          </Markdown>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ) : (
@@ -393,6 +448,11 @@ export default function HistoryPage() {
                               ? '正在分析商品信息，预计1-3分钟完成'
                               : '商品检测请求已提交，等待系统处理'}
                           </p>
+                          <div className="mt-4 flex justify-center">
+                            <Button onClick={() => window.location.reload()}>
+                              刷新报告
+                            </Button>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>

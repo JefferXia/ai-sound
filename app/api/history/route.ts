@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/app/(auth)/auth';
 import prisma from '@/lib/prisma';
 import { utcToBeijing } from '@/lib/utils';
+import { getUserById } from '@/db/queries';
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,6 +63,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // 使用 getUserById 获取用户信息，包括 grade
+    const userInfo = await getUserById(session.user.id);
+    if (!userInfo) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: '用户信息不存在',
+          authenticated: false 
+        },
+        { status: 404 }
+      );
+    }
+
     // 从URL参数获取分页参数
     // const { searchParams } = new URL(request.url);
     // const limit = parseInt(searchParams.get('limit') || '100');
@@ -95,6 +109,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: formattedData,
       total: formattedData.length,
+      userGrade: userInfo.grade,
     });
 
   } catch (error) {
