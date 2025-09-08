@@ -101,17 +101,17 @@ function ProductUrlInput() {
     <div className="max-w-4xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 主输入区域 - 严格按照设计参考 */}
-        <div className="relative bg-gray-800/50 border border-gray-600 rounded-2xl overflow-hidden">
+        <div className="relative bg-muted/50 dark:bg-gray-800/50 border border-border dark:border-gray-600 rounded-2xl overflow-hidden">
           <div className="flex items-center">
             {/* URL输入框 */}
             <div className="flex-1 relative">
-              <ExternalLink className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white z-10" />
+              <ExternalLink className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground dark:text-white z-10" />
               <Input
                 type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://item.taobao.com/item.htm?id=xxx"
-                className="pl-12 pr-4 py-4 bg-transparent text-white placeholder-gray-400 focus:outline-none text-lg border-0 focus:ring-0 focus:border-0 rounded-none rounded-l-2xl"
+                className="pl-12 pr-4 py-4 dark:bg-transparent bg-white text-foreground dark:text-white placeholder-muted-foreground dark:placeholder-gray-400 focus:outline-none text-lg border-0 focus:ring-0 focus:border-0 focus:ring-offset-0 focus-visible:ring-0 rounded-none rounded-l-2xl"
                 disabled={isLoading}
               />
             </div>
@@ -198,10 +198,10 @@ export default function Home() {
             <span>
               <span className="spark mask-gradient absolute inset-0 h-[100%] w-[100%] animate-flip overflow-hidden rounded-full [mask:linear-gradient(white,_transparent_50%)] before:absolute before:aspect-square before:w-[200%] before:rotate-[-90deg] before:animate-rotate before:bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] before:content-[''] before:[inset:0_auto_auto_50%] before:[translate:-50%_-15%]" />
             </span>
-            <span className="backdrop absolute inset-[1px] rounded-full bg-neutral-950 transition-colors duration-200 group-hover:bg-neutral-900" />
-            <span className="h-full w-full blur-md absolute bottom-0 inset-x-0 bg-gradient-to-tr from-primary/40"></span>
-            <span className="z-10 py-0.5 text-sm text-neutral-100 flex items-center justify-center gap-1.5">
-              <Sparkles className="w-4 h-4 mr-2 text-cyan-400" />
+            <span className="backdrop absolute inset-[1px] rounded-full bg-white/80 dark:bg-neutral-950 transition-colors duration-200 group-hover:bg-white dark:group-hover:bg-neutral-900 backdrop-blur-sm" />
+            <span className="h-full w-full blur-md absolute bottom-0 inset-x-0 bg-gradient-to-tr from-primary/20 dark:from-primary/40"></span>
+            <span className="z-10 py-0.5 text-sm text-foreground dark:text-neutral-100 flex items-center justify-center gap-1.5">
+              <Sparkles className="w-4 h-4 mr-2 text-cyan-500 dark:text-cyan-400" />
               AI 驱动的浏览器扩展
             </span>
           </div>
@@ -323,18 +323,18 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8 items-stretch">
             <div className="relative">
               <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-[#00d4ff] via-[#c77dff] to-[#ff6b9d] z-0 opacity-60"></div>
-              <div className="relative bg-[#1a2332]/70 backdrop-blur-sm border border-[#00d4ff]/30 rounded-2xl p-8 text-center hover:bg-[#1a2332]/50 hover:border-[#ff6b9d]/50 transition-all duration-300 group h-full flex flex-col">
+              <div className="relative bg-card/70 dark:bg-[#1a2332]/70 backdrop-blur-sm border border-primary/30 dark:border-[#00d4ff]/30 rounded-2xl p-8 text-center hover:bg-card/50 dark:hover:bg-[#1a2332]/50 hover:border-primary/50 dark:hover:border-[#ff6b9d]/50 transition-all duration-300 group h-full flex flex-col">
                 <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-[#00d4ff] to-[#00f5d4] text-white rounded-full flex items-center justify-center font-bold text-sm">
                   01
                 </div>
-                <div className="w-16 h-16 bg-[#0a1324]/60 border border-[#00d4ff]/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#00f5d4] group-hover:scale-110 group-hover:border-[#ff6b9d] group-hover:bg-[#ff6b9d]/10 group-hover:text-[#ff6b9d] transition-all duration-300">
+                <div className="w-16 h-16 bg-muted/60 dark:bg-[#0a1324]/60 border border-primary/30 dark:border-[#00d4ff]/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-primary dark:text-[#00f5d4] group-hover:scale-110 group-hover:border-primary dark:group-hover:border-[#ff6b9d] group-hover:bg-primary/10 dark:group-hover:bg-[#ff6b9d]/10 group-hover:text-primary dark:group-hover:text-[#ff6b9d] transition-all duration-300">
                   <Globe size={32} />
                 </div>
                 <div className="flex-grow">
-                  <h3 className="text-xl font-bold text-[#ffffff] mb-4">
+                  <h3 className="text-xl font-bold text-foreground dark:text-[#ffffff] mb-4">
                     定位待分析网页
                   </h3>
-                  <p className="text-[#b8d4f0] leading-relaxed">
+                  <p className="text-muted-foreground dark:text-[#b8d4f0] leading-relaxed">
                     打开要分析的竞品页面、活动页面或后台报表。
                   </p>
                 </div>
@@ -343,11 +343,11 @@ export default function Home() {
 
             <div className="relative">
               <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-[#00d4ff] via-[#c77dff] to-[#ff6b9d] z-0 opacity-60"></div>
-              <div className="relative bg-[#1a2332]/70 backdrop-blur-sm border border-[#00d4ff]/30 rounded-2xl p-8 text-center hover:bg-[#1a2332]/50 hover:border-[#ff6b9d]/50 transition-all duration-300 group h-full flex flex-col">
+              <div className="relative bg-card/70 dark:bg-[#1a2332]/70 backdrop-blur-sm border border-primary/30 dark:border-[#00d4ff]/30 rounded-2xl p-8 text-center hover:bg-card/50 dark:hover:bg-[#1a2332]/50 hover:border-primary/50 dark:hover:border-[#ff6b9d]/50 transition-all duration-300 group h-full flex flex-col">
                 <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-[#00d4ff] to-[#00f5d4] text-white rounded-full flex items-center justify-center font-bold text-sm">
                   02
                 </div>
-                <div className="w-16 h-16 bg-[#0a1324]/60 border border-[#00d4ff]/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#00f5d4] group-hover:scale-110 group-hover:border-[#ff6b9d] group-hover:bg-[#ff6b9d]/10 group-hover:text-[#ff6b9d] transition-all duration-300">
+                <div className="w-16 h-16 bg-muted/60 dark:bg-[#0a1324]/60 border border-primary/30 dark:border-[#00d4ff]/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-primary dark:text-[#00f5d4] group-hover:scale-110 group-hover:border-primary dark:group-hover:border-[#ff6b9d] group-hover:bg-primary/10 dark:group-hover:bg-[#ff6b9d]/10 group-hover:text-primary dark:group-hover:text-[#ff6b9d] transition-all duration-300">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -372,10 +372,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="flex-grow">
-                  <h3 className="text-xl font-bold text-[#ffffff] mb-4">
+                  <h3 className="text-xl font-bold text-foreground dark:text-[#ffffff] mb-4">
                     AI智能理解
                   </h3>
-                  <p className="text-[#b8d4f0] leading-relaxed">
+                  <p className="text-muted-foreground dark:text-[#b8d4f0] leading-relaxed">
                     AI检测文本、表格、图片、视频或源码并分析内容结构。
                   </p>
                 </div>
@@ -383,11 +383,11 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="relative bg-[#1a2332]/70 backdrop-blur-sm border border-[#00d4ff]/30 rounded-2xl p-8 text-center hover:bg-[#1a2332]/50 hover:border-[#ff6b9d]/50 transition-all duration-300 group h-full flex flex-col">
+              <div className="relative bg-card/70 dark:bg-[#1a2332]/70 backdrop-blur-sm border border-primary/30 dark:border-[#00d4ff]/30 rounded-2xl p-8 text-center hover:bg-card/50 dark:hover:bg-[#1a2332]/50 hover:border-primary/50 dark:hover:border-[#ff6b9d]/50 transition-all duration-300 group h-full flex flex-col">
                 <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-[#00d4ff] to-[#00f5d4] text-white rounded-full flex items-center justify-center font-bold text-sm">
                   03
                 </div>
-                <div className="w-16 h-16 bg-[#0a1324]/60 border border-[#00d4ff]/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#00f5d4] group-hover:scale-110 group-hover:border-[#ff6b9d] group-hover:bg-[#ff6b9d]/10 group-hover:text-[#ff6b9d] transition-all duration-300">
+                <div className="w-16 h-16 bg-muted/60 dark:bg-[#0a1324]/60 border border-primary/30 dark:border-[#00d4ff]/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-primary dark:text-[#00f5d4] group-hover:scale-110 group-hover:border-primary dark:group-hover:border-[#ff6b9d] group-hover:bg-primary/10 dark:group-hover:bg-[#ff6b9d]/10 group-hover:text-primary dark:group-hover:text-[#ff6b9d] transition-all duration-300">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -406,10 +406,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="flex-grow">
-                  <h3 className="text-xl font-bold text-[#ffffff] mb-4">
+                  <h3 className="text-xl font-bold text-foreground dark:text-[#ffffff] mb-4">
                     结构化报告
                   </h3>
-                  <p className="text-[#b8d4f0] leading-relaxed">
+                  <p className="text-muted-foreground dark:text-[#b8d4f0] leading-relaxed">
                     信息从混乱到清晰，所有整理好的数据一键导出报告。
                   </p>
                 </div>
@@ -446,31 +446,24 @@ export default function Home() {
       {/* Contact Developer Section */}
       <section id="contact" className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
-          <div
-            className="p-12 rounded-3xl text-center"
-            style={{
-              background: 'rgba(255, 255, 255, 0.02)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              backdropFilter: 'blur(10px)',
-            }}
-          >
+          <div className="p-12 rounded-3xl text-center bg-card/50 dark:bg-white/5 border border-border dark:border-white/10 backdrop-blur-sm">
             <div className="mb-8">
-              <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-400 mb-6">
-                <span className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></span>
+              <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 mb-6">
+                <span className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full mr-2 animate-pulse"></span>
                 产品开发中
               </span>
             </div>
-            <h2 className="text-5xl font-bold mb-6 text-white">
+            <h2 className="text-5xl font-bold mb-6 text-foreground dark:text-white">
               联系 极效火眼 开发者
             </h2>
-            <p className="text-xl mb-8 text-gray-300 leading-relaxed">
+            <p className="text-xl mb-8 text-muted-foreground dark:text-gray-300 leading-relaxed">
               我们正在全力开发 极效火眼，添加联系方式直接沟通，获得产品最新进展
             </p>
 
             {/* Contact Methods */}
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               {/* QQ Contact */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+              <div className="bg-card/50 dark:bg-white/5 border border-border dark:border-white/10 rounded-2xl p-8 text-center">
                 {/* QQ QR Code */}
                 <div className="w-48 h-48 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg p-4">
                   <img
@@ -482,10 +475,10 @@ export default function Home() {
 
                 {/* Instructions */}
                 <div className="space-y-3">
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
                     扫码添加企微
                   </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed">
+                  <p className="text-muted-foreground dark:text-gray-300 text-sm leading-relaxed">
                     扫描上方二维码，添加我的微信
                     <br />
                     直接沟通，获得第一手产品信息
@@ -493,7 +486,7 @@ export default function Home() {
 
                   {/* Contact Button */}
                   <div className="mt-6">
-                    <div className="inline-flex items-center px-6 py-3 bg-green-500/20 border border-blue-500/30 rounded-xl text-green-400 font-medium">
+                    <div className="inline-flex items-center px-6 py-3 bg-green-500/20 border border-green-500/30 rounded-xl text-green-600 dark:text-green-400 font-medium">
                       <svg
                         className="w-5 h-5 mr-2"
                         fill="currentColor"
@@ -508,7 +501,7 @@ export default function Home() {
               </div>
 
               {/* Feishu Contact */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+              <div className="bg-card/50 dark:bg-white/5 border border-border dark:border-white/10 rounded-2xl p-8 text-center">
                 {/* Feishu QR Code */}
                 <div className="w-48 h-48 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg p-4">
                   <img
@@ -520,10 +513,10 @@ export default function Home() {
 
                 {/* Instructions */}
                 <div className="space-y-3">
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
                     扫码添加飞书
                   </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed">
+                  <p className="text-muted-foreground dark:text-gray-300 text-sm leading-relaxed">
                     扫描上方二维码，添加我的飞书
                     <br />
                     直接沟通，获得第一手产品信息
@@ -531,7 +524,7 @@ export default function Home() {
 
                   {/* Contact Button */}
                   <div className="mt-6">
-                    <div className="inline-flex items-center px-6 py-3 bg-blue-500/20 border border-green-500/30 rounded-xl text-blue-400 font-medium">
+                    <div className="inline-flex items-center px-6 py-3 bg-blue-500/20 border border-blue-500/30 rounded-xl text-blue-600 dark:text-blue-400 font-medium">
                       <svg
                         className="w-5 h-5 mr-2"
                         fill="currentColor"
@@ -548,7 +541,7 @@ export default function Home() {
 
             {/* Tips */}
             <div className="mt-12 text-center">
-              <p className="text-gray-400 text-base md:text-lg font-medium">
+              <p className="text-muted-foreground dark:text-gray-400 text-base md:text-lg font-medium">
                 💡 提示：请备注&quot;极效火眼&quot;以便快速通过好友申请
               </p>
             </div>
@@ -558,7 +551,7 @@ export default function Home() {
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mt-1">
                   <svg
-                    className="w-4 h-4 text-blue-400"
+                    className="w-4 h-4 text-blue-600 dark:text-blue-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -572,8 +565,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-1">实时沟通</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="text-foreground dark:text-white font-semibold mb-1">
+                    实时沟通
+                  </h3>
+                  <p className="text-muted-foreground dark:text-gray-400 text-sm">
                     直接对话，实时了解开发进展
                   </p>
                 </div>
@@ -582,7 +577,7 @@ export default function Home() {
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mt-1">
                   <svg
-                    className="w-4 h-4 text-green-400"
+                    className="w-4 h-4 text-green-600 dark:text-green-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -596,8 +591,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-1">专属服务</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="text-foreground dark:text-white font-semibold mb-1">
+                    专属服务
+                  </h3>
+                  <p className="text-muted-foreground dark:text-gray-400 text-sm">
                     一对一咨询，定制化解决方案
                   </p>
                 </div>
@@ -606,7 +603,7 @@ export default function Home() {
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mt-1">
                   <svg
-                    className="w-4 h-4 text-purple-400"
+                    className="w-4 h-4 text-purple-600 dark:text-purple-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -620,8 +617,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-1">优先体验</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="text-foreground dark:text-white font-semibold mb-1">
+                    优先体验
+                  </h3>
+                  <p className="text-muted-foreground dark:text-gray-400 text-sm">
                     内测资格，抢先试用新功能
                   </p>
                 </div>

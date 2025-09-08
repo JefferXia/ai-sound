@@ -14,6 +14,16 @@ datasource db {
   relationMode = "prisma"
 }
 
+// 用户等级枚举
+enum UserGrade {
+  V0
+  V1
+  V2
+  V3
+  V4
+  V5
+}
+
 model User {
   id         String      @id @default(uuid())
   email      String?     @unique @db.VarChar(64) // 唯一的电子邮件字段，改为可选
@@ -23,6 +33,7 @@ model User {
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   balance    Int         @default(0)             // 余额
+  grade      UserGrade   @default(V0)            // 用户等级，根据支付记录自动更新
   point      Point[]                             // 用户与积分账户的关系
   weiRecord  WeiRecord[]
   payments   PaymentRecord[]                     // 用户支付记录 

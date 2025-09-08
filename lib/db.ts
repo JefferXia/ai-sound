@@ -253,6 +253,27 @@ export async function checkPoint(userId: string) {
   return userData?.balance || 0;
 }
 
+// 更新用户等级
+export async function updateUserGrade(userId: string, amount: number) {
+  let grade: 'V0' | 'V1' | 'V2' | 'V3' | 'V4' | 'V5' = 'V0';
+  
+  if (amount >= 9.9) {
+    grade = 'V1';
+  } else if (amount >= 199) {
+    grade = 'V2';
+  } else if (amount >= 499) {
+    grade = 'V3';
+  } else if (amount >= 999) {
+    grade = 'V4';
+  }
+  
+  await prisma.user.update({
+    where: { id: userId },
+    data: { grade: grade }
+  });
+  
+  return grade;
+}
 
 export async function userDetails(userId: string) {
   const userData: any = await prisma.user.findUnique({
@@ -263,6 +284,7 @@ export async function userDetails(userId: string) {
       name: true,
       phone: true,
       balance: true,
+      grade: true,
       wechatAvatar: true,
       weiRecord: {
         orderBy: {
@@ -278,6 +300,7 @@ export async function userDetails(userId: string) {
       phone: userData.phone,
       avatar: userData.wechatAvatar,
       balance: userData.balance,
+      grade: userData.grade,
       weiTotal: '--',
     };
     if(userData.weiRecord) {

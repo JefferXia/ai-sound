@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import type { PaymentType, PaymentStatus, PaymentRecord } from '@/types/payment'
 import { createPaymentUtils } from '@/lib/payment'
-import { addPoint } from '@/lib/db'
+import { addPoint, updateUserGrade } from '@/lib/db'
 
 const prisma = new PrismaClient()
 
@@ -64,8 +64,11 @@ export class RechargeService {
       // 2. 为用户添加积分
       await addPoint(paymentRecord.userId, paymentRecord.pointAmount, 'RECHARGE', `充值${paymentRecord.amount}元获得${paymentRecord.pointAmount}积分`)
 
-      // 3. 记录充值成功日志
-      console.log(`用户${paymentRecord.userId}充值成功，获得${paymentRecord.pointAmount}积分`)
+      // 3. 更新用户等级
+      await updateUserGrade(paymentRecord.userId, Number(paymentRecord.amount))
+
+      // 4. 记录充值成功日志
+      console.log(`用户${paymentRecord.userId}充值成功，获得${paymentRecord.pointAmount}积分，等级已更新`)
 
       return paymentRecord
     } catch (error) {
