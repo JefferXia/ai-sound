@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
         phone: userInfo.phone,
         name: userInfo.name,
         balance: userInfo.balance,
+        grade: userInfo.grade,
         createdAt: userInfo.created_at,
         // updated_at: userInfo.updated_at,
         // 微信登录相关信息

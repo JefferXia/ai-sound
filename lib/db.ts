@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { utcToBeijing } from './utils';
+import { UserGrade } from '@prisma/client';
 
 interface Record {
   type: string;
@@ -208,6 +209,7 @@ export async function pointDetails(userId: string) {
       phone: true,
       wechatAvatar: true,
       balance: true,
+      grade: true,
       created_at: true,
       point: {
         orderBy: {
@@ -230,6 +232,7 @@ export async function pointDetails(userId: string) {
         phone: accountData.phone,
         avatar: accountData.wechatAvatar,
         balance: accountData.balance,
+        grade: accountData.grade,
         createdAt: utcToBeijing(accountData.created_at),
       },
       pointData: formatData,
@@ -255,7 +258,7 @@ export async function checkPoint(userId: string) {
 
 // 更新用户等级
 export async function updateUserGrade(userId: string, amount: number) {
-  let grade: 'V0' | 'V1' | 'V2' | 'V3' | 'V4' | 'V5' = 'V0';
+  let grade: UserGrade = 'V0';
   
   if (amount >= 9.9) {
     grade = 'V1';

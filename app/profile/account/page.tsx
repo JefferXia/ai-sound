@@ -6,12 +6,14 @@ import { AccountInfo } from '@/components/user/account-info';
 import { AccountList } from '@/components/user/account-list';
 import Loading from '@/components/create/loading';
 import { useGlobalContext } from '@/app/globalContext';
+import { UserGrade } from '@prisma/client';
 
 export interface AccountData {
   name: string;
   phone: string;
   avatar: string;
   balance: number;
+  grade: UserGrade;
   createdAt: string;
 }
 export interface PointItem {

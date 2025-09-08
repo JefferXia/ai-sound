@@ -70,7 +70,7 @@ function ProductUrlInput() {
         // 成功后跳转到历史记录页面
         setTimeout(() => {
           router.push('/history');
-        }, 1500); // 延迟1.5秒让用户看到成功消息
+        }, 1000); // 延迟1秒让用户看到成功消息
       } else {
         // 如果是未登录错误，直接跳转到登录页
         if (data.authenticated === false) {
