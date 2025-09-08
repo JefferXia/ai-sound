@@ -37,25 +37,32 @@ interface RechargeFormProps {
 // 三档充值套餐
 const RECHARGE_PACKAGES = [
   {
+    id: 'begin',
+    name: '优惠体验包',
+    price: 4.9,
+    points: 100,
+    description: '升级为付费会员查看完整报告',
+  },
+  {
     id: 'basic',
-    name: '专业体验包',
-    price: 199,
-    points: 1500,
-    description: '适合商家体验，可检测15次',
+    name: '安心体验包',
+    price: 49,
+    points: 1000,
+    description: '适合商家体验，可检测10次',
   },
   {
     id: 'pro',
-    name: '旗舰商家包',
-    price: 499,
-    points: 5000,
-    description: '适合全平台商家，可检测50次',
+    name: '专业运营包',
+    price: 99,
+    points: 2000,
+    description: '适合全平台商家，可检测20次',
   },
   {
     id: 'enterprise',
-    name: '尊享品牌包',
-    price: 999,
-    points: 12000,
-    description: '适合多店铺商家，可检测120次',
+    name: '团队保障包',
+    price: 299,
+    points: 10000,
+    description: '适合电商团队/代运营公司，可检测100次',
   },
 ];
 
@@ -68,7 +75,7 @@ export function RechargeForm({
 
   // 获取用户ID，如果用户未登录则使用默认值
   const userId = userInfo?.id || 'anonymous';
-  const [selectedPackage, setSelectedPackage] = useState<string>('pro');
+  const [selectedPackage, setSelectedPackage] = useState<string>('begin');
   const [paymentType, setPaymentType] = useState<PaymentType>('alipay');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -309,7 +316,7 @@ export function RechargeForm({
 
   // 显示套餐选择界面
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-muted">
+    <Card className="w-full max-w-6xl mx-auto bg-muted">
       <CardHeader className="text-center">
         <CardTitle className="flex items-center justify-center gap-2">
           <Coins className="h-6 w-6 text-yellow-600" />
@@ -323,7 +330,7 @@ export function RechargeForm({
             <Label className="text-lg font-medium dark:text-zinc-200">
               选择充值套餐
             </Label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {RECHARGE_PACKAGES.map((pkg) => (
                 <div
                   key={pkg.id}

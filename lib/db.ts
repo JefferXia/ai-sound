@@ -260,13 +260,13 @@ export async function checkPoint(userId: string) {
 export async function updateUserGrade(userId: string, amount: number) {
   let grade: UserGrade = 'V0';
   
-  if (amount >= 9.9) {
+  if (amount >= 4.9) {
     grade = 'V1';
-  } else if (amount >= 199) {
+  } else if (amount >= 49) {
     grade = 'V2';
-  } else if (amount >= 499) {
+  } else if (amount >= 99) {
     grade = 'V3';
-  } else if (amount >= 999) {
+  } else if (amount >= 299) {
     grade = 'V4';
   }
   
