@@ -236,7 +236,7 @@ export default function Home() {
       </section>
 
       {/* Product URL Input Section */}
-      <section className="py-20 px-4">
+      <section className="py-10 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="gradient-border rounded-2xl p-8">
             <div className="text-center mb-8">
@@ -254,7 +254,7 @@ export default function Home() {
       </section>
 
       {/* Demo Section */}
-      <section id="demo" className="py-20 px-4">
+      <section id="demo" className="py-10 px-4">
         <div className="container mx-auto">
           {/* <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
             <span className="gradient-text">实际效果展示</span>
@@ -263,9 +263,19 @@ export default function Home() {
             看看极效火眼如何帮助您处理网页信息
           </p> */}
 
-          <div className="max-w-4xl mx-auto gradient-border rounded-2xl p-2">
+          <div className="max-w-4xl mx-auto rounded-2xl p-2">
             <div className="bg-card rounded-xl aspect-video flex items-center justify-center">
-              <img src="/images/product.gif" alt="Product" className="w-full" />
+              <video
+                src="/video/20250909-104417.mp4"
+                className="w-full h-full object-cover rounded-xl"
+                controls={false}
+                autoPlay
+                muted
+                loop
+                playsInline
+              >
+                您的浏览器不支持视频播放
+              </video>
             </div>
           </div>
         </div>
