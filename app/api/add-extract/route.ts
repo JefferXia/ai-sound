@@ -3,12 +3,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { addPoint } from '@/lib/db'
 import { getUserById } from '@/db/queries'
+import { auth } from '@/app/(auth)/auth'
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth()
+    const userId = session?.user?.id
+
     const body = await req.json()
     const {
-      user_id,
+      user_id = userId,
       amount = 10,
       reason = '文案提取',
     } = body || {}
@@ -34,7 +38,7 @@ export async function POST(req: NextRequest) {
       balance: transactionData?.[0]?.balance,
     })
   } catch (error) {
-    console.error('add-wei error:', error)
+    console.error('add-extract error:', error)
     return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
   }
 } 

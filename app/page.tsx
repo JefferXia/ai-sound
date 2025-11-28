@@ -476,9 +476,11 @@ export default function Home() {
               <div className="bg-card/50 dark:bg-white/5 border border-border dark:border-white/10 rounded-2xl p-8 text-center">
                 {/* QQ QR Code */}
                 <div className="w-48 h-48 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg p-4">
-                  <img
+                  <Image
                     src="/images/mu_qiwei.png"
                     alt="企微二维码"
+                    width={192}
+                    height={192}
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -514,9 +516,11 @@ export default function Home() {
               <div className="bg-card/50 dark:bg-white/5 border border-border dark:border-white/10 rounded-2xl p-8 text-center">
                 {/* Feishu QR Code */}
                 <div className="w-48 h-48 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg p-4">
-                  <img
+                  <Image
                     src="/images/mu_feishu.png"
                     alt="飞书二维码"
+                    width={192}
+                    height={192}
                     className="w-full h-full object-contain"
                   />
                 </div>

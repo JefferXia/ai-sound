@@ -283,3 +283,26 @@ model InviteRecord {
   @@index([invitee_id])
   @@unique([invitee_id]) // 每个用户只能被邀请一次
 }
+
+// 商品详情页违规案例表
+model ProductViolation {
+  id                    Int      @id @default(autoincrement())
+  case_name             String   @db.VarChar(200)               // 案例名称
+  violation_type        String   @db.VarChar(50)                // 违规类型
+  platform              String   @db.VarChar(50)                // 涉及平台
+  company               String   @db.VarChar(200)               // 违规企业
+  penalty_amount        String   @db.VarChar(100)               // 处罚金额（原始格式）
+  penalty_amount_num    Decimal  @db.Decimal(15, 2)             // 处罚金额（数值格式）
+  penalty_measures      String   @db.VarChar(200)               // 处罚措施
+  violation_details     String   @db.Text                       // 违规详情
+  legal_basis           String   @db.VarChar(500)               // 处罚依据
+  data_source           String   @db.VarChar(100)               // 数据来源
+  publish_date          String   @db.VarChar(20)                // 发布时间
+  region                String   @db.VarChar(100)               // 所属地区
+  severity              String   @db.VarChar(20)                // 严重程度
+  detail_page_violation String   @db.VarChar(100)               // 详情页违规类型
+  created_at            DateTime @default(now())                // 创建时间
+  
+  // 索引
+  @@index([violation_type])
+}

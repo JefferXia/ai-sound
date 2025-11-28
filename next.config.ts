@@ -8,13 +8,16 @@ const nextConfig: NextConfig = {
         hostname: 'avatar.vercel.sh',
       },
       {
-        hostname: '*.cos.ap-nanjing.myqcloud.com'
+        hostname: '*.cos.ap-nanjing.myqcloud.com',
       },
       {
-        hostname: '*.cos.ap-shanghai.myqcloud.com'
+        hostname: '*.cos.ap-shanghai.myqcloud.com',
       },
       {
-        hostname: 'thirdwx.qlogo.cn'
+        hostname: 'thirdwx.qlogo.cn',
+      },
+      {
+        hostname: 'picsum.photos',
       },
     ],
   },
